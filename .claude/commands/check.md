@@ -286,9 +286,48 @@ Please provide:
 3. Final determination on whether this is a genuine issue"
 ```
 
-#### c) Fix Decision Matrix
+#### c) Critical Issue Evaluation
 
-Based on specialist reports, categorize each issue:
+After receiving specialist assessments, apply critical evaluation to **ALL issues confirmed as genuine by specialists**
+before including them in the final report:
+
+**Ultrathink hard on each issue.** For every identified problem, challenge the reasoning behind considering it
+valid. What evidence actually supports this being a real issue? What assumptions are baked into the analysis? Does
+the argument hold up under scrutiny? Did the agent miss critical context or overlook more significant problems? Be
+unbiased and ruthless in this assessment - many "issues" that seem valid at first glance fall apart under careful
+examination. Then consider the other side: what valid reasons, if any, are there for addressing this issue?
+Evaluate both perspectives fairly.
+
+##### Critical Evaluation Criteria
+
+1. **Impact Verification**
+   - Would fixing this issue improve the code in any way (functionality, readability, maintainability, performance)?
+   - Is there a concrete scenario where this issue causes problems?
+   - Even if minor, does addressing it make the code better?
+
+2. **Correctness Validation**
+   - Is this actually incorrect, or is it working as intended?
+   - Would "fixing" this break existing functionality or violate design decisions?
+   - Is the identified pattern actually a problem, or is it the right approach for this context?
+
+3. **Context Alignment**
+   - Does fixing this align with existing project patterns, or would it create inconsistency?
+   - Is this part of incomplete work that will be addressed in subsequent commits?
+   - Are we applying inappropriate standards from different contexts?
+
+4. **Scope Verification**
+   - Is the issue within the analyzed scope (not in pre-existing code)?
+   - Can it be fixed without modifying out-of-scope files?
+   - Is this new code or existing code?
+
+Only discard issues that aren't actually problems or where the "fix" would make things worse. Valid issues that
+pass the critical evaluation get categorized by scope: in-scope issues go in "In-scope and doable" or "In-scope but
+blocked", while out-of-scope issues go in "Out-of-scope but legitimate". Remember: if fixing an issue would
+genuinely improve the code - even slightly - it's worth reporting in the appropriate section.
+
+#### d) Fix Decision Matrix
+
+Based on specialist reports and critical evaluation, categorize each issue:
 
 - **In-scope and doable**: Issues within the analyzed scope that can be addressed immediately
 - **In-scope but blocked**: Issues within scope that require external dependencies or prerequisites before fixing
