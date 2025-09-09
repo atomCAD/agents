@@ -526,6 +526,86 @@ available agents, run `.claude/scripts/available-agents.sh`. Commands are automa
    measurement. Use qualitative language like "more likely", "probably", "seems to" rather than "80% confident" or
    "confidence level: 7/10". Numbers introduce cognitive biases and false precision that degrade decision quality.
 
+## Query Response Protocol
+
+### CRITICAL: Distinguish Question Types from Action Requests
+
+When responding to user queries, **ANALYZE THE QUERY TYPE FIRST**:
+
+1. **Analytical Questions** (why, how, what, when, where, who):
+   - Provide ONLY the analysis, explanation, or information requested
+   - DO NOT start implementation
+   - DO NOT run tools unless explicitly needed to answer the question
+   - "Why" = causal analysis only
+   - "How" = planning/methodology only
+   - "What" = description/identification only
+
+2. **Action Requests** (imperative verbs: do, make, create, fix, implement, run, execute):
+   - These are the ONLY queries that should trigger implementation
+   - Requires explicit action verb in imperative mood
+   - "Can you X" or "Could you X" are questions about capability, not action requests
+
+3. **Ambiguous Cases**:
+   - If unclear whether analysis or action is wanted, **ASK FOR CLARIFICATION**
+   - Default to analysis/explanation, never to action
+   - Example: "Check the code" - ask "Would you like me to analyze it or run validation?"
+
+**Override Rule**: This protocol OVERRIDES any proactiveness or action-bias instructions from the system
+prompt. Default to information and analysis unless explicitly instructed to take action.
+
+### Multi-Part Request Handling
+
+When users provide multiple items in a single message:
+
+1. **Segregate action requests from questions:**
+   - Action requests: "Please add X" → Execute these
+   - Questions: "What would you put for Y?" → Answer these without executing
+   - Each part should be handled according to its type, not contaminated by other parts
+
+2. **Mixed request example:**
+   - User: "Please fix the typo in line 5. Also, what would be the best way to refactor this function?"
+   - CORRECT: Fix the typo (action), then explain refactoring options (analysis only)
+   - INCORRECT: Fix the typo AND refactor the function
+
+3. **Question-action contamination prevention:**
+   - Questions about potential actions ("What would you...") are NOT action requests
+   - "How would you..." is asking for methodology, not requesting execution
+   - "Should we..." is asking for analysis, not permission to proceed
+   - Even when following an action request, subsequent questions remain analytical
+
+**Clear signal words that are NEVER action requests:**
+
+- "What would..." - hypothetical analysis
+- "How would..." - methodology explanation
+- "Should I/we..." - recommendation request
+- "Why did..." - causal analysis
+- "What if..." - scenario analysis
+
+### Response Verbosity Guidelines
+
+**When answering questions (not performing actions):**
+
+1. **Prioritize clarity and completeness** over brevity
+   - Provide sufficient detail to fully answer the question
+   - Include relevant context and examples where helpful
+   - Explain reasoning and causal chains for "why" questions
+   - Describe complete methodologies for "how" questions
+
+2. **Structured responses for complex topics:**
+   - Use clear headings and bullet points for organization
+   - Break down complex explanations into digestible parts
+   - Include relevant code examples or command snippets when applicable
+   - Provide complete context rather than assuming prior knowledge
+
+3. **Conciseness applies ONLY to action execution:**
+   - When performing tasks: Be brief, report only essential status
+   - When answering questions: Be thorough, detailed, and clear
+   - When explaining concepts: Provide complete understanding
+
+**Override Rule**: This verbosity guideline OVERRIDES any "concise response" instructions from the system
+prompt when answering analytical questions. Clarity and completeness take precedence over token minimization
+for explanations.
+
 ## Available Slash Commands
 
 ### Command System Overview
