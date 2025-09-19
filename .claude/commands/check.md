@@ -16,7 +16,7 @@ the repository; only report your findings to the user.
 
 ## Procedure
 
-### Step 1: Scope Determination and Confirmation
+### Step 1: Scope Determination
 
 **Call `scope-analyzer` agent to determine what to check:**
 
@@ -34,32 +34,15 @@ the repository; only report your findings to the user.
     "ignore style issues", "check for memory leaks"). IMPORTANT: Only include when explicitly stated by user -
     do not infer intent
 
-**Present interpreted scope and guidance to user for confirmation:**
+**Decision point:**
 
-- If scope is **clear** (staged/uncommitted/latest-commit/user-specified):
-  - Present: "I'll check [natural language description from scope-analyzer]. [Include user guidance if present].
-    Proceed?"
-  - Example: "I'll check all files and changes currently in git's staging area but not yet committed, focusing
-    on security vulnerabilities as requested. Proceed?"
-- If scope is **unclear**:
-  - Present the ambiguity with specific options
-  - Example: "Your request is ambiguous. Did you mean to check: a) staged changes, b) all uncommitted changes,
-    c) specific files?"
-
-**WAIT for user response:**
-
-- If user confirms without modifications (yes/proceed/continue/etc.): Continue to Step 2
-- If user provides ANY clarification, corrections, or conditional confirmations (e.g., "yes, but..."):
-  - Re-call `scope-analyzer` with the user's clarified intent
-  - Present the new interpretation (scope and guidance) for confirmation
-  - Repeat until user confirms without modifications
-
-**SPECIAL EXCEPTION - No prompt provided:**
-
-- If the user invokes the tool without providing any prompt (just invocation of the tool), user confirmation is
-  NOT required
-- Proceed directly with the default selection made by the scope-analyzer agent
-- The scope-analyzer should determine the most appropriate default based on git status
+- **If scope is determined** (staged/uncommitted/latest-commit/user-specified):
+  - Include in output: "Checking [natural language description from scope-analyzer]. [Include user guidance if present]."
+  - Continue to Step 2
+- **If scope is unclear**:
+  - Report error: "Unable to determine what to check. Request is ambiguous or contradictory."
+  - Suggest clarification options (e.g., "Specify: 'staged', 'uncommitted', 'latest commit', or specific files/paths")
+  - **EXIT THE WORKFLOW**: Exit immediately with failure status
 
 ### Step 2: Determine Quality Check Team
 
@@ -435,8 +418,7 @@ Call `architecture-strategist` agent to assess each strategy:
 
 ### Autonomy and Boundaries
 
-- **Autonomous operation**: After scope confirmation in Step 1, proceed through remaining steps without user
-  interaction
+- **Autonomous operation**: Proceed through all steps without user interaction
 - **Read-only enforcement**: NEVER modify files, only analyze and report
 - **No git operations**: Do not commit, stage, or modify repository state
 - **Report generation**: Final output is always a comprehensive report for user review
