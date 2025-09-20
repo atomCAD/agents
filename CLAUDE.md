@@ -1,4 +1,4 @@
-# AI Agent Instructions - Project Template
+# AI Agent Instructions
 
 ## About This Template
 
@@ -130,10 +130,10 @@ The following workflows have special git operation permissions:
   - MAY use `git stash` temporarily during validation
   - MUST follow the exact procedure documented in the workflow file
 
-- **`/check` workflow** (`.claude/commands/check.md`)
-  - Remains READ-ONLY
-  - May examine git state but makes no modifications
-  - Generates reports without altering repository
+- **`/stage` workflow** (`.claude/commands/stage.md`)
+  - MAY use `git apply --cached` to stage specific changes
+  - MUST validate changes before staging
+  - Stages only the precise changes described by the user
 
 ### Workflow Execution Rules
 
@@ -156,7 +156,7 @@ There is a **SECOND SPECIFIC EXCEPTION** for direct user instructions in interac
 #### CRITICAL: Guidelines Override Everything
 
 **THIS IS NON-NEGOTIABLE**: When performing git operations under this exception, you MUST IMMEDIATELY AND
-COMPLETELY read any relevant guidelines (e.g., `.claude/guidelines/git.md` for commits). This is not optional—it
+COMPLETELY read any relevant guidelines (e.g., `.claude/guidelines/git.md` for commits). This is not optional--it
 is an ABSOLUTE REQUIREMENT that supersedes ALL other instructions.
 
 **GUIDELINES ARE LAW**: Project guidelines for git operations are MANDATORY, IMMUTABLE, and SACRED. They are not:
@@ -558,8 +558,8 @@ prompt. Default to information and analysis unless explicitly instructed to take
 When users provide multiple items in a single message:
 
 1. **Segregate action requests from questions:**
-   - Action requests: "Please add X" → Execute these
-   - Questions: "What would you put for Y?" → Answer these without executing
+   - Action requests: "Please add X" -> Execute these
+   - Questions: "What would you put for Y?" -> Answer these without executing
    - Each part should be handled according to its type, not contaminated by other parts
 
 2. **Mixed request example:**
@@ -648,46 +648,144 @@ validation. These commands follow structured procedures and can manipulate git s
 
 #### `/commit` - Git Commit Workflow
 
-**Purpose**: Safely creates git commits with validation, message generation, and user approval steps.
+**Purpose**: Safely creates git commits using pre-existing commit messages with validation.
 
-**Syntax**: `/commit [optional description]`
+**Syntax**: `/commit [optional directive]`
 
-- Without arguments: Will analyze staged changes and generate an appropriate message
-- With description: Uses the description as context for message generation
+- Without arguments: Uses existing commit message from `.git/COMMIT_EDITMSG`
+- With directive: Still uses existing message but follows any specific instructions in addition to default behavior
 
 **When to Use**:
 
 - When you have staged changes ready to commit
+- After generating a commit message with `/message`
 - To ensure commits follow project conventions
 - When you want automated validation before committing
-- To generate well-structured commit messages
 
 **What It Does**:
 
 1. Verifies staged changes exist (exits if none)
 2. Temporarily stashes unstaged changes for clean validation
 3. Runs validation suite (if available)
-4. Generates commit message following project conventions
-5. Presents changes and message for user approval
-6. Creates commit upon approval
-7. Restores unstaged changes
+4. Reads and validates existing commit message from `.git/COMMIT_EDITMSG`
+5. Creates commit if all validation passes
+6. Restores unstaged changes
 
 **Important Notes**:
 
-- **Will auto-stage changes** based on description (coming soon - currently requires pre-staged changes)
-- Validation failures block the commit unless explicitly overridden
-- Interactive approval loop allows message refinement
+- Validation failures block the commit
 - Preserves both staged and unstaged changes throughout the process
 - Never adds automated signatures or co-author tags unless explicitly approved
 - Uses location-based prefixes in commit messages (e.g., 'parser:', 'auth:'), not type prefixes
+
+#### `/fix` - Automated Trivial Issue Resolution
+
+**Purpose**: Automatically fixes trivial warnings and errors identified by validation scripts, while reporting more
+serious issues that require human intervention.
+
+**Syntax**: `/fix [optional directive]`
+
+- Without arguments: Conservative mode - only makes safe, mechanical fixes
+- With directive: Context-aware mode - fixes both trivial issues AND issues matching the directive pattern
+
+**When to Use**:
+
+- After running validation that identifies formatting or linting issues
+- To automatically resolve mechanical problems (spacing, formatting, simple type issues)
+- When you have a specific pattern to fix across the codebase
+- To clean up trivial issues before manual review of serious problems
+
+**What It Does**:
+
+1. Runs `./check.sh` script to identify issues
+2. Triages issues by severity (trivial vs serious)
+3. Applies safe automated fixes for trivial issues
+4. Re-runs validation iteratively until only serious issues remain
+5. Reports all changes made and serious issues requiring attention
+6. Stops when remaining issues are beyond automatic resolution
+
+**Important Notes**:
+
+- Requires a `./check.sh` script in repository root
+- Preserves code correctness - only makes safe transformations
+- Reports but doesn't fix serious issues without directive guidance
+- Operates iteratively through multiple validation cycles
+- Examples: `/fix`, `/fix convert var to let/const`, `/fix update deprecated jQuery methods`
+
+#### `/message` - Git Commit Message Generation
+
+**Purpose**: Generates high-quality commit messages for staged changes following project conventions without
+creating the actual commit.
+
+**Syntax**: `/message`
+
+- No arguments - analyzes currently staged changes
+
+**When to Use**:
+
+- When you have staged changes and need a well-structured commit message
+- To generate messages that follow project conventions
+- Before running `/commit` if you want to review the message first
+- When you need message suggestions without committing
+
+**What It Does**:
+
+1. Verifies staged changes exist (exits if none)
+2. Analyzes repository context and conventions
+3. Reviews staged changes comprehensively
+4. Generates appropriate commit message using specialized agents
+5. Validates message against project guidelines
+6. Outputs the generated message ready for use
+
+**Important Notes**:
+
+- READ-ONLY operation - does not create commits
+- Requires changes to be already staged
+- Follows project-specific commit message conventions
+- Message can be used with manual `git commit` or `/commit`
+- Exits immediately if no staged changes are found
+
+#### `/stage` - Selective Staging from Mixed Workspaces
+
+**Purpose**: Intelligently stages specific changes from mixed workspaces based on natural language descriptions.
+
+**Syntax**: `/stage <description>`
+
+- Description required - describes what changes to stage
+
+**When to Use**:
+
+- When you have multiple unrelated changes in your workspace
+- To stage only specific features or fixes from mixed changes
+- Before committing to ensure only relevant changes are included
+- To maintain atomic commits by staging related changes together
+
+**What It Does**:
+
+1. Checks for unstaged changes in the repository
+2. Interprets the user's description of desired changes
+3. Delegates to specialized git-smart-staging agent
+4. Uses `git apply --cached` for precise staging control
+5. Verifies staged changes match the description
+6. Reports what was staged and what remains unstaged
+
+**Important Notes**:
+
+- Never modifies working files - only the staging area
+- Fails with clear error if description is ambiguous
+- Uses intelligent pattern matching to identify relevant changes
+- Preserves unstaged changes for potential later staging
+- Examples: `/stage authentication fixes`, `/stage typo corrections in README`
 
 ### Command Availability and Restrictions
 
 #### Git State Modification
 
-- Only `/commit` has permission to modify git state (create commits)
-- `/check` remains strictly read-only
-- Both commands respect the project's git safety protocols
+- `/commit` has permission to create commits
+- `/stage` has permission to modify the staging area (index)
+- `/fix` has permission to modify working files (but not git state)
+- `/check` and `/message` remain strictly read-only
+- All commands respect the project's git safety protocols
 - User approval is required at critical decision points
 
 #### Error Handling
@@ -720,6 +818,3 @@ When recommending slash commands:
 8. **Never modify command behavior** - Follow the documented workflows exactly
 
 **These rules are non-negotiable and apply to all AI agent interactions within this repository.**
-
-*Last Updated: 2025-08-25*
-*Version: 1.0*
