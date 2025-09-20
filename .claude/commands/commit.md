@@ -230,6 +230,12 @@ accurately describes all staged changes.
      - Determine failure reason
      - Report to user with recovery options
 
+4. **Remove commit message file:**
+
+   ```bash
+   rm .git/COMMIT_EDITMSG
+   ```
+
 **Error handling for commit failures:**
 
 - **Pre-commit hook failure**:
