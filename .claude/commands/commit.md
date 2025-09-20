@@ -211,6 +211,10 @@ accurately describes all staged changes.
    git commit -F .git/COMMIT_EDITMSG
    ```
 
+   - Use ONLY the exact message approved by user
+   - Do NOT add "Co-authored-by" or similar tags unless explicitly in approved message
+   - Do NOT modify message in any way
+
    **CRITICAL: Use -F flag to read from file:**
    - Maintains exact message formatting from .git/COMMIT_EDITMSG
    - Preserves line breaks and special characters
@@ -225,11 +229,6 @@ accurately describes all staged changes.
      - Capture error message
      - Determine failure reason
      - Report to user with recovery options
-
-4. **No automatic attribution:**
-   - Use ONLY the exact message approved by user
-   - Do NOT add "Co-authored-by" or similar tags unless explicitly in approved message
-   - Do NOT modify message in any way post-approval
 
 **Error handling for commit failures:**
 
