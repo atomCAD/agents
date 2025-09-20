@@ -258,7 +258,7 @@ Execute comprehensive validation with specialist-driven corrections:
 **VALIDATION CYCLE (repeat until all agents pass):**
 
 1. **Run markdownlint validation first:**
-   - Run `cd .git && markdownlint-cli2 COMMIT_EDITMSG --config ../.claude/config/commit-message.markdownlint-cli2.yaml`
+   - Run `bash -c "cd /workspace/.git && markdownlint-cli2 COMMIT_EDITMSG --config ../.claude/config/commit-message.markdownlint-cli2.yaml"`
    - If markdownlint reports any issues:
      - Apply automatic fixes for common markdown formatting issues
      - Update `.git/COMMIT_EDITMSG` with corrected content
