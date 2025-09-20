@@ -21,7 +21,7 @@ Check for staged changes to analyze:
 
 1. Check staged changes:
    - Run `git diff --staged --stat` to get summary of staged changes
-   - If outputs is empty, no changes are staged
+   - If output is empty, no changes are staged
 
 2. Decision point:
    - If staged changes exist (non-empty output): Continue to Step 2
