@@ -188,11 +188,11 @@ Call general-purpose with:
 **Important:** Each call to `general-purpose` should be made in parallel with different role instructions. The
 agent will handle each request independently, maintaining the specialization of the original failed agents.
 
-### Step 4: Issue Evaluation and Prioritization
+### Step 4a: Specialist Assessment
 
-**CRITICAL: Call ALL specialist agents in a SINGLE message with multiple tool calls for parallel execution:**
+**Purpose**: Obtain independent expert evaluation of each identified issue.
 
-#### a) Independent Specialist Assessment
+**CRITICAL: Call ALL specialist agents in a SINGLE message with multiple tool calls for parallel execution.**
 
 For EVERY issue identified by quality agents, call appropriate specialist(s) for independent evaluation:
 
@@ -240,9 +240,11 @@ Please provide independent assessment:
 3. If no, explain why this is acceptable."
 ```
 
-**Wait for ALL specialist assessments before proceeding.**
+**Wait for ALL specialist assessments before proceeding to Step 4b.**
 
-#### b) Integration of Multiple Specialist Reports
+### Step 4b: Report Integration
+
+**Purpose**: Synthesize multiple specialist perspectives into unified assessments.
 
 For issues where multiple specialists were consulted:
 
@@ -269,7 +271,9 @@ Please provide:
 3. Final determination on whether this is a genuine issue"
 ```
 
-#### c) Critical Issue Evaluation
+### Step 4c: Critical Evaluation
+
+**Purpose**: Apply rigorous critical analysis to validate genuine issues.
 
 After receiving specialist assessments, apply critical evaluation to **ALL issues confirmed as genuine by specialists**
 before including them in the final report:
@@ -281,7 +285,7 @@ unbiased and ruthless in this assessment - many "issues" that seem valid at firs
 examination. Then consider the other side: what valid reasons, if any, are there for addressing this issue?
 Evaluate both perspectives fairly.
 
-##### Critical Evaluation Criteria
+#### Critical Evaluation Criteria
 
 1. **Impact Verification**
    - Would fixing this issue improve the code in any way (functionality, readability, maintainability, performance)?
@@ -308,7 +312,9 @@ pass the critical evaluation get categorized by scope: in-scope issues go in "In
 blocked", while out-of-scope issues go in "Out-of-scope but legitimate". Remember: if fixing an issue would
 genuinely improve the code - even slightly - it's worth reporting in the appropriate section.
 
-#### d) Fix Decision Matrix
+### Step 4d: Issue Categorization
+
+**Purpose**: Categorize validated issues into actionable groups.
 
 Based on specialist reports and critical evaluation, categorize each issue:
 
