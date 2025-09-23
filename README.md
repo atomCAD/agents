@@ -70,29 +70,74 @@ Validates code, verifies commit message, creates commit. Stashes unstaged work d
 
 ### Setup
 
-```bash
-# Copy workflow files to your project
-cp -r .claude/ /path/to/your/project/
-cp CLAUDE.md /path/to/your/project/
-cp check.sh /path/to/your/project/
+#### Devcontainer Setup (Recommended for Full Automation)
 
-# Create task plan
-echo "- [ ] Your first task" > PLAN.md
+For fully automated workflows, which require the aptly named `--dangerously-skip-permissions`:
 
-# Run automation
-./examples/task.sh
-```
+**Prerequisites:** Docker is required (Podman may work but is untested).
 
-Example `PLAN.md`:
+1. **Open the directory in Visual Studio Code**
+   Use the VS Code interface to open the directory containing this README, or run:
 
-```markdown
-- [ ] Create user model with validation
-- [ ] Implement registration endpoint
-- [ ] Add password hashing
-- [ ] Write tests
-```
+   ```bash
+   code .
+   ```
+
+2. **Install devcontainer plugin** (if prompted)
+   VS Code may prompt you to install the Dev Containers extension - click "Install"
+
+3. **Reopen in Container**
+   VS Code will show a prompt to "Reopen in Container" - click this prompt
+
+4. **Wait for container setup**
+   The container will build and configure automatically. This may take a few minutes on first run.
+
+5. **Open Claude Code**
+   Click the Claude Code icon in the VS Code interface.
+   This opens Claude Code in an embedded terminal window within the container.
+
+6. **Provide login credentials**
+   You'll be prompted for your Claude credentials. These are saved in
+   `.git/.config/claude` and persist across container rebuilds.
+
+7. **Launch a new terminal within the devcontainer**
+   You have several options depending on where you want to interact with the
+   command-line tools:
+   - **Bottom Pane**: Terminal -> New Terminal in VS Code (opens a terminal on the
+     bottom pane)
+   - **Side Pane**: Click the Claude Code icon, then hit Ctrl+C twice to exit
+     claude and get a bash prompt (opens a terminal on the side pane)
+   - **External**: Run `devcontainer exec --workspace-folder .` from any terminal
+     emulator at the project root (requires installing devcontainer-cli)
+
+8. **Create task plan**
+   Create a `PLAN.md` file with a listing of discrete, atomic commits to be
+   generated in sequence.
+
+9. **Run automation**
+   From the terminal in the devcontainer, run the automated task script:
+
+   ```bash
+   ./examples/task.sh
+   ```
+
+**Why devcontainer for automation?**
+
+The devcontainer provides a secure, isolated environment where Claude can safely run
+with `--dangerously-skip-permissions`. This flag is required for fully automated
+workflows like `examples/task.sh` that need to execute slash commands using
+the command-line API, which lacks interactive permission prompts.
+
+**Security benefits:**
+
+- Isolated container environment prevents host system access
+- Resource limits (8GB RAM, 2 CPU cores) prevent resource exhaustion
+- Security hardening with `--cap-drop=ALL` and `--security-opt=no-new-privileges`
+- Docker-in-Docker support for Claude Code's analysis tools
 
 ### Manual Workflow
+
+Simply run the slash commands in sequence as needed. For example, to implement a bug fix:
 
 ```bash
 # Make changes in your codebase
