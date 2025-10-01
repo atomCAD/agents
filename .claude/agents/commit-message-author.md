@@ -1,8 +1,8 @@
 ---
-name: "commit-message-author"
+name: commit-message-author
 description: "Expert at writing and verifying concise, accurate git commit messages that describe what changed and why, following project guidelines, without overselling or speculation"
-color: "emerald"
-model: "claude-sonnet-4-5"
+color: emerald
+model: claude-sonnet-4-5
 ---
 
 # Commit Message Author Agent

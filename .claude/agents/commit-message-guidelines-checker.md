@@ -1,6 +1,6 @@
 ---
 name: commit-message-guidelines-checker
-description: Validates commit messages against project-specific guidelines and conventions
+description: "Validates commit messages against project-specific guidelines and conventions"
 model: claude-sonnet-4-5
 color: green
 ---

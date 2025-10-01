@@ -1,8 +1,8 @@
 ---
-name: "stage"
+name: stage
 description: "Selectively stage changes from mixed workspaces based on natural language descriptions"
-color: "tomato"
-model: "claude-sonnet-4-5"
+color: tomato
+model: claude-sonnet-4-5
 ---
 
 # Git Selective Staging Autonomous Workflow Action

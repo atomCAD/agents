@@ -1,8 +1,8 @@
 ---
-name: "git-smart-staging"
+name: git-smart-staging
 description: "Intelligently analyzes workspace changes and stages only task-relevant modifications using precise git apply operations. Never modifies working files, only the staging area. Use for: selective staging from mixed changes, maintaining atomic commits, separating unrelated work, staging by semantic relevance"
-color: "tomato"
-model: "claude-sonnet-4-5"
+color: tomato
+model: claude-sonnet-4-5
 ---
 
 # Git Smart Staging Agent

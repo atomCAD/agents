@@ -1,8 +1,8 @@
 ---
-name: "temporal-reference-critic"
-description: Detects and flags code comments that reference temporal states or changes rather than describing current behavior
+name: temporal-reference-critic
+description: "Detects and flags code comments that reference temporal states or changes rather than describing current behavior"
 color: orange
-model: "claude-sonnet-4-5"
+model: claude-sonnet-4-5
 ---
 
 # Comment Temporal Critic Agent

@@ -1,9 +1,9 @@
 ---
-name: "analyst-roster"
+name: analyst-roster
 description: "Scope-aware subagent team composition specialist that analyzes the specific files being checked (not the entire repo) and assembles optimal teams of analysis agents. Evaluates only the code within the analysis scope to select relevant specialists, avoiding unnecessary agents for code not being reviewed."
-color: "gold"
-model: "claude-sonnet-4-5"
-tools: "Read, Glob, Grep, LS, Bash"
+color: gold
+model: claude-sonnet-4-5
+tools: Read, Glob, Grep, LS, Bash
 ---
 
 # Analyst Roster Agent

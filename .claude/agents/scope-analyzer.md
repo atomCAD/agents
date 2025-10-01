@@ -1,8 +1,8 @@
 ---
-name: "scope-analyzer"
+name: scope-analyzer
 description: "Interprets user intent to determine the scope of work, identifying whether to target staged changes, uncommitted changes, latest commit, or user-specified files/paths"
-color: "slate"
-model: "claude-sonnet-4-5"
+color: slate
+model: claude-sonnet-4-5
 ---
 
 # Scope Analyzer Agent
