@@ -2,7 +2,7 @@
 name: "check"
 description: "Code quality control through comprehensive code review and validation"
 color: "sky"
-model: "claude-sonnet-4-0"
+model: "claude-sonnet-4-5"
 ---
 
 # Code Quality Control Autonomous Workflow Action

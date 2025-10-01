@@ -1,7 +1,7 @@
 ---
 name: commit-message-format-checker
 description: Validates commit message format including line length, structure, mood, and whitespace
-model: claude-sonnet-4-0
+model: claude-sonnet-4-5
 color: blue
 ---
 

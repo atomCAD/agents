@@ -2,7 +2,7 @@
 name: "commit"
 description: "Git commit workflow with validation and message generation"
 color: "green"
-model: "claude-sonnet-4-0"
+model: "claude-sonnet-4-5"
 ---
 
 # Git Commit Autonomous Workflow Action

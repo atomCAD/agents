@@ -37,7 +37,7 @@ while true; do
     # Query Claude to identify the next unfinished task from PLAN.md
     # This validates actual implementation status, not just plan checkboxes
     task=$(
-        claude --model opus -p "$(cat <<'EOF'
+        claude -p "$(cat <<'EOF'
 ## Goal
 Validate PLAN.md implementation status and identify next task.
 
@@ -157,7 +157,7 @@ while true; do
 
     # Analyze validation report to determine if task is complete and ready for commit
     status=$(
-        claude --dangerously-skip-permissions --model opus -p "The following is a validation report indicating whether the task \"$task\" has been fully completed and staged for commit. If the task is fully complete and staged, with no in-scope & do-able issues found, print exactly 'COMPLETE'. If not, print exactly 'RETRY'. Do not output anything else. Here is the report: \"$report\"" | tail -n 1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
+        claude --dangerously-skip-permissions -p "The following is a validation report indicating whether the task \"$task\" has been fully completed and staged for commit. If the task is fully complete and staged, with no in-scope & do-able issues found, print exactly 'COMPLETE'. If not, print exactly 'RETRY'. Do not output anything else. Here is the report: \"$report\"" | tail -n 1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
     )
 
     # Handle validation results and take appropriate action

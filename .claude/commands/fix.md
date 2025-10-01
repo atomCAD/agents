@@ -2,7 +2,7 @@
 name: "fix"
 description: "Automated trivial issue resolution through iterative validation and fixing"
 color: "amber"
-model: "claude-sonnet-4-0"
+model: "claude-sonnet-4-5"
 ---
 
 # Automated Trivial Issue Resolution Autonomous Workflow Action
