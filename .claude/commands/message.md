@@ -281,7 +281,7 @@ Execute comprehensive validation with specialist-driven corrections:
    - **If ANY validation agents report issues OR markdownlint fails**: Continue to step 4 (issue resolution)
 
 4. **Issue Analysis and Validation (for ALL identified issues):**
-   - **Launch Opus specialist agent for each reported issue** (in parallel):
+   - **Launch specialist agent for each reported issue** (in parallel):
      - Pass the validation agent's report and the current commit message
      - Specialist determines: Is this issue real? What specific corrective action is needed?
      - Specialist provides detailed remediation guidance or dismisses false positives

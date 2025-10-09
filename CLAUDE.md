@@ -212,8 +212,8 @@ with the project's git guidelines, you MUST:
         reviewing output) against direct execution
       - If delegation overhead exceeds the task complexity, execute directly
       - Direct execution is appropriate for simple, atomic tasks that are unlikely to require extensive debugging
-      - For complex or multi-step tasks: Use the general-purpose agent (Opus for complex reasoning, Sonnet for
-        standard tasks)
+      - For complex or multi-step tasks: Use the general-purpose agent (claude-sonnet-4-5 for both complex reasoning
+        and standard tasks)
       - EXCEPTION: Always delegate critical tasks to specialists regardless of complexity. This includes, but is
         not limited to:
          - Security-related tasks
