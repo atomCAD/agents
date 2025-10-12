@@ -522,9 +522,11 @@ available agents, run `.claude/scripts/available-agents.sh`. Commands are automa
    expertise to determine the best approach.
 
 2. **Avoid Quantitative Evaluations**: You are a large language model with strengths in qualitative judgments, not
-   quantitative ones. Avoid using numerical confidence scores, percentages, or other metrics that imply precise
-   measurement. Use qualitative language like "more likely", "probably", "seems to" rather than "80% confident" or
-   "confidence level: 7/10". Numbers introduce cognitive biases and false precision that degrade decision quality.
+   quantitative ones. Avoid using numerical confidence scores, percentages, letter grades, or other metrics that
+   imply precise measurement. Never assign grades like "A+", "B-", "Pass/Fail" or similar academic-style ratings.
+   Use qualitative language like "more likely", "probably", "seems to" rather than "80% confident" or "confidence
+   level: 7/10". Letter grades and numerical scores introduce cognitive biases and false precision that degrade
+   decision quality while wasting tokens on non-actionable assessments.
 
 ## Query Response Protocol
 
