@@ -15,37 +15,30 @@ autonomously without user interaction.
 
 ## Procedure
 
-### Step 1: Verify Staged Changes
+### CRITICAL: Adapt Workflow To Interpreted User Intent
 
-Check for staged changes to analyze:
+**MANDATORY**: The user's directive reveals their intent.
+You MUST understand what they want to accomplish and adapt the workflow accordingly.
+DO NOT rigidly check for staged changes if the directive clearly indicates working with something else entirely.
 
-1. Check staged changes:
-   - Run `git diff --staged --stat` to get summary of staged changes
-   - If output is empty, no changes are staged
+### Step 1: Understand Intent, Then Choose Workflow Path
 
-2. Decision point:
-   - If staged changes exist (non-empty output): Continue to Step 2
-   - If no staged changes (empty output):
-     - Report error: "No changes are currently staged for message generation."
-     - Run `git status` to show current repository status for context
-     - Suggest staging commands: `/stage` or manual `git add`
-     - **EXIT WORKFLOW IMMEDIATELY** with failure status
+**FIRST: Comprehend what the user is asking for. The directive is your guide, not the repository state.**
 
-**Example output for no staged changes:**
+1. **Determine the user's actual goal:**
+   - Are they asking to work with an existing commit? (e.g., references to commits, HEAD, etc.)
+   - Are they asking to improve/modify something that already exists?
+   - Are they describing changes that need staging first?
+   - Or is this the standard "generate message for staged changes" workflow?
 
-```text
-Error: No changes are currently staged for message generation.
+2. **Adapt workflow to match intent:**
+   - If working with existing commits → Use `git show` to get the commit content
+   - If improving existing messages → Read and enhance what's already there
+   - If describing unstaged work → Guide them to stage first
+   - If standard workflow → Check for staged changes (only exit here if none found)
 
-Current status:
-{output of git status}
-
-To stage changes for commit message generation:
-- Use `/stage <description>` for intelligent staging
-- Use `git add <file>` for specific files
-- Use `git add -p` for interactive staging
-
-Exiting message generation workflow.
-```
+**The Golden Rule**: Only exit for "no staged changes" when there's NO directive indicating a different intent.
+If the user provides ANY directive, interpret it fully before deciding to exit.
 
 ### Step 2: Analyze Repository Context
 
@@ -613,15 +606,26 @@ Suggestions:
 Each concern should have its own focused commit message.
 ```
 
+## Key Principle: Intent Over State
+
+When a user provides a directive like `/message latest commit`, they're telling you their intent. Don't fail because
+staged changes are empty - they clearly want to work with an existing commit. Similarly, `/message make it more
+concise` implies working with an existing message, not generating a new one.
+
+**Remember**: Understand the intent behind the directive. Don't pattern-match keywords - comprehend what the user is
+actually trying to accomplish.
+
 ## Important Notes
 
+- **DIRECTIVE SUPREMACY**: User directives override ALL default behaviors
+- **Intelligent interpretation**: ALWAYS analyze user intent before checking technical conditions
 - **Fully autonomous**: No user interaction required during generation
-- **Comprehensive analysis**: Always examines complete staged diff, never truncated
+- **Comprehensive analysis**: Always examines complete diff, never truncated
 - **Quality assurance**: Multiple validation layers ensure message quality
 - **Project integration**: Respects guidelines and maintains style consistency
 - **Ready for commit**: Generated messages are immediately usable with `/commit`
 - **Error transparency**: Clear reporting when generation or validation fails
 - **Safe operations**: Never modifies staged changes, only analyzes and generates messages
-- **Amend awareness**: Handles amending commits by combining existing and new changes
+- **Flexible operation**: Can work with staged changes, existing commits, or message improvements
 
 **These rules are non-negotiable and apply to all AI agent interactions using this workflow.**
