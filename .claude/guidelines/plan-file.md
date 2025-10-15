@@ -85,6 +85,27 @@ authentication system is not - it must be decomposed into multiple atomic tasks.
 further while remaining atomic. However, "minimal" when used elsewhere in this document refers to the property
 of being as small as possible, not as a synonym for "atomic task" itself.
 
+### Outcome
+
+An outcome is a desired result that requires multiple tasks to achieve. Outcomes represent "what" needs to be
+accomplished (the end state) while tasks represent "how" to get there (the specific actions). In GTD (Getting Things
+Done) terminology, outcomes correspond to "projects" - meaningful capabilities that cannot be completed in a single
+action.
+
+**Key characteristics:**
+
+- Multi-step results requiring multiple tasks
+- Observable end states with measurable completion
+- User-facing value or capabilities
+- Success criteria that define "done"
+
+**When to use**: For complex features that span multiple atomic tasks, list explicit outcomes with their success
+criteria in an Outcomes section. For simple features accomplishable in 1-2 tasks, outcomes can be omitted and success
+criteria specified at the plan level instead (see Optional Elements).
+
+**Example**: "Users can reset forgotten passwords" (outcome) vs. "Add password reset endpoint" (task that contributes
+to that outcome).
+
 ## Document Structure
 
 ### Metadata Section
@@ -98,6 +119,10 @@ Every PLAN.md document should start with this header structure:
 
 [Brief overview of the feature being implemented - 1-3 sentences describing the goal]
 
+## Outcomes
+
+[List of desired outcomes/projects - each outcome is a result requiring multiple actions]
+
 ## Tasks
 ```
 
@@ -105,12 +130,93 @@ Every PLAN.md document should start with this header structure:
 
 - **Title**: Clear, concise feature name prefixed with "Plan:"
 - **Overview**: Brief description of what this plan implements and why
-- **Tasks section**: Ordered list of checkbox tasks
+- **Outcomes section**: List of desired outcomes/projects (GTD-style)
+- **Tasks section**: Ordered list of checkbox tasks (next actions)
+
+### Outcomes Section Format
+
+The Outcomes section lists **desired results** (projects in GTD terminology) - things that require more than one action to
+complete. Each outcome represents a meaningful capability or deliverable that emerges from completing multiple tasks.
+
+#### Outcome Characteristics
+
+- **Multi-step results**: Each outcome requires multiple tasks to achieve
+- **Observable end states**: Describes what "done" looks like, not how to get there
+- **User-facing value**: Focus on capabilities and benefits, not implementation details
+- **Measurable completion**: Clear criteria for when the outcome is achieved
+
+#### Outcome Format
+
+Outcomes use standard bullet points (not checkboxes, since they're not tasks) with sub-requirements for success criteria,
+principles, and constraints:
+
+```markdown
+## Outcomes
+
+- Users can securely authenticate with the system
+  - Success criteria: Login works, sessions persist, logout clears session
+  - Security principle: Use OAuth 2.0 for authentication
+  - Constraint: Support SSO integration with existing providers
+- Shopping cart persists across sessions
+  - Success criteria: Cart survives browser refresh, logout/login cycle
+  - Constraint: Must persist for minimum 30 days
+  - Performance: Cart operations complete < 500ms
+- Search results are filtered and ranked by relevance
+  - Success criteria: Filters apply correctly, ranking algorithm works
+  - Performance: Results return in < 2 seconds
+  - Principle: Use existing search infrastructure
+```
+
+#### Relationship to Tasks
+
+Each outcome will typically have multiple tasks associated with it. Tasks are the concrete next actions that move toward
+achieving the outcomes:
+
+```markdown
+## Outcomes
+
+- Users can reset forgotten passwords
+  - Success criteria: Reset link sent, token expires, password updates
+  - Security constraint: Token valid for 24 hours only
+  - Principle: One-time use tokens, no token reuse
+
+## Tasks
+
+- [ ] Add password reset request endpoint
+- [ ] Implement secure token generation
+- [ ] Create password reset email template
+- [ ] Add password update endpoint with token validation
+- [ ] Implement token expiration (24 hours)
+```
+
+#### Validating Outcomes
+
+Apply these questions to verify outcome quality:
+
+1. **Multi-step test**: Does this require 2+ tasks to achieve?
+   - If no: This is a task, not an outcome
+
+2. **End-state test**: Does this describe WHAT (result), not HOW (implementation)?
+   - If describing implementation: Refocus on the user-facing result
+
+3. **Measurability test**: Can completion be objectively determined?
+   - If no: Add or clarify success criteria
+
+4. **Value test**: Does this represent meaningful capability?
+   - If purely internal/technical: Consider whether it needs to be an explicit outcome
+
+**Common mistakes:**
+
+- Outcome is too granular (completable as single task)
+- Outcome describes approach rather than result
+- Success criteria are subjective or vague
+- Outcome scope spans entire plan (needs splitting)
 
 ### Optional Elements
 
 - **Dependencies**: External libraries, APIs, or prerequisite features
-- **Success Criteria**: How to verify the feature is complete
+- **Success Criteria**: How to verify the feature is complete (use this for simple plans; for complex multi-task
+  features, specify success criteria within the Outcomes section instead)
 - **Technical Notes**: Architecture decisions, design patterns, or constraints
 
 ### Task List Format
@@ -933,7 +1039,8 @@ When all tasks are completed and committed:
 
 PLAN.md documents follow a structured format:
 
-- Metadata section with title, overview, and tasks heading
+- Metadata section with title, overview, outcomes, and tasks headings
+- Outcomes section listing desired results/projects (GTD-style)
 - Task list using markdown checkboxes (`[ ]` pending, `[x]` completed)
 - Three task categories: feature (default), move-only, and refactor
 - Task descriptions with action verb, what, and optional where/how
