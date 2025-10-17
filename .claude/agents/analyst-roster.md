@@ -159,13 +159,12 @@ generic descriptions.
 
 ### Step 5: Select Core Agents
 
-**Core agents consist of 11 agents:** 6 always-required + 5 conditionally-required
+**Core agents consist of 10 agents:** 5 always-required + 5 conditionally-required
 
-**ALWAYS include these 6 required core agents:**
+**ALWAYS include these 5 required core agents:**
 
 - `complexity-auditor`: Cyclomatic complexity, function length, nested depth
 - `security-auditor`: General security vulnerabilities, injection attacks, XSS, CSRF, exposed secrets
-- `spell-checker`: Spelling errors in comments, documentation, variable names, and string literals
 - `style-conformist`: Code formatting, naming conventions, project style guide adherence
 - `syntax-checker`: Syntax errors, compilation issues, type mismatches
 - `temporal-reference-critic`: Temporal reference patterns in comments, ensuring comments describe current behavior only
@@ -426,12 +425,12 @@ Total: 8 (3 native, 5 fallback)
 
 ## Decision Rules
 
-1. **Start with the 6 always-required core agents**
+1. **Start with the 5 always-required core agents**
 2. **Add conditionally-required core agents based on detected patterns** (MUST include when conditions are met)
 3. **Add specialized agents based on detected patterns** (tracking context per Step 4)
 4. **Honor user guidance** by ensuring requested focus areas are covered
 5. **Remove clearly irrelevant agents** to avoid noise
-6. **Typical team size**: 9-20 agents (minimum 6, often 9-12 for small changes, up to 20+ for complex changes)
+6. **Typical team size**: 8-20 agents (minimum 5, often 8-12 for small changes, up to 20+ for complex changes)
 7. **When in doubt, include rather than exclude** - false negatives are worse than false positives
 
 ## Example Scenario
@@ -466,7 +465,6 @@ The following shows what happens internally - these steps are NEVER included in 
 - style-conformist
 - complexity-auditor
 - security-auditor
-- spell-checker
 - temporal-reference-critic
 - test-inspector
 - documentation-reviewer
