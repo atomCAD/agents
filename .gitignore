@@ -61,6 +61,3 @@ $RECYCLE.BIN/
 # Logs
 *.log
 logs/
-
-# Local planning artifacts
-/PLAN.md

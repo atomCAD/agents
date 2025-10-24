@@ -6,7 +6,8 @@ a feature into atomic tasks, where each task represents a single commit develope
 ## File Location
 
 The active PLAN.md file lives in the repository root directory. Only one active PLAN.md should exist in the root
-at any time.
+at any time. When a plan is completed, it is archived to `.attic/plans/PLAN-YYYY-MM-DD-topic.md` and committed to
+version control.
 
 ## Scope of This Document
 
@@ -722,38 +723,37 @@ When documenting refactoring, structure the task to verify behavior preservation
 
 ## Update Protocol
 
-**IMPORTANT**: PLAN.md is excluded from version control (listed in .gitignore). All updates to the plan are logged
-in a ChangeLog section within PLAN.md itself, not committed to git.
+**IMPORTANT**: PLAN.md and ChangeLog.md are tracked in version control throughout development. All updates to the plan
+are logged in a separate ChangeLog.md file. When a plan is completed, both files are concatenated and archived to
+`.attic/plans/` for permanent record.
 
-### ChangeLog Section Format
+### ChangeLog.md Format
 
-#### Example: ChangeLog section structure
+Changes to PLAN.md are appended to ChangeLog.md using shell redirection to avoid reading the entire file:
 
-Add a ChangeLog section after the Tasks section:
+```bash
+cat >> "ChangeLog.md" <<'EOF'
 
-```markdown
-## ChangeLog
-
-### YYYY-MM-DD - [Brief description of change]
+## YYYY-MM-DD - [Brief description of change]
 
 [Detailed explanation of what changed and why]
-
-### YYYY-MM-DD - [Previous change description]
-
-[Previous change details]
+EOF
 ```
 
 #### ChangeLog Requirements
 
-- Entries in descending chronological order (most recent first)
+- New entries appended to the end of the file (chronological order, oldest first)
 - ISO 8601 date format (YYYY-MM-DD)
 - Brief description in the header
 - Detailed explanation in the body
 - Each update creates a new entry
+- Use `cat >>` to append without reading the entire file
+- Spacing: When appending entries, include a blank line at the start of the heredoc (after `<<'EOF'`) to separate
+  from the previous entry. Do not include a blank line before the closing `EOF`.
 
 ### Initial Plan Creation
 
-When creating a new PLAN.md for the first time, include an initial ChangeLog entry documenting the plan's creation.
+When creating a new PLAN.md for the first time, create an initial ChangeLog.md entry documenting the plan's creation.
 This establishes context for the plan's evolution and helps track the overall development approach.
 
 #### Required Elements for Initial Entry
@@ -763,31 +763,21 @@ This establishes context for the plan's evolution and helps track the overall de
 - High-level approach or strategy
 - Key assumptions, constraints, or architectural decisions (if applicable)
 
-#### Template for Initial Entry
-
-This template should be used when creating a new PLAN.md:
-
-```markdown
-### YYYY-MM-DD - Initial plan created
-
-Created plan for [feature/goal name]. Decomposed into [N] tasks following [approach/strategy].
-[Optional: Key assumptions, constraints, or architectural decisions made during planning.]
-```
-
 #### Example of Initial Entry
 
-Here's what an initial ChangeLog entry looks like in practice:
+Create ChangeLog.md with the initial entry:
 
-```markdown
-### 2025-10-08 - Initial plan created
+```bash
+cat >> "ChangeLog.md" <<'EOF'
+
+## 2025-10-08 - Initial plan created
 
 Created plan for user authentication system. Decomposed into 8 tasks following
 TDD approach with focus on security best practices. Starting with data model,
 then authentication logic, then API endpoints to ensure solid foundation.
 Assumes bcrypt for password hashing and JWT for session management.
+EOF
 ```
-
-**Note**: When creating a new plan, use this format for the initial ChangeLog entry.
 
 ### Marking Tasks Complete
 
@@ -818,13 +808,16 @@ updates to PLAN.md are required.
 
 This example shows logging a change made during implementation:
 
-```markdown
-### 2025-10-09 - Update email validation requirements
+```bash
+cat >> "ChangeLog.md" <<'EOF'
+
+## 2025-10-09 - Update email validation requirements
 
 Modified task "Add email validation to user registration" during implementation.
 Originally planned to use regex validation, but discovered the email-validator
 library provides better internationalization support. Updated sub-requirements
 to reflect library-based approach instead of custom regex.
+EOF
 ```
 
 ### Task-Commit Alignment
@@ -858,14 +851,17 @@ that are too small (multiple tasks fit in one commit). Both indicate planning er
 3. **Update PLAN.md**: Replace the oversized task with 2+ properly-scoped tasks
 4. **Add ChangeLog entry** explaining the rescoping:
 
-   ```markdown
-   ### YYYY-MM-DD - Rescope oversized task
+   ```bash
+   cat >> "ChangeLog.md" <<'EOF'
+
+   ## YYYY-MM-DD - Rescope oversized task
 
    Discovered task "[Original task]" was not atomic during implementation - it required
    multiple commits. Decomposed into [N] atomic tasks:
    - [New task 1]
    - [New task 2]
    - [New task N]
+   EOF
    ```
 
 5. **Resume implementation** with correctly-scoped tasks
@@ -940,11 +936,14 @@ When new requirements or tasks are discovered:
 
 This example shows how to document newly-discovered requirements:
 
-```markdown
-### 2025-10-10 - Add password reset tasks
+```bash
+cat >> "ChangeLog.md" <<'EOF'
+
+## 2025-10-10 - Add password reset tasks
 
 Discovered requirement for password reset flow during authentication implementation.
 Added 3 new tasks covering email validation, token generation, and reset UI.
+EOF
 ```
 
 ### Reordering Tasks
@@ -960,11 +959,14 @@ When dependencies change or better ordering is discovered:
 
 This example shows documenting a dependency-based reordering:
 
-```markdown
-### 2025-10-12 - Reorder database migration tasks
+```bash
+cat >> "ChangeLog.md" <<'EOF'
+
+## 2025-10-12 - Reorder database migration tasks
 
 Moved schema migration task before API implementation to resolve dependency issue.
 Cannot implement API endpoints without the database schema in place.
+EOF
 ```
 
 ### Removing Tasks
@@ -979,13 +981,17 @@ If a task becomes unnecessary:
 
 This example shows documenting a removed task:
 
-```markdown
-### 2025-10-13 - Remove OAuth integration task
+```bash
+cat >> "ChangeLog.md" <<'EOF'
 
-Removed task: Integrate OAuth 2.0 provider
+## 2025-10-13 - Remove password strength indicator task
+
+Removed task: Add visual password strength indicator to registration form
   - [Sub-requirements preserved verbatim]
 
-Reason: Client decided to use basic authentication only.
+Reason: Discovered the form validation library already provides this functionality
+built-in. No additional implementation needed.
+EOF
 ```
 
 ### Reopening or Rolling Back Completed Tasks
@@ -1007,10 +1013,14 @@ Reason: Client decided to use basic authentication only.
 
 3. **Add ChangeLog entry**:
 
-   ```markdown
-   ### YYYY-MM-DD - Rolled back task "Task description"
+   ```bash
+   cat >> "ChangeLog.md" <<'EOF'
+
+   ## YYYY-MM-DD - Rolled back task "Task description"
+
    Discovered issue: [specific problem]. Reverted commit abc123.
    Will re-implement with different approach: [new approach].
+   EOF
    ```
 
 **When requirements change after completion:**
@@ -1028,12 +1038,37 @@ When all tasks are completed and committed:
    - All commits referenced in task history
    - No pending items
 
-2. **Final ChangeLog entry** (optional but recommended):
+2. **Add final ChangeLog entry**:
 
-   ```markdown
-   ### YYYY-MM-DD - Plan completed
+   ```bash
+   cat >> "ChangeLog.md" <<'EOF'
+
+   ## YYYY-MM-DD - Plan completed
+
    All tasks implemented and committed. Feature [Feature Name] is complete.
+   EOF
    ```
+
+3. **Archive the plan**:
+
+   ```bash
+   # Ensure archive directory exists
+   mkdir -p .attic/plans
+
+   # Concatenate ChangeLog to the end of PLAN.md
+   cat "ChangeLog.md" >> "PLAN.md" && \
+
+   # Move PLAN.md to archive with timestamped name
+   mv "PLAN.md" ".attic/plans/PLAN-$(date +%Y-%m-%d)-short-topic-description.md" && \
+
+   # Remove ChangeLog (contents already in archived PLAN.md)
+   rm "ChangeLog.md"
+   ```
+
+   **Important**: Replace `short-topic-description` with a brief, hyphenated description of what was implemented
+   (e.g., `user-authentication`, `avatar-upload`, `search-optimization`).
+
+4. **Repository is ready for next plan**: Working directory contains no PLAN.md or ChangeLog.md files.
 
 ## Summary
 
@@ -1045,8 +1080,9 @@ PLAN.md documents follow a structured format:
 - Three task categories: feature (default), move-only, and refactor
 - Task descriptions with action verb, what, and optional where/how
 - Sub-requirements specifying test criteria, implementation details, and validation
-- ChangeLog section documenting all plan modifications
+- Separate ChangeLog.md file documenting all plan modifications
 - Update protocol for marking complete, adding, reordering, and removing tasks
+- Archive completed plans to `.attic/plans/` with concatenated changelog, committed to version control
 
 ---
 *Last Updated: 2025-10-09*

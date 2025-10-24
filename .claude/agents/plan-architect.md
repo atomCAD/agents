@@ -230,13 +230,15 @@ Before finalizing a plan, verify:
 
 Follow the exact PLAN.md format specified in `.claude/guidelines/plan-file.md`, including:
 
-- File structure (title, overview, outcomes, tasks, ChangeLog)
+- File structure (title, overview, outcomes, tasks)
 - Outcomes as bullet points (desired results/projects)
 - Task syntax with checkboxes and sub-requirement formatting
-- ChangeLog entry requirements for new plans and updates
 - Metadata and status tracking
 
-When modifying existing plans, preserve completed tasks and outcomes, adding ChangeLog entries explaining changes.
+**ChangeLog is maintained separately**: All plan modifications are documented in ChangeLog.md using the append-only
+pattern. See ChangeLog Management section below.
+
+When modifying existing plans, preserve completed tasks and outcomes, adding ChangeLog.md entries explaining changes.
 
 ## Decision-Making Process
 
