@@ -60,14 +60,13 @@ the repository; only report your findings to the user.
 ```markdown
 ## Selected Agents
 
-- syntax-checker
 - style-conformist
 - complexity-auditor
 - security-auditor
 - interface-designer: for GraphQL schema design not REST APIs
 - performance-analyst: for N+1 query patterns in resolvers
 
-Total: 6
+Total: 5
 ```
 
 Parse to extract:
@@ -101,12 +100,6 @@ If specialized agents fail to start (e.g., agent not found, configuration error)
 **Example agent call for staged changes (showing all 4 core agents):**
 
 ```text
-Call syntax-checker with:
-- Scope: |
-    All files and changes currently in git's staging area but not yet committed.
-    These are the changes ready to be included in the next commit.
-- Directive: "READ-ONLY analysis, generate findings report, make NO file modifications"
-
 Call style-conformist with:
 - Scope: |
     All files and changes currently in git's staging area but not yet committed.
@@ -120,6 +113,12 @@ Call complexity-auditor with:
 - Directive: "READ-ONLY analysis, generate findings report, make NO file modifications"
 
 Call security-auditor with:
+- Scope: |
+    All files and changes currently in git's staging area but not yet committed.
+    These are the changes ready to be included in the next commit.
+- Directive: "READ-ONLY analysis, generate findings report, make NO file modifications"
+
+Call temporal-reference-critic with:
 - Scope: |
     All files and changes currently in git's staging area but not yet committed.
     These are the changes ready to be included in the next commit.
@@ -140,7 +139,7 @@ Call interface-designer with:
 **Example agent call for user-specified paths:**
 
 ```text
-Call syntax-checker with:
+Call style-conformist with:
 - Scope: |
     The directory src/parser as requested, regardless of git status.
     Analysis will cover all code in this location.
@@ -152,7 +151,7 @@ Call syntax-checker with:
 
 **Fallback Example (if specialized agents fail):**
 
-If `syntax-checker`, `style-conformist`, and `security-auditor` all fail to start:
+If `style-conformist`, `complexity-auditor`, and `security-auditor` all fail to start:
 
 ```text
 # Make parallel calls to general-purpose agent, each with specific role
@@ -161,8 +160,8 @@ Call general-purpose with:
     All files and changes currently in git's staging area but not yet committed.
     These are the changes ready to be included in the next commit.
 - Role: |
-    Act as a syntax checker. Look for syntax errors, compilation issues, type mismatches,
-    and malformed code constructs. Focus only on syntax issues.
+    Act as a style conformist. Review code style, formatting standards, naming conventions,
+    and consistency with project guidelines. Focus only on style issues.
 - Directive: "READ-ONLY analysis, generate findings report, make NO file modifications"
 
 Call general-purpose with:
@@ -170,8 +169,8 @@ Call general-purpose with:
     All files and changes currently in git's staging area but not yet committed.
     These are the changes ready to be included in the next commit.
 - Role: |
-    Act as a style conformist. Review code style, formatting standards, naming conventions,
-    and consistency with project guidelines. Focus only on style issues.
+    Act as a complexity auditor. Analyze cyclomatic complexity, function length, nested depth,
+    and code maintainability. Focus only on complexity issues.
 - Directive: "READ-ONLY analysis, generate findings report, make NO file modifications"
 
 Call general-purpose with:

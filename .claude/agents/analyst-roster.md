@@ -159,14 +159,13 @@ generic descriptions.
 
 ### Step 5: Select Core Agents
 
-**Core agents consist of 10 agents:** 5 always-required + 5 conditionally-required
+**Core agents consist of 9 agents:** 4 always-required + 5 conditionally-required
 
-**ALWAYS include these 5 required core agents:**
+**ALWAYS include these 4 required core agents:**
 
 - `complexity-auditor`: Cyclomatic complexity, function length, nested depth
 - `security-auditor`: General security vulnerabilities, injection attacks, XSS, CSRF, exposed secrets
 - `style-conformist`: Code formatting, naming conventions, project style guide adherence
-- `syntax-checker`: Syntax errors, compilation issues, type mismatches
 - `temporal-reference-critic`: Temporal reference patterns in comments, ensuring comments describe current behavior only
 
 **MUST include these 5 conditionally-required core agents WHEN CONDITIONS ARE MET:**
@@ -344,12 +343,6 @@ For each selected agent from Steps 5-8:
     unnecessary type conversions`
   - Note: Specialized agent used as fallback for related missing agent
 
-- Selected: `syntax-checker` (not available)
-  - Context: "New TypeScript files with complex generics"
-  - Fallback: `general-purpose: Acting as syntax-checker - validate syntax errors, compilation issues, type
-    mismatches`
-  - Note: Role qualifier describes the type of checking, not specific file locations
-
 ## Output Format
 
 **CRITICAL OUTPUT REQUIREMENT**: You must ONLY output the final markdown template below. Do NOT include any of
@@ -394,14 +387,13 @@ Total: [total] ([native count] native, [fallback count] fallback)
 - scope-analyzer
 - security-auditor
 
-### Using Fallbacks (5)
-- general-purpose: Acting as syntax-checker - check for compilation errors, syntax violations, type mismatches
+### Using Fallbacks (4)
 - general-purpose: Acting as style-conformist - enforce code style and formatting standards
 - general-purpose: Acting as complexity-auditor - analyze cyclomatic complexity, function length, nested depth
 - general-purpose: Acting as performance-analyst - identify performance bottlenecks, inefficient algorithms
 - general-purpose: Acting as interface-designer - review CLI command structure consistency
 
-Total: 8 (3 native, 5 fallback)
+Total: 7 (3 native, 4 fallback)
 ```
 
 **Fallback Indication Rules:**
@@ -425,12 +417,12 @@ Total: 8 (3 native, 5 fallback)
 
 ## Decision Rules
 
-1. **Start with the 5 always-required core agents**
+1. **Start with the 4 always-required core agents**
 2. **Add conditionally-required core agents based on detected patterns** (MUST include when conditions are met)
 3. **Add specialized agents based on detected patterns** (tracking context per Step 4)
 4. **Honor user guidance** by ensuring requested focus areas are covered
 5. **Remove clearly irrelevant agents** to avoid noise
-6. **Typical team size**: 8-20 agents (minimum 5, often 8-12 for small changes, up to 20+ for complex changes)
+6. **Typical team size**: 8-20 agents (minimum 4, often 8-12 for small changes, up to 20+ for complex changes)
 7. **When in doubt, include rather than exclude** - false negatives are worse than false positives
 
 ## Example Scenario
@@ -460,8 +452,7 @@ The following shows what happens internally - these steps are NEVER included in 
 ```markdown
 ## Selected Agents
 
-### Available Agents (14)
-- syntax-checker
+### Available Agents (13)
 - style-conformist
 - complexity-auditor
 - security-auditor
@@ -480,7 +471,7 @@ The following shows what happens internally - these steps are NEVER included in 
 - general-purpose: Acting as caching-strategist - review caching configuration, TTL strategies, and connection pooling
 - go-engineer: Acting as go-nit-checker - identify Go anti-patterns, improper error handling, unnecessary type conversions
 
-Total: 16 (14 native, 2 fallback)
+Total: 15 (13 native, 2 fallback)
 ```
 
 **Note about this example**:
@@ -488,7 +479,7 @@ Total: 16 (14 native, 2 fallback)
 - The example above shows ONLY the final output that should be returned
 - The internal processing steps (detecting agents, analyzing changesets, tracking context) happened behind the
   scenes but are NEVER included in the output
-- The vast majority of selected agents (14 out of 16) are available and functioning normally
+- The vast majority of selected agents (13 out of 15) are available and functioning normally
 - Only 2 specialized agents require fallbacks: `caching-strategist` uses `general-purpose` with a role
   qualifier, and `go-nit-checker` uses the available `go-engineer` agent as a specialized fallback
 - The fallback instructions are specific and contextual - role qualifiers describe WHAT role to take on, while
