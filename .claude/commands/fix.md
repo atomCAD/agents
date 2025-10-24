@@ -193,6 +193,14 @@ Even with directives, the agent will NOT:
 - **If check finds ANY issues** (ANY output including diffs, warnings, errors, regardless of exit code):
   Continue to Step 2
 
+**IMPORTANT - Reading Bash Tool Results:**
+
+The Bash tool results tell you the exit code without needing to re-run:
+
+- **Exit code 0**: Function results have NO `<error>` tag
+- **Exit code non-zero**: Function results have an `<error>` tag
+- **NEVER re-run `./check.sh` just to verify the exit code** - you already know it from the tool results
+
 **CRITICAL WARNING - CASCADING CHECK FAILURES**:
 
 - **Earlier failing checks PREVENT later checks from running** (e.g., if compilation fails, linting cannot run)
@@ -338,6 +346,13 @@ After applying fixes:
 ```bash
 ./check.sh
 ```
+
+**Interpreting Bash Tool Results:**
+
+- **NO `<error>` tag in results + empty output**: Exit code 0, all checks passed, DONE
+- **NO `<error>` tag in results + any output**: Exit code 0 but issues remain, CONTINUE
+- **`<error>` tag in results**: Exit code non-zero, issues remain, CONTINUE
+- **NEVER re-run commands just to verify the exit code** - the tool results already tell you
 
 **Progress evaluation:**
 
