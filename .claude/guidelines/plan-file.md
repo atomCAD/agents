@@ -88,24 +88,26 @@ of being as small as possible, not as a synonym for "atomic task" itself.
 
 ### Outcome
 
-An outcome is a desired result that requires multiple tasks to achieve. Outcomes represent "what" needs to be
-accomplished (the end state) while tasks represent "how" to get there (the specific actions). In GTD (Getting Things
-Done) terminology, outcomes correspond to "projects" - meaningful capabilities that cannot be completed in a single
-action.
+An outcome is a desired result that requires either multiple tasks to achieve OR explicit validation of critical
+requirements. Outcomes represent "what" needs to be accomplished (the end state) while tasks represent "how" to get
+there (the specific actions). In GTD (Getting Things Done) terminology, outcomes correspond to "projects" - meaningful
+capabilities that cannot be completed in a single action.
 
 **Key characteristics:**
 
-- Multi-step results requiring multiple tasks
+- Multi-step results requiring multiple tasks, OR single critical requirements needing explicit validation
 - Observable end states with measurable completion
 - User-facing value or capabilities
 - Success criteria that define "done"
 
 **When to use**: For complex features that span multiple atomic tasks, list explicit outcomes with their success
 criteria in an Outcomes section. For simple features accomplishable in 1-2 tasks, outcomes can be omitted and success
-criteria specified at the plan level instead (see Optional Elements).
+criteria specified at the plan level instead (see Optional Elements). Single-task outcomes should be used sparingly -
+primarily for critical requirements (performance, security, compliance) that need explicit tracking and validation.
 
-**Example**: "Users can reset forgotten passwords" (outcome) vs. "Add password reset endpoint" (task that contributes
-to that outcome).
+**Example**: "Users can reset forgotten passwords" (outcome requiring multiple tasks) vs. "Add password reset endpoint"
+(task that contributes to that outcome). Single-task example: "API responds within 500ms" (critical performance
+requirement with explicit validation needs).
 
 ## Document Structure
 
@@ -136,34 +138,66 @@ Every PLAN.md document should start with this header structure:
 
 ### Outcomes Section Format
 
-The Outcomes section lists **desired results** (projects in GTD terminology) - things that require more than one action to
-complete. Each outcome represents a meaningful capability or deliverable that emerges from completing multiple tasks.
+The Outcomes section lists **desired results** (projects in GTD terminology) - things that typically require more than one
+action to complete, or critical requirements needing explicit validation. Each outcome represents a meaningful capability
+or deliverable that emerges from completing one or more tasks.
 
 #### Outcome Characteristics
 
-- **Multi-step results**: Each outcome requires multiple tasks to achieve
+- **Multi-step results**: Each outcome typically requires multiple tasks to achieve
 - **Observable end states**: Describes what "done" looks like, not how to get there
 - **User-facing value**: Focus on capabilities and benefits, not implementation details
 - **Measurable completion**: Clear criteria for when the outcome is achieved
 
+#### Single-Task Outcomes
+
+While most outcomes require multiple tasks, some critical requirements warrant explicit tracking as outcomes even if
+implementable in a single task. Use single-task outcomes sparingly and only when:
+
+**Valid use cases:**
+
+- **Performance requirements**: "API responds within 500ms" - simple to implement but critical to verify
+- **Security requirements**: "All API endpoints require authentication" - may be one task but needs explicit validation
+- **Compliance requirements**: "GDPR data export completes within 30 days" - hard requirement needing verification
+- **Critical constraints**: "System handles 10,000 concurrent users" - requires explicit load testing validation
+
+**When NOT to use single-task outcomes:**
+
+- Simple features without critical validation needs - use plan-level success criteria instead
+- Internal refactoring or code organization - doesn't need outcome-level tracking
+- Routine bug fixes - track as tasks unless they address critical security/performance issues
+- Tasks that are already part of a larger outcome - avoid redundant tracking
+
+**Guideline**: If a single-task item is important enough that its validation deserves explicit documentation separate
+from the task itself, it can be an outcome. Otherwise, keep it as a task.
+
 #### Outcome Format
 
-Outcomes use standard bullet points (not checkboxes, since they're not tasks) with sub-requirements for success criteria,
-principles, and constraints:
+Outcomes can use either checkboxes or standard bullet points, with sub-requirements for success criteria, principles, and
+constraints. Checkboxes are useful for tracking when an outcome has been fully achieved and verified:
 
 ```markdown
 ## Outcomes
 
-- Users can securely authenticate with the system
-  - Success criteria: Login works, sessions persist, logout clears session
+- [ ] Users can securely authenticate with the system
+  - Success criteria:
+    - Login works
+    - Sessions persist
+    - Logout clears session
   - Security principle: Use OAuth 2.0 for authentication
   - Constraint: Support SSO integration with existing providers
-- Shopping cart persists across sessions
-  - Success criteria: Cart survives browser refresh, logout/login cycle
+
+- [ ] Shopping cart persists across sessions
+  - Success criteria:
+    - Cart survives browser refresh
+    - Cart survives logout/login cycle
   - Constraint: Must persist for minimum 30 days
   - Performance: Cart operations complete < 500ms
-- Search results are filtered and ranked by relevance
-  - Success criteria: Filters apply correctly, ranking algorithm works
+
+- [ ] Search results are filtered and ranked by relevance
+  - Success criteria:
+    - Filters apply correctly
+    - Ranking algorithm works
   - Performance: Results return in < 2 seconds
   - Principle: Use existing search infrastructure
 ```
@@ -176,8 +210,11 @@ achieving the outcomes:
 ```markdown
 ## Outcomes
 
-- Users can reset forgotten passwords
-  - Success criteria: Reset link sent, token expires, password updates
+- [ ] Users can reset forgotten passwords
+  - Success criteria:
+    - Reset link sent
+    - Token expires
+    - Password updates
   - Security constraint: Token valid for 24 hours only
   - Principle: One-time use tokens, no token reuse
 
@@ -194,8 +231,9 @@ achieving the outcomes:
 
 Apply these questions to verify outcome quality:
 
-1. **Multi-step test**: Does this require 2+ tasks to achieve?
+1. **Outcome test**: Does this require 2+ tasks OR explicit validation of a critical requirement?
    - If no: This is a task, not an outcome
+   - If single-task: Is this a critical requirement (performance, security, compliance) that warrants explicit tracking?
 
 2. **End-state test**: Does this describe WHAT (result), not HOW (implementation)?
    - If describing implementation: Refocus on the user-facing result
@@ -208,7 +246,7 @@ Apply these questions to verify outcome quality:
 
 **Common mistakes:**
 
-- Outcome is too granular (completable as single task)
+- Outcome is too granular (completable as single task without critical validation needs)
 - Outcome describes approach rather than result
 - Success criteria are subjective or vague
 - Outcome scope spans entire plan (needs splitting)
