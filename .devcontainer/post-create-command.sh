@@ -69,6 +69,33 @@ if [ ! -L /home/vscode/.claude.json ]; then
 fi
 echo "Claude configuration ready"
 
+# Set up shell history configuration (bind mount from .git/.config/history)
+echo "Setting up shell history..."
+# Ensure the bind mount directory has correct permissions
+if [ -d /home/vscode/.history ] && [ ! -w /home/vscode/.history ]; then
+    echo "Fixing permissions on shell history directory..."
+    sudo chown -R vscode:vscode /home/vscode/.history
+fi
+# Configure bash to use persistent history
+if ! grep -q "^export HISTFILE=~/.history/bash_history" ~/.bashrc; then
+    cat >> ~/.bashrc << 'EOF'
+# Persistent bash history (stored in /workspace/.git/.config/history)
+export HISTFILE=~/.history/bash_history
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+EOF
+fi
+# Configure zsh to use persistent history
+if [ ! -f ~/.zshrc ] || ! grep -q "^export HISTFILE=~/.history/zsh_history" ~/.zshrc; then
+    cat >> ~/.zshrc << 'EOF'
+# Persistent zsh history (stored in /workspace/.git/.config/history)
+export HISTFILE=~/.history/zsh_history
+export HISTSIZE=10000
+export SAVEHIST=20000
+EOF
+fi
+echo "Shell history configuration ready"
+
 echo "=== Post-create setup complete ==="
 
 # EOF

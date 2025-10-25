@@ -46,7 +46,9 @@
     // pids-limit: Maximum number of processes
     "--pids-limit=${localEnv:DEVCONTAINER_PIDS_LIMIT:1024}",
     // Bind mount for Claude configuration (git-clean-proof location)
-    "--mount=type=bind,source=${localWorkspaceFolder}/.git/.config/claude,target=/home/vscode/.claude"
+    "--mount=type=bind,source=${localWorkspaceFolder}/.git/.config/claude,target=/home/vscode/.claude",
+    // Bind mount for shell history (git-clean-proof location)
+    "--mount=type=bind,source=${localWorkspaceFolder}/.git/.config/history,target=/home/vscode/.history"
   ],
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
@@ -63,7 +65,7 @@
   },
   "forwardPorts": [],
   // Create Claude config directory before container starts (for bind mount)
-  "initializeCommand": "mkdir -p ${localWorkspaceFolder}/.git/.config/claude",
+  "initializeCommand": "mkdir -p ${localWorkspaceFolder}/.git/.config/claude && mkdir -p ${localWorkspaceFolder}/.git/.config/history",
   // Note: Claude Code is intentionally installed without version pinning - it auto-updates regardless.
   "postCreateCommand": "sh .devcontainer/post-create-command.sh"
 }
