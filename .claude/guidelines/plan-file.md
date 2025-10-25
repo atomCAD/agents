@@ -269,7 +269,8 @@ Tasks use markdown checkbox syntax:
 
 1. Tasks are ordered by dependency (prerequisite tasks come first)
 2. Each task builds incrementally on previous tasks
-3. No task should require setup work for future tasks
+3. Each task must accomplish something meaningful on its own - avoid purely preparatory work that only adds
+   dependencies or infrastructure for future tasks
 4. Each task adds exactly one feature/capability
 
 #### Documenting Task Dependencies
@@ -608,14 +609,24 @@ atomic tasks.
 
 **Why**: No measurable success criteria, no clear scope, not testable.
 
-#### Example 3: Creates Future Dependency
+#### Example 3: Purely Preparatory Work
 
 ```markdown
-- [ ] Set up database schema for future features
+- [ ] Add lodash dependency
 ```
 
-**Why**: Only create what's needed for the current feature. Don't do setup work for tasks that aren't being
-implemented yet.
+**Why**: Each task must accomplish something meaningful. Adding a dependency without using it leaves the repository
+in a "dangling" state where the dependency appears unnecessary. Instead, add dependencies when they're actually used:
+
+**Better:**
+
+```markdown
+- [ ] Implement array sorting utility
+  - Add lodash dependency
+  - Create sortBy helper function using lodash
+  - Write tests for sorting behavior
+  - Use in user list component
+```
 
 #### Example 4: Not Incremental (Requires Multiple Steps)
 
@@ -923,8 +934,10 @@ This indicates the **original planning was too granular**. The tasks were not tr
 4. **Add ChangeLog entry** explaining the consolidation
 5. **Resume implementation** with correctly-scoped task
 
-**Note:** Over-granular tasks are less problematic than oversized ones - they still maintain atomic commits.
-However, they create unnecessary overhead in task tracking.
+**Why this matters:** Over-granular tasks break atomicity by creating intermediate committed states where the codebase
+violates project invariants. For example, splitting "Add feature X" into "Add dependency" and "Implement feature X"
+creates a commit with dangling, unused code. Each commit must leave the codebase in a valid, working state in
+compliance with project guidelines (passing tests, linting, no unused dependencies or dead code, etc.).
 
 **Example of Over-Granular Tasks:**
 
@@ -952,10 +965,17 @@ This combines the work into a single atomic task with sub-requirements, matching
 #### The Core Principle
 
 **The plan should reflect the actual atomic tasks needed to build the feature** (see "Atomic Task" in Key
-Terminology for full definition). If reality diverges from the plan during implementation, the plan was wrong -
-not reality. Fix the plan, then continue implementation.
+Terminology for full definition). Follow the plan as written - it exists to guide implementation.
 
-**Good planning prevents implementation surprises.** When tasks are correctly scoped as atomic, they naturally map
+**When to update the plan:** Only when it becomes clear the task as written is impossible or relies on false
+assumptions (e.g., "Integrate with API endpoint /users" but that endpoint doesn't exist, or "Use library X for
+feature Y" but library X doesn't support the needed functionality), or is poorly scoped. Implementation difficulty
+alone is not a reason to change the plan. The threshold is high: the plan should only be changed when the task
+cannot be completed as specified, not merely because it's harder than expected.
+
+**Task decomposition principle:** Break tasks down as much as possible, but no further. Tasks should be decomposed
+until further breakdown would violate project invariants - creating commits with dead code, unused dependencies, or
+leaving the codebase in a non-compliant state. When tasks are correctly scoped at this level, they naturally map
 1:1 to commits without adjustment.
 
 **In practice:** Most planning errors lean toward tasks that are too large rather than too small. When in doubt
