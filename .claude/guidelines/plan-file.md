@@ -120,11 +120,11 @@ Every PLAN.md document should start with this header structure:
 ```markdown
 # Plan: [Feature Name]
 
-[Brief overview of the feature being implemented - 1-3 sentences describing the goal]
+[Brief overview of the work being planned - 1-3 sentences describing the goal]
 
 ## Outcomes
 
-[List of desired outcomes/projects - each outcome is a result requiring multiple actions]
+[List of desired outcomes/projects - each outcome is a result requiring multiple actions and/or explicit validation]
 
 ## Tasks
 ```
@@ -287,16 +287,6 @@ Terminology):
   - Test: Cache hit/miss metrics
 ```
 
-##### Example: Complex dependency graph
-
-For complex dependency graphs, add a metadata section:
-
-```markdown
-## Task Dependencies
-- Task 3 depends on: Tasks 1, 2
-- Task 5 depends on: Task 4
-```
-
 #### Task Description Format
 
 **Feature task format** (no category prefix):
@@ -363,7 +353,8 @@ Every task must be categorized as one of three types:
 2. **Move-only** - Relocates code with minimal changes
 
    **Allowed in move-only tasks:**
-   - Moving functions, classes, or modules to new files
+   - Moving functions, classes, or modules to different files
+   - Reordering function/class definitions within a file
    - Adding module definitions, imports, exports required for new location
    - Updating import paths in files using the moved code
    - Minimal formatting changes to fit new context
@@ -374,18 +365,19 @@ Every task must be categorized as one of three types:
    - Renaming beyond what's required for new location
    - Combining/splitting functions
 
-   **File boundary requirement**: Move-only tasks must move code across file boundaries. Reorganizing code within a
-   single file is categorized as Refactor, even if it's purely positional movement without logic changes.
+   **Purpose**: Move-only tasks isolate code relocation from logic changes. Movement diffs are large and difficult to
+   review - the reviewer should only need to verify the code is identical in the new location. Never mix movement
+   with refactoring in the same task, as it makes review significantly harder.
 
    **"Minimal changes" defined**: Only modifications strictly necessary for code to function in new location:
-   - Indentation adjustments to match new file's style
+   - Indentation adjustments to match new location's style
    - Import path updates (changing relative paths)
    - Namespace or module wrapper additions required by new location
    - Export/visibility keywords required by language (e.g., `pub`, `export`)
    - Location-specific comment references (e.g., file names in docstrings)
-   - Line wrapping adjustments to match new file's line length conventions
+   - Line wrapping adjustments to match new location's line length conventions
    - Qualified name updates when moving between namespaces
-   - Re-exports in original location to maintain temporary backward compatibility
+   - Re-exports in original location when needed to maintain temporary backward compatibility
 
    **NOT minimal (use Refactor instead):**
    - Rewriting or improving documentation content
@@ -405,14 +397,13 @@ Every task must be categorized as one of three types:
    - Renaming variables, functions, classes, or modules for clarity
    - Extracting duplicated code into reusable functions or modules
    - Simplifying complex functions or logic while preserving behavior
-   - Improving code organization within files
    - Updating code style or formatting for consistency
    - Breaking down large functions into smaller, more focused ones
 
    **NOT allowed (use Feature or Move-only instead):**
    - Changing program behavior or outputs (use Feature)
    - Adding new functionality or capabilities (use Feature)
-   - Moving code to different files or modules (use Move-only)
+   - Relocating code (use Move-only)
    - Fixing bugs that change behavior (use Feature)
 
    **Decision criteria**: If the program's external behavior remains identical (same inputs produce same outputs),
@@ -452,8 +443,6 @@ Apply these tests in order to verify a task is properly atomic:
 - Description exceeds one sentence
 - More than 5-7 sub-requirements
 - Sub-requirements span multiple unrelated concerns
-- Estimated time exceeds 2 hours
-- Changes span 3+ unrelated files
 
 If ANY test fails, return to planning and re-scope before implementation.
 
@@ -472,10 +461,6 @@ These guidelines help calibrate task granularity. They are heuristics, not rigid
 - Requires multiple significant architectural decisions
 - Contains unknown unknowns requiring exploration
 - Involves cross-cutting concerns affecting multiple subsystems
-
-**Time-based indicators** (consider splitting if):
-
-- Estimated implementation time exceeds 2 hours
 - Requires significant context switching between domains
 - Validation approach is complex or multi-faceted
 
@@ -675,20 +660,22 @@ When documenting layered infrastructure, structure it as separate tasks where ea
 tested:
 
 ```markdown
-- [ ] Create data model
-  - Write tests for model validation
-  - Write tests for model methods
-  - Implement model class
+- [ ] Add User model with email validation
+  - Write tests for valid/invalid email formats
+  - Write tests for required fields (name, email, password)
+  - Implement User model with validation rules
 
-- [ ] Create data access layer
-  - Write tests for CRUD operations
-  - Write tests for error handling
-  - Implement database integration
+- [ ] Create database repository for User persistence
+  - Write tests for creating users in database
+  - Write tests for finding users by email
+  - Write tests for handling duplicate email errors
+  - Implement UserRepository with database operations
 
-- [ ] Create API endpoint
-  - Write tests for endpoint responses
-  - Write tests for input validation
-  - Implement controller logic
+- [ ] Add POST /api/users registration endpoint
+  - Write tests for successful user creation (201 response)
+  - Write tests for duplicate email rejection (409 response)
+  - Write tests for invalid input validation (400 response)
+  - Implement registration controller using UserRepository
 ```
 
 ### Cross-Component Features
@@ -714,30 +701,27 @@ require multiple meaningful commits.
 **CORRECT (atomic tasks):**
 
 ```markdown
-- [ ] Add avatar_url column to users table
-  - Write migration to add avatar_url column with constraints
-  - Write tests for column constraints and defaults
-  - Verify migration runs and rolls back cleanly
-
 - [ ] Implement POST /api/users/:id/avatar endpoint
-  - Write tests for file upload validation (type, size limits)
-  - Write tests for successful upload (file stored, URL returned)
-  - Write tests for error cases (missing file, invalid user, storage failure)
+  - Add avatar_url column to users table (nullable string)
+  - Add multer dependency for file uploads
+  - Write tests for file upload validation (image types, 5MB size limit)
+  - Write tests for successful upload (200 status, file stored, URL returned)
+  - Write tests for error cases (400 invalid file, 404 invalid user, 500 storage failure)
   - Implement endpoint with file storage and database update
 
 - [ ] Create AvatarUpload component
   - Write tests for file selection and preview
   - Write tests for upload progress and error states
-  - Write tests for API integration
+  - Write tests for API integration with POST /api/users/:id/avatar
   - Implement component with file selection UI
   - Add preview and error state displays
-  - Integrate with POST /api/users/:id/avatar endpoint
+  - Integrate with avatar upload endpoint
 
 - [ ] Add avatar display to UserProfile component
   - Write tests for avatar display with valid URL
-  - Write tests for fallback when avatar_url is null
+  - Write tests for fallback image when avatar_url is null
   - Update UserProfile to fetch and display avatar
-  - Verify display works in various states
+  - Verify display works in various states (loading, success, fallback)
 ```
 
 **Note for authors**: Each task is atomic and complete: one layer, fully tested, independently valuable. The
@@ -750,10 +734,11 @@ complete "feature" emerges from the series of atomic tasks.
 When documenting bug fixes, structure the task to include regression tests:
 
 ```markdown
-- [ ] Fix null pointer in user profile display
-  - Write test reproducing the bug
-  - Write tests for related edge cases
-  - Fix the null check in render function
+- [ ] Fix UserProfile crash when user has no avatar
+  - Write failing test for null avatar_url
+  - Add null/undefined check in UserProfile.render()
+  - Write tests for related edge cases (empty string, malformed URL)
+  - Refactor avatar display logic to use fallback helper
   - Verify all tests pass
 ```
 
@@ -764,10 +749,13 @@ When documenting bug fixes, structure the task to include regression tests:
 When documenting refactoring, structure the task to verify behavior preservation:
 
 ```markdown
-- [ ] Refactor: Simplify authentication module
-  - Refactor code structure
-  - Verify all existing tests still pass
-  - Remove deprecated code paths
+- [ ] Refactor: Extract password validation into reusable helper
+  - Verify password validation in registration and reset handlers has test coverage
+  - Verify all existing tests pass (baseline)
+  - Extract duplicated password validation logic from both handlers
+  - Create validatePassword() helper with existing validation rules
+  - Update registration and reset handlers to use helper
+  - Verify all tests still pass
 ```
 
 ## Update Protocol
@@ -1143,5 +1131,5 @@ PLAN.md documents follow a structured format:
 - Archive completed plans to `.attic/plans/` with concatenated changelog, committed to version control
 
 ---
-*Last Updated: 2025-10-09*
-*Version: 1.0*
+*Last Updated: 2025-10-23*
+*Version: 2.0*
