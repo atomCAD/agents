@@ -22,6 +22,14 @@ META_AGENTS=(
 # Base directory for agent definitions
 AGENTS_DIR="$(dirname "$0")/../agents"
 
+# Check for required dependencies
+if ! command -v yq >/dev/null 2>&1; then
+    echo "Error: 'yq' is required but not installed." >&2
+    echo "Install from: https://github.com/mikefarah/yq" >&2
+    echo "Note: Requires the Go implementation of yq (mikefarah/yq), not the Python version" >&2
+    exit 1
+fi
+
 # Check if agents directory exists
 if [ ! -d "$AGENTS_DIR" ]; then
     echo "Error: Agents directory not found at $AGENTS_DIR" >&2
