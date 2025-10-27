@@ -150,48 +150,32 @@ The planning process follows these six phases to transform a user directive into
 
 **Prerequisites**: All commands assume execution from repository root directory.
 
-### Step 1: Parse Request and Check Status
+### Step 1: Parse Request
 
-1. **Interpret the user's request** (if any):
-   - Use natural language understanding to determine intent
-   - No directive = spend time revising and improving the plan
-   - With directive = understand what they want to do with the plan
+**Interpret the user's request** (if any):
 
-2. **Check PLAN.md state**:
-
-   ```bash
-   test -f PLAN.md
-   ```
-
-**Decision routing:**
-
-- **No PLAN.md + no directive** -> Show "no active plan" message, exit
-- **PLAN.md exists + no directive** -> Continue to Step 2 to revise and improve the plan
-- **Any directive provided** -> Continue to Step 2 (will create or modify PLAN.md as needed)
+- Use natural language understanding to determine intent
+- No directive = spend time revising and improving the plan
+- With directive = understand what they want to do with the plan
 
 ### Step 2: Execute Planning Operation
 
 **MANDATORY: Read guidelines first:**
 
-```bash
-cat .claude/guidelines/plan-file.md
-```
+Use the Read tool to load `.claude/guidelines/plan-file.md` - this contains all rules for task decomposition and formatting.
 
-This contains all rules for task decomposition and formatting.
+**Load current plan state:**
 
-**Load current state (if exists):**
+Use the Read tool to load `PLAN.md`.
 
-```bash
-if [ -f PLAN.md ]; then
-    cat PLAN.md
-fi
-```
+**If PLAN.md doesn't exist** (Read tool returns file not found error): See "Initial Plan Creation" error recovery
+procedure at the end of this section.
 
 **Interpret what the user wants using natural language understanding:**
 
-#### For Plan Revision Without Directive (No directive + PLAN.md exists)
+#### For Plan Revision Without Directive
 
-When user runs `/plan` with no directive and PLAN.md exists:
+When user runs `/plan` with no directive:
 
 1. **Review the existing plan comprehensively**
    - Analyze task decomposition quality
@@ -299,7 +283,6 @@ Generated Tasks:
 - **Marking completion**: User indicates certain work is done
   - Identify which tasks from their description
   - Update checkboxes from `[ ]` to `[x]`
-  - Exit with error if no PLAN.md exists (nothing to mark complete)
 
 - **Restructuring**: User indicates tasks aren't properly scoped
   - Identify problematic tasks
@@ -345,20 +328,7 @@ Requirements:
 
 **Apply changes to PLAN.md:**
 
-The method depends on whether PLAN.md exists:
-
-#### For initial plan creation (PLAN.md does not exist)
-
-Use the Write tool to create PLAN.md with the complete structure:
-
-- Write tool has safety protection against accidental overwrites
-- Include complete structure: title, overview, outcomes section, tasks section
-- Format outcomes as bullet list with sub-requirements (success criteria, principles, constraints)
-- Format tasks as checkboxes with categorization tags where appropriate
-
-#### For plan modifications (PLAN.md exists)
-
-Use the Edit tool for surgical modifications. NEVER recreate the file.
+**ALWAYS use the Edit tool for all modifications. NEVER recreate the file.**
 
 Common modification patterns:
 
@@ -423,18 +393,29 @@ When the Edit tool fails with "string not found":
    - If it fails again, the file may be changing concurrently
    - Consider expanding context or using a different modification approach
 
-**Create or append to ChangeLog.md:**
+#### Initial Plan Creation (Error Recovery)
+
+**This procedure only applies when PLAN.md doesn't exist.**
+
+If the Read tool returns a file not found error for PLAN.md:
+
+1. **Verify no directive was provided**: If user provided no directive, exit with "no active plan" message
+2. **Use Write tool to create PLAN.md** with complete structure:
+   - Include title with "Plan: [Feature Name]"
+   - Add overview paragraph explaining the purpose
+   - Add Outcomes section with bullet list (success criteria, principles, constraints)
+   - Add Tasks section with checkboxes
+   - Format tasks with categorization tags where appropriate
+3. **Create initial ChangeLog.md entry** documenting plan creation
+4. **Continue to Step 3** to generate report
+
+**Key principle**: This is the exception path. The normal workflow assumes PLAN.md exists and uses Edit tool exclusively.
+
+**Update ChangeLog.md:**
+
+Always append to ChangeLog.md (never replace):
 
 ```bash
-# For initial plan creation:
-cat >> "ChangeLog.md" <<'EOF'
-
-## YYYY-MM-DD - Initial plan created
-
-[Description of plan creation and approach]
-EOF
-
-# For plan updates:
 cat >> "ChangeLog.md" <<'EOF'
 
 ## YYYY-MM-DD - [Brief description of change]
