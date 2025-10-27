@@ -298,33 +298,83 @@ Requirements:
 
 **Apply changes to PLAN.md:**
 
-1. Update task list based on operation
-2. Add ChangeLog.md entry documenting the change
-3. Preserve any existing completed tasks
-4. Maintain proper formatting
+The method depends on whether PLAN.md exists:
 
-**Save PLAN.md:**
+#### For initial plan creation (PLAN.md does not exist)
 
-```bash
-# Write the updated content including Outcomes section
-cat > PLAN.md << 'EOF'
-# Plan: [Feature Name]
+Use the Write tool to create PLAN.md with the complete structure:
 
-[Overview]
+- Write tool has safety protection against accidental overwrites
+- Include complete structure: title, overview, outcomes section, tasks section
+- Format outcomes as bullet list with sub-requirements (success criteria, principles, constraints)
+- Format tasks as checkboxes with categorization tags where appropriate
 
-## Outcomes
+#### For plan modifications (PLAN.md exists)
 
-- [ ] [Outcome 1: desired result requiring multiple steps]
-  - Success criteria: ...
-- [ ] [Outcome 2: another multi-step result]
-  - Success criteria: ...
+Use the Edit tool for surgical modifications. NEVER recreate the file.
 
-## Tasks
+Common modification patterns:
 
-- [ ] [Task 1]
-- [ ] [Task 2]
-EOF
-```
+1. **Marking tasks complete:**
+
+   ```text
+   # Change unchecked checkbox to checked
+   old_string: "- [ ] [Category] Task description"
+   new_string: "- [x] [Category] Task description"
+   ```
+
+2. **Adding new tasks:**
+   - Call `plan-architect` subagent to determine optimal insertion point based on dependencies and priority
+   - Agent returns line number(s) for insertion
+   - Edit to insert new task lines at the specified location
+
+3. **Adding new outcomes:**
+   - Insert new outcome bullets in the Outcomes section
+   - Include success criteria as sub-bullets
+
+4. **Removing tasks:**
+   - Delete the specific task line(s)
+   - Document removal reason in ChangeLog
+
+5. **Updating task descriptions:**
+   - Replace old task text with clarified version
+   - Preserve checkbox state and categorization
+
+6. **Restructuring tasks:**
+   - Replace problematic task with multiple atomic tasks
+   - Use Edit tool to swap old task line with new task lines
+
+**Key principles:**
+
+- Use Read tool first to see current state
+- Use Edit tool with precise old_string/new_string
+- Preserve all existing content not being modified
+- Never use `cat >` or other overwrite operations
+- PLAN.md is a living document - edit it, don't recreate it
+- If Edit fails, follow the error recovery procedure below
+
+#### Error Recovery
+
+When the Edit tool fails with "string not found":
+
+1. **Verify current state**: Use Read tool to examine the file's actual contents
+   - The file may have been modified since your last read
+   - Content may have changed due to previous operations
+
+2. **Diagnose the mismatch**: Compare your old_string with actual file content
+   - Check for whitespace differences (spaces vs tabs, trailing spaces)
+   - Verify indentation matches exactly (copy from Read output, not from memory)
+   - Look for line breaks or formatting changes
+   - Ensure the target content hasn't moved to a different location
+
+3. **Regenerate the edit**: Create new old_string/new_string using actual content
+   - Copy exact text from Read tool output including all whitespace
+   - Include enough context to make old_string unique in the file
+   - Preserve formatting precisely as it appears in the file
+
+4. **Retry the operation**: Execute Edit with corrected parameters
+   - If it fails again, the file may be changing concurrently
+   - Consider expanding context or using a different modification approach
 
 **Create or append to ChangeLog.md:**
 
