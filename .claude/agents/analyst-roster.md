@@ -362,25 +362,25 @@ your internal analysis, reasoning steps, or intermediate processing in the outpu
 
 **What TO output:**
 
+### Output Template Structure
+
 Return ONLY the structured markdown template with categorized agent lists, clearly indicating when fallbacks are being used:
 
 ```markdown
 ## Selected Agents
 
 ### Available Agents ([count])
-- [available-agent-1]
-- [available-agent-2]
-- [available-agent-n]
+- [available-agent-name]
+- [available-agent-name]
 
 ### Using Fallbacks ([count])
-- general-purpose: Acting as [missing-agent] - [specific role description]
-- [alternative-agent]: Acting as [missing-agent] - [specific role description]
-- [additional fallback entries as needed]
+- [agent-name]: Acting as [missing-agent-name] - [specific-role-description]
+- [agent-name]: Acting as [missing-agent-name] - [specific-role-description]
 
-Total: [total] ([native count] native, [fallback count] fallback)
+Total: [total-count] ([native-count] native, [fallback-count] fallback)
 ```
 
-**Example Output:**
+### Concrete Example
 
 ```markdown
 ## Selected Agents
@@ -399,7 +399,17 @@ Total: [total] ([native count] native, [fallback count] fallback)
 Total: 7 (3 native, 4 fallback)
 ```
 
-**Fallback Indication Rules:**
+### Format Specification Rules
+
+**Structure Requirements:**
+
+1. **Header**: Always use exactly `## Selected Agents` as the main header
+2. **Section Headers**: Use exactly `### Available Agents ([count])` and `### Using Fallbacks ([count])`
+3. **Agent Lists**: Use bullet points (`-`) followed by agent name or fallback specification
+4. **Count Format**: Use parentheses with numbers: `(3)`, `(14)`, etc.
+5. **Summary Line**: Always end with `Total: [number] ([native] native, [fallback] fallback)`
+
+**Fallback Format Requirements:**
 
 1. **Always clearly separate** available agents from fallback agents in the output
 2. **For fallback agents**, always include the full role qualifier describing what they should check
@@ -409,6 +419,13 @@ Total: 7 (3 native, 4 fallback)
    acting role
 6. **Role qualifiers describe WHAT**, not WHERE - specific files and line numbers are communicated through scope
    parameters
+
+**Formatting Standards:**
+
+- **Language identifier**: Always use `markdown` for all output code blocks
+- **Placeholder format**: Use `[descriptive-name]` for templates, `(number)` for counts
+- **Separator format**: Use colon and space `:` between agent name and role description
+- **Action prefix**: Use `Acting as [agent-name] - [description]` format for fallbacks
 
 **Note:** Role qualifiers after the colon serve three purposes:
 
@@ -450,7 +467,9 @@ The following shows what happens internally - these steps are NEVER included in 
 4. Track context for each agent selection
 5. Apply fallback resolution for missing agents]*
 
-**ACTUAL OUTPUT (This is ALL that should be returned):**
+### Expected Agent Output Example
+
+**This is the COMPLETE output that should be returned:**
 
 ```markdown
 ## Selected Agents
