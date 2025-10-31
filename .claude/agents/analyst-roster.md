@@ -249,6 +249,8 @@ specific context from Step 4:
 
 **If specific patterns detected**:
 
+- `prompt-nit-checker`: If AI agent definitions (.claude/agents/*.md), slash commands (.claude/commands/*.md), CLAUDE.md,
+  or other AI prompt/directive files
 - `regex-validator`: If regex patterns found
 - `numerical-methods-analyst`: If heavy math/scientific computing
 - `memory-inspector`: If low-level memory operations
