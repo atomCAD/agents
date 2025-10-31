@@ -146,7 +146,7 @@ For each agent selected, capture:
 
 **Example Context Tracking:**
 
-```text
+```yaml
 Agent: database-optimizer
 Trigger: SQL queries detected in user_repository.py lines 45-67
 Location: user_repository.py - new get_user_by_email() and batch_update_users() functions
