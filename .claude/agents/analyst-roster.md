@@ -201,6 +201,7 @@ specific context from Step 4:
 `.claude/commands/`, or containing YAML frontmatter):
 
 - `prompt-engineer`: For agent prompt specifications and command workflow definitions
+- `prompt-nit-checker`: For identifying over-constraints and pattern-matching that wastes LLM capabilities
 - `documentation-reviewer`: For general documentation quality
 - `markdown-linter`: For markdown syntax and formatting (if available)
 
@@ -249,6 +250,8 @@ specific context from Step 4:
 
 **If specific patterns detected**:
 
+- `prompt-nit-checker`: If AI agent definitions (.claude/agents/*.md), slash commands (.claude/commands/*.md), CLAUDE.md,
+  or other AI prompt/directive files
 - `regex-validator`: If regex patterns found
 - `numerical-methods-analyst`: If heavy math/scientific computing
 - `memory-inspector`: If low-level memory operations
