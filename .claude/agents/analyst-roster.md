@@ -147,11 +147,11 @@ For each agent selected, capture:
 **Example Context Tracking:**
 
 ```yaml
-Agent: database-optimizer
-Trigger: SQL queries detected in user_repository.py lines 45-67
-Location: user_repository.py - new get_user_by_email() and batch_update_users() functions
-Focus: Check for N+1 queries in batch operation, verify index usage on email field
-Examples: Line 52 executes query in loop, line 61 missing parameterization
+agent: database-optimizer
+trigger: SQL queries detected in user_repository.py lines 45-67
+location: user_repository.py - get_user_by_email() and batch_update_users() functions
+focus: Check for N+1 queries in batch operation, verify index usage on email field
+examples: Line 52 executes query in loop, line 61 missing parameterization
 ```
 
 This context will be used in Step 9 to generate precise, contextual fallback instructions rather than
