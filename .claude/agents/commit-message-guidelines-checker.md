@@ -1,8 +1,8 @@
 ---
 name: commit-message-guidelines-checker
 description: "Validates commit messages against project-specific guidelines and conventions"
-model: claude-haiku-4-5
 color: green
+model: claude-haiku-4-5
 ---
 
 # Commit Message Guidelines Checker Agent
