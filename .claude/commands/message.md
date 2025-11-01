@@ -201,7 +201,28 @@ Instructions: Keep technical accuracy but make more concise and highlight practi
    - Verify `.git/COMMIT_EDITMSG` exists and contains a relevant commit message describing the changeset
    - If agent notes any problems, handle them before proceeding to validation
 
-### Step 5: Iterative Validation and Correction Loop
+### Step 5: Format Validation Loop
+
+**MARKDOWN FORMAT VALIDATION (complete before proceeding to LLM validation):**
+
+Run markdownlint validation iteratively until format is clean:
+
+1. **Run markdownlint validation:**
+   - Run `bash -c "cd /workspace/.git && markdownlint-cli2 COMMIT_EDITMSG --config ../.claude/config/commit-message.markdownlint-cli2.yaml"`
+
+2. **If markdownlint reports issues:**
+   - Apply automatic fixes for common markdown formatting issues
+   - Update `.git/COMMIT_EDITMSG` with corrected content
+   - Re-run markdownlint validation to verify fixes
+   - Repeat up to 5 times until no issues remain or maximum attempts reached
+   - If still failing after 5 attempts, exit with markdownlint error details
+
+3. **If markdownlint passes:**
+   - Proceed to Step 6 (LLM Validation)
+
+**This format validation loop ensures commit messages follow markdown best practices before expensive LLM validation.**
+
+### Step 6: LLM Validation and Correction Loop
 
 **CRITICAL: Call ALL selected agents in a SINGLE message with multiple tool calls for parallel execution:**
 
@@ -209,18 +230,7 @@ Execute comprehensive validation with specialist-driven corrections:
 
 **VALIDATION CYCLE (repeat until all agents pass):**
 
-1. **Run markdownlint validation first:**
-   - Run `bash -c "cd /workspace/.git && markdownlint-cli2 COMMIT_EDITMSG --config ../.claude/config/commit-message.markdownlint-cli2.yaml"`
-   - If markdownlint reports any issues:
-     - Apply automatic fixes for common markdown formatting issues
-     - Update `.git/COMMIT_EDITMSG` with corrected content
-     - Re-run markdownlint validation to verify fixes
-     - Repeat up to 5 times until no issues remain or maximum attempts reached
-     - If still failing after 5 attempts, exit with markdownlint error details
-   - If no issues found, proceed to next step
-   - This validation ensures commit messages follow markdown best practices for readability
-
-2. **Execute all validation agents in parallel:**
+1. **Execute all validation agents in parallel:**
    - **commit-message-accuracy-checker**: Verifies message claims match actual code changes
    - **commit-message-format-checker**: Validates formatting, line lengths, imperative mood, whitespace
    - **commit-message-guidelines-checker**: Applies project-specific guidelines and conventions
@@ -228,25 +238,25 @@ Execute comprehensive validation with specialist-driven corrections:
 
    **CRITICAL**: Generate all tool calls in a single message for parallel execution.
 
-3. **Cycle Decision Point:**
-   - **If ALL validation agents pass AND markdownlint passes**: Continue to Step 6 (save and report)
-   - **If ANY validation agents report issues OR markdownlint fails**: Continue to step 4 (issue resolution)
+2. **Cycle Decision Point:**
+   - **If ALL validation agents pass**: Continue to Step 7 (save and report)
+   - **If ANY validation agents report issues**: Continue to Step 3 (issue resolution)
 
-4. **Issue Analysis and Validation (for ALL identified issues):**
+3. **Issue Analysis and Validation (for ALL identified issues):**
    - **Launch specialist agent for each reported issue** (in parallel):
      - Pass the validation agent's report and the current commit message
      - Specialist determines: Is this issue real? What specific corrective action is needed?
      - Specialist provides detailed remediation guidance or dismisses false positives
    - **Consolidate ALL specialist recommendations** into actionable corrections
 
-5. **Issue Correction (for ALL validated issues):**
+4. **Issue Correction (for ALL validated issues):**
    - **Apply ALL trivial corrections** (formatting, whitespace, simple text changes) directly
      - **Update `.git/COMMIT_EDITMSG`** with fully corrected message
    - **For ALL complex corrections** (message structure, content accuracy, style changes):
      - Call commit-message-author with ALL correction instructions consolidated
      - Include original message, all issue details, and all required changes
 
-6. **Return to Validation Cycle:**
+5. **Return to Validation Cycle:**
    - **Return to start of validation cycle** (re-execute all validation agents on the corrected message)
    - **Maximum 5 validation cycles** to prevent infinite loops
    - **If still failing after 5 cycles**: Exit with detailed error report
@@ -254,13 +264,13 @@ Execute comprehensive validation with specialist-driven corrections:
 **Example correction cycle:**
 
 ```text
-Cycle 1: Format agent finds subject too long -> Specialist confirms -> Call commit-message-author to shorten
-Cycle 2: Markdownlint finds formatting issues -> Apply automatic fixes -> Update COMMIT_EDITMSG
-Cycle 3: Accuracy agent finds technical claim incorrect -> Specialist confirms -> Call commit-message-author to correct
-Cycle 4: All agents pass and markdownlint passes -> Proceed to Step 6
+Format Loop: Markdownlint finds formatting issues -> Apply automatic fixes -> Update COMMIT_EDITMSG -> Passes
+Critic Cycle 1: Format agent finds subject too long -> Specialist confirms -> Call commit-message-author to shorten
+Critic Cycle 2: Accuracy agent finds technical claim incorrect -> Specialist confirms -> Call commit-message-author to correct
+Critic Cycle 3: All validation agents pass -> Proceed to Step 7
 ```
 
-### Step 6: Report Results
+### Step 7: Report Results
 
 Provide comprehensive report on the completed message generation:
 
