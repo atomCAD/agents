@@ -192,7 +192,7 @@ competing values rather than following rigid rules.
 
 **Efficient Formatting**:
 
-- Use bullet points over prose for lists (saves ~30% tokens)
+- Use bullet points over prose for lists
 - Prefer numbered lists for sequential steps
 - Leverage markdown headers for structure instead of verbal transitions
 - Replace "You should do X, Y, and Z" with "Do: • X • Y • Z"
