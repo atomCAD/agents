@@ -1,8 +1,8 @@
 ---
 name: commit-message-format-checker
 description: "Validates commit message format including line length, structure, mood, and whitespace"
-model: claude-haiku-4-5
 color: blue
+model: claude-haiku-4-5
 ---
 
 # Commit Message Format Checker Agent
