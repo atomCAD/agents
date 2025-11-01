@@ -3,6 +3,11 @@
 PLAN.md documents guide incremental feature development through test-driven development (TDD). Each plan breaks down
 a feature into atomic tasks, where each task represents a single commit developed using the red-green-refactor cycle.
 
+**Prerequisite**: This document assumes familiarity with atomic changes. See [atomic-changes.md](atomic-changes.md) for
+the foundational concepts of what makes a change atomic, change categories (Feature/Move-only/Refactor), atomicity
+verification tests, and the location-independence principle. This document focuses on how to represent atomic changes
+in PLAN.md format.
+
 ## File Location
 
 The active PLAN.md file lives in the repository root directory. Only one active PLAN.md should exist in the root
@@ -18,25 +23,27 @@ creating and maintaining the document), not PLAN.md **consumers** (developers ex
 
 1. **Document Structure** - What sections exist, how they're formatted
 2. **Content Format** - Syntax for tasks, checklists, categories, descriptions
-3. **Task Decomposition** - What makes a properly-scoped task, how to break down work into document entries
-4. **Task Categories and Their Requirements**:
-   - **Feature tasks** - Must follow TDD (write tests first, then implementation)
-   - **Move-only tasks** - Must verify no behavior changes
-   - **Refactor tasks** - Change code structure without changing behavior
+3. **Sub-requirement Format** - How to break down tasks into testable steps
+4. **Outcome Tracking** - When and how to document multi-task outcomes
 5. **TDD Integration** - How feature tasks should be structured to follow red-green-refactor
 6. **Update Protocol** - How to correctly modify the document over time
 7. **Document Lifecycle** - How PLAN.md files are created, used, and completed
-8. **Calibration Heuristics** - Guidelines for task granularity
-9. **Examples** - Well-formed and malformed task descriptions
+8. **Task-Commit Alignment** - The 1:1 relationship between tasks and commits
+
+**Note**: Foundational concepts about atomic changes, change categories, atomicity verification, and decomposition
+principles are covered in [atomic-changes.md](atomic-changes.md). This document focuses on PLAN.md-specific formatting
+and workflow.
 
 ### Out of Scope
 
-1. **Slash Commands/Tools** - References to `/message`, `/commit`, or other external tooling
-2. **Promotional Content** - "Benefits" section explaining why PLAN.md is good
-3. **Generic Development Philosophy** - Anti-patterns that aren't specifically about PLAN.md task structure
-4. **Strategic Architecture Advice** - General advice about when to use patterns (unless it's about how to represent
+1. **Atomic Change Fundamentals** - Covered in [atomic-changes.md](atomic-changes.md) (definitions, categories,
+   verification tests, decomposition principles)
+2. **Slash Commands/Tools** - References to `/message`, `/commit`, or other external tooling
+3. **Promotional Content** - "Benefits" section explaining why PLAN.md is good
+4. **Generic Development Philosophy** - Anti-patterns that aren't specifically about PLAN.md task structure
+5. **Strategic Architecture Advice** - General advice about when to use patterns (unless it's about how to represent
    them as tasks)
-5. **Content that teaches how to use an existing PLAN.md effectively, rather than how to create and maintain the
+6. **Content that teaches how to use an existing PLAN.md effectively, rather than how to create and maintain the
    PLAN.md document itself**
 
 ## Key Terminology
@@ -67,24 +74,11 @@ The following shows how sub-requirements break down a task's implementation:
 
 ### Atomic Task
 
-An atomic task is the smallest meaningful addition to a system that can be independently completed, tested, and
-committed. It represents the quantum unit of progress in PLAN.md - you cannot decompose it further without losing
-atomicity.
+An atomic task in PLAN.md is an [atomic change](atomic-changes.md#atomic-change) represented as a checkbox item in the
+Tasks section. Each task becomes exactly one git commit when implemented.
 
-**Key characteristics:**
-
-- Completable in exactly one commit
-- Does precisely one thing
-- Adds the smallest meaningful capability
-- Has clear pass/fail validation
-- Leaves the codebase in a working state
-
-**Example:** Adding password validation logic to a registration endpoint is atomic. Implementing an entire user
-authentication system is not - it must be decomposed into multiple atomic tasks.
-
-**Related concept**: An atomic task represents a "minimal increment" in the sense that it cannot be decomposed
-further while remaining atomic. However, "minimal" when used elsewhere in this document refers to the property
-of being as small as possible, not as a synonym for "atomic task" itself.
+**See [atomic-changes.md](atomic-changes.md) for**: Definition, key characteristics, change categories, atomicity
+verification tests, and decomposition principles.
 
 ### Outcome
 
@@ -314,6 +308,9 @@ Terminology):
 ```
 
 ## Task Decomposition Principles
+
+**See [atomic-changes.md](atomic-changes.md) for**: Change categories (Feature, Move-only, Refactor), atomicity
+verification tests, calibration heuristics, and decomposition principles.
 
 ### Foundational Principle: Task-Commit Relationship
 
