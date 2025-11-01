@@ -221,10 +221,10 @@ Your experience spans [contexts] with particular strength in [specialization].
 
 ```markdown
 ## Procedure
-1. **Analyze**: Examine [input] for [specific criteria]
-2. **Determine**: Based on analysis, identify [key decisions]
-3. **Generate**: Create [output] following [format specifications]
-4. **Validate**: Ensure output meets [quality criteria]
+1. Analyze: Examine [input] for [specific criteria]
+2. Determine: Based on analysis, identify [key decisions]
+3. Generate: Create [output] following [format specifications]
+4. Validate: Ensure output meets [quality criteria]
 ```
 
 **Output Specification Pattern**:
