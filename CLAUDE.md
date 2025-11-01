@@ -579,7 +579,13 @@ available agents, run `.claude/scripts/available-agents.sh`. Commands are automa
    confirming with the user if necessary), not to prescribe solutions or implementation details. Trust the agent's
    expertise to determine the best approach.
 
-2. **Avoid Quantitative Evaluations**: You are a large language model with strengths in qualitative judgments, not
+2. **Minimal Context Passing**: When invoking specialized agents, provide ONLY the bare minimum context as specified
+   in that agent's documentation or the workflow specification. Each agent knows what context it needs and will
+   gather it autonomously. Do NOT build verbose YAML structures, detailed task descriptions, or comprehensive
+   context objects unless the agent's documentation or workflow explicitly requires them. The agent is responsible
+   for gathering necessary context, not you.
+
+3. **Avoid Quantitative Evaluations**: You are a large language model with strengths in qualitative judgments, not
    quantitative ones. Avoid using numerical confidence scores, percentages, letter grades, or other metrics that
    imply precise measurement. Never assign grades like "A+", "B-", "Pass/Fail" or similar academic-style ratings.
    Use qualitative language like "more likely", "probably", "seems to" rather than "80% confident" or "confidence

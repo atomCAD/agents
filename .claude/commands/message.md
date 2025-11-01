@@ -183,64 +183,23 @@ Instructions: Keep technical accuracy but make more concise and highlight practi
 
 ### Step 4: Generate Commit Message
 
-Call specialized agent to create commit message:
+1. Determine scope:
+   - If user provided directive: `scope = "amend with directive: {directive}"`
+   - Otherwise: `scope = "new"`
 
-1. Call commit-message-author agent with comprehensive context:
+2. Call agent:
 
-   ```text
-   Context:
-   - Operation type: [new commit OR amending existing commit OR improving existing message]
-   - If amending:
-     - Existing commit details: [output of git show HEAD]
-     - New staged changes: [output of git diff --staged]
-   - If improving existing message:
-     - Existing message: [content from .git/COMMIT_EDITMSG]
-     - User directive: [user's guidance for improvement]
-     - Staged changes: [complete diff from git diff --staged]
-   - If new commit:
-     - Staged changes: [complete diff from git diff --staged]
-   - Recent commit history: [last 10 commits for style consistency]
-   - Project guidelines: [content from guidelines file or note if absent]
-   - Change statistics: [files changed, insertions, deletions]
-   - Branch context: [current branch name]
-
-   CRITICAL REQUIREMENTS:
-   - Analyze the ENTIRE diff comprehensively, never truncate
-   - For amending: Consider both existing commit and new staged changes
-   - For improving: Use existing message as foundation, apply user directive
-   - Use location-based component prefixes (e.g., 'auth:', 'parser:'), NOT type prefixes
-   - Follow project-specific conventions from guidelines
-   - Never include tool advertisements or automated signatures
-   - Use imperative mood in subject line
-   - Keep subject line under 50 characters (hard limit: 72)
-   - Wrap body text at 72 characters
-   - Include detailed explanation for complex changes
-
-   Request:
-   [If improving existing message]
-   Improve the existing commit message according to the user's directive:
-   - Keep what works well from the existing message
-   - Apply the user's requested changes or improvements
-   - Ensure the result accurately describes the staged changes
-   - Maintain consistency with project conventions
-
-   [If generating new message]
-   Generate a commit message that:
-   - Clearly explains what changes were made
-   - Explains why these changes were necessary
-   - Uses consistent style with project history
-   - References related issues or tickets if apparent
-   - Provides context for future developers
+   ```python
+   Task(
+     subagent_type="commit-message-author",
+     prompt="Generate commit message for {scope}. Write the message to .git/COMMIT_EDITMSG"
+   )
    ```
 
-2. Process agent response:
-   - Extract generated commit message
-   - Ensure proper formatting is preserved
-   - Check for any agent errors or warnings
-
-3. Save initial commit message:
-   - Write the generated commit message to `.git/COMMIT_EDITMSG`
-   - Verify the file was written correctly
+3. Verify agent output:
+   - Check if agent reported any errors or issues
+   - Verify `.git/COMMIT_EDITMSG` exists and contains a relevant commit message describing the changeset
+   - If agent notes any problems, handle them before proceeding to validation
 
 ### Step 5: Iterative Validation and Correction Loop
 
