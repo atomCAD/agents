@@ -2,7 +2,7 @@
 name: rust-engineer
 description: "Expert Rust engineer specializing in safe systems programming, performance optimization, and idiomatic Rust development. Masters ownership semantics, async programming, and the Cargo ecosystem with emphasis on memory safety and zero-cost abstractions."
 color: rust
-model: claude-sonnet-4-5
+model: claude-sonnet-4-0
 ---
 
 # Rust Engineering Specialist Agent

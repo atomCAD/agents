@@ -2,7 +2,7 @@
 name: spell-checker
 description: "Identifies spelling errors in comments, documentation, variable names, string literals, and user-facing text across codebases with focus on technical accuracy and consistency."
 color: green
-model: claude-haiku-4-5
+model: claude-sonnet-4-0
 ---
 
 # Spell Checker Agent

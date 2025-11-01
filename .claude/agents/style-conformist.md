@@ -2,7 +2,7 @@
 name: style-conformist
 description: "Enforces code style consistency and formatting conventions across programming languages, ensuring adherence to established project style guides and industry best practices."
 color: blue
-model: claude-sonnet-4-5
+model: claude-sonnet-4-0
 ---
 
 # Style Conformist Agent

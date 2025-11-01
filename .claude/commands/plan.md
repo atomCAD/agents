@@ -2,7 +2,7 @@
 name: plan
 description: "Create and manage PLAN.md documents for incremental TDD-based feature development"
 color: purple
-model: claude-sonnet-4-5
+model: claude-sonnet-4-0
 ---
 
 # PLAN.md Management Autonomous Workflow Action
