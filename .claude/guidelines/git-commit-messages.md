@@ -135,7 +135,9 @@ This helps readers understand how this fits into the larger picture.
 
 ## Detailed Analysis Requirements
 
-After examining the COMPLETE commit (see CRITICAL section above), analyze:
+After examining the COMPLETE commit (see CRITICAL section above), consider the following
+aspects **only when they are relevant to understanding the change**. For the most trivial
+changes, most or all of these may not apply:
 
 1. **Architectural Impact**
    - How does this change fit into the overall system architecture?
@@ -171,7 +173,10 @@ After examining the COMPLETE commit (see CRITICAL section above), analyze:
 
 ### DO
 
-- **READ THE ENTIRE COMMIT FIRST** (non-negotiable)
+- **READ THE ENTIRE COMMIT FIRST**
+
+Apply these guidelines when they are relevant to understanding the change. Not all items apply to every commit:
+
 - Explain both WHAT changed and WHY
 - Document design decisions with technical rationale FROM THE CODE
 - Include code examples DIRECTLY FROM THE DIFF when illustrative
@@ -180,12 +185,13 @@ After examining the COMPLETE commit (see CRITICAL section above), analyze:
 - Write as if explaining to a future developer debugging this code
 - Use present tense, focusing on the change's purpose
 - Provide enough context for someone unfamiliar with recent work
-- Mention ALL files changed and their purpose
 - Document bug fixes found along the way (e.g., unwrap() replacements)
 - Reference issue numbers when fixing bugs: "Fixes #123" or "Closes #456"
 - Cross-reference related issues or PRs: "Related to #789" or "See PR #234"
 
 ### DON'T
+
+These are prohibited in all commit messages regardless of change complexity:
 
 - Write a message without reading the complete diff
 - Reference development steps ("Step 1", "Step 2", etc.)
@@ -204,7 +210,62 @@ includes phrases like "Generated with [tool name]", "Created by [AI assistant]",
 development tools. The commit message should focus solely on documenting the change itself, not the tools used
 to create it.
 
-## Complete Example
+## Message Examples by Complexity
+
+### Trivial Change - Documentation Fix
+
+Context: Removing an unsubstantiated percentage claim from documentation. The diff shows
+exactly what was removed. The only question a reader might have is "why remove it?" so
+the message briefly answers that.
+
+```text
+agents: remove unverified token savings claim from formatting tip
+
+The "~30%" percentage was not based on measurement and could
+mislead users about actual savings.
+```
+
+### Simple Change - Bug Fix
+
+Context: Fixing a timeout bug. Someone debugging session issues needs to know what was
+broken and how the fix works. The message explains the old behavior (timer never reset),
+the user impact (spurious logouts), and the new behavior (timer resets on activity).
+
+```text
+auth: fix session timeout not resetting on user activity
+
+The session timer was only set on login and never reset, causing
+active users to be logged out after 30 minutes regardless of
+activity. Instead update the expiration timestamp on each authenticated
+request to keep active sessions alive.
+```
+
+### Medium Change - Refactoring
+
+Context: Moving code between files without changing functionality. Future readers need to
+understand why this reorganization happened, what changed, and that it's safe (no behavior
+changes). The message addresses the motivation (navigation/organization), confirms it's a
+pure refactor, and reassures about API compatibility.
+
+```text
+parser: extract expression parsing into separate module
+
+Move expression parsing logic from parser.rs into new expr.rs
+module to improve code organization. The 400-line expression
+parser was dominating parser.rs, making navigation difficult and
+obscuring the main parsing flow.
+
+This is a pure code reorganization with no functional changes. The
+public API remains identical - parse_expression() is now re-exported
+from the new module. All existing tests pass without modification.
+```
+
+### Complex Change - New Feature
+
+Context: Adding foundational infrastructure that other code will depend on. Future
+developers need to understand the design decisions (why byte offsets? why half-open
+intervals?), how it fits into the larger system, and what operations it provides. Code
+examples help show intended usage patterns.
 
 ```text
 source: introduce Span type for zero-copy position tracking in parser
@@ -1245,11 +1306,13 @@ const response = await fetch('/api/auth/token', {
 
 ### Total Message Length
 
-- As long as needed to properly document the change
-- Minimum: At least 3 paragraphs for non-trivial changes
+Write what's needed to understand the commit. For the most trivial changes, the subject
+line may be sufficient. Usually a body will be present to explain WHY the change was made,
+to summarize the changes for larger commits, or to provide context that isn't obvious from
+reading the diff.
 
-Remember: A commit message that seems too long today will be invaluable context for someone debugging an issue
-six months from now.
+Remember: A commit message that seems too long today will be invaluable context for
+someone debugging an issue six months from now.
 
 ## Enforcement Checklist
 
@@ -1276,7 +1339,7 @@ Before submitting a commit message, verify:
 - [ ] I included code examples from the actual diff
 - [ ] I documented performance characteristics from real code
 - [ ] My message accurately reflects what was built, not planned
-- [ ] I verified line numbers and content match between Read output and git diff (AI agents)
+- [ ] I verified line numbers and content match between Read output and git diff
 - [ ] I cross-referenced that any mentioned functions/variables exist in the actual code
 - [ ] I confirmed that described behavior matches actual implementation (not assumed behavior)
 - [ ] I checked that examples in commit message are copied from real code, not synthesized
