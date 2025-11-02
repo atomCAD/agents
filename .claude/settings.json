@@ -1,4 +1,24 @@
 {
+  "permissions": {
+    "allow": [],
+    "deny": [
+      "Bash(git add:*)"
+    ],
+    "ask": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git add:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"Reminder: Use of 'git add' is prohibited, and staging changes is only allowed when requested by the user or instructed in the workflow. Follow instructions in CLAUDE.md regarding use of git: these instructions are NON-NEGOTIABLE.\" && exit 2"
+          }
+        ]
+      }
+    ]
+  },
   "includeCoAuthoredBy": false,
   "env": {
     "DISABLE_TELEMETRY": "1"
