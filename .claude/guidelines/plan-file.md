@@ -320,171 +320,33 @@ atomic task that becomes exactly one commit."
 This is not a goal to work toward - it defines what a task IS. If something requires multiple commits, it's
 not one task. If multiple "tasks" fit in one commit, they're not properly decomposed.
 
-### Task Categories
+### Task Category Labels
 
-Every task must be categorized as one of three types:
+Tasks must be labeled with their category (see [atomic-changes.md](atomic-changes.md#change-categories) for
+definitions):
 
-1. **Feature** - Implements new features, bug fixes, or any behavior change to the program
+**Feature tasks** (no category prefix):
 
-   **Allowed in feature tasks:**
-   - Adding new functionality or capabilities to the system
-   - Fixing bugs that change program behavior
-   - Modifying existing behavior to meet new requirements
-   - Adding new tests for new or changed behavior
-   - Creating new files, classes, functions, or modules for new features
-   - Updating existing code to support new functionality
+```markdown
+- [ ] Add email validation to user registration
+```
 
-   **NOT allowed (use Move-only or Refactor instead):**
-   - Relocating code without behavior changes (use Move-only)
-   - Improving code structure without changing behavior (use Refactor)
-   - Renaming variables/functions without functional changes (use Refactor)
-   - Extracting duplicated code without adding features (use Refactor)
-   - Moving files or modules without adding features (use Move-only)
+**Move-only tasks** (prefix with "Move-only:"):
 
-   **Decision criteria**: If adding new behavior, fixing broken behavior, or changing how the program responds to
-   inputs, it's a feature. If only changing code organization or quality without behavior changes, use Move-only
-   or Refactor.
+```markdown
+- [ ] Move-only: Extract authentication logic to separate module
+```
 
-   **TDD requirement**: All feature tasks must follow test-driven development with tests implemented first.
+**Refactor tasks** (prefix with "Refactor:"):
 
-2. **Move-only** - Relocates code with minimal changes
+```markdown
+- [ ] Refactor: Simplify user validation logic
+```
 
-   **Allowed in move-only tasks:**
-   - Moving functions, classes, or modules to different files
-   - Reordering function/class definitions within a file
-   - Adding module definitions, imports, exports required for new location
-   - Updating import paths in files using the moved code
-   - Minimal formatting changes to fit new context
+#### TDD Requirement for Feature Tasks
 
-   **NOT allowed (use Refactor instead):**
-   - Changing function signatures or interfaces
-   - Modifying internal logic or algorithms
-   - Renaming beyond what's required for new location
-   - Combining/splitting functions
-
-   **Purpose**: Move-only tasks isolate code relocation from logic changes. Movement diffs are large and difficult to
-   review - the reviewer should only need to verify the code is identical in the new location. Never mix movement
-   with refactoring in the same task, as it makes review significantly harder.
-
-   **"Minimal changes" defined**: Only modifications strictly necessary for code to function in new location:
-   - Indentation adjustments to match new location's style
-   - Import path updates (changing relative paths)
-   - Namespace or module wrapper additions required by new location
-   - Export/visibility keywords required by language (e.g., `pub`, `export`)
-   - Location-specific comment references (e.g., file names in docstrings)
-   - Line wrapping adjustments to match new location's line length conventions
-   - Qualified name updates when moving between namespaces
-   - Re-exports in original location when needed to maintain temporary backward compatibility
-
-   **NOT minimal (use Refactor instead):**
-   - Rewriting or improving documentation content
-   - Reformatting code style beyond what's needed for new context
-   - Renaming variables, functions, or parameters
-   - Changing logic, algorithms, or control flow
-
-   **Boundary with Refactor**: If improving *how the code works* (not just *where it lives*), use Refactor
-   instead. Ask: "Would this change be needed if the code stayed in its original location?" If yes, it's a
-   refactor.
-
-   **Decision criteria**: If improving how code works (not just where it lives), it's a refactor.
-
-3. **Refactor** - Changes code structure without changing behavior
-
-   **Allowed in refactor tasks:**
-   - Renaming variables, functions, classes, or modules for clarity
-   - Extracting duplicated code into reusable functions or modules
-   - Simplifying complex functions or logic while preserving behavior
-   - Updating code style or formatting for consistency
-   - Breaking down large functions into smaller, more focused ones
-
-   **NOT allowed (use Feature or Move-only instead):**
-   - Changing program behavior or outputs (use Feature)
-   - Adding new functionality or capabilities (use Feature)
-   - Relocating code (use Move-only)
-   - Fixing bugs that change behavior (use Feature)
-
-   **Decision criteria**: If the program's external behavior remains identical (same inputs produce same outputs),
-   it's a refactor. If changing what the program does or where code lives, use Feature or Move-only.
-
-### Atomic Tasks
-
-Each task must be **atomic** (see "Atomic Task" in Key Terminology) - the smallest meaningful addition to the
-system. In the context of task decomposition, atomic tasks must additionally:
-
-1. **Be categorized**: Clearly labeled as feature, move-only, or refactor
-
-**Critical principle**: Tasks should be as **simple as possible** while still remaining atomic. If a task can be
-broken down further without losing atomicity, it should be. If a task cannot be completed in one commit during
-implementation, **the original planning was wrong** - return to planning and rescope.
-
-### Verifying Task Atomicity
-
-Apply these tests in order to verify a task is properly atomic:
-
-1. **Single Sentence Test**: Can you describe the task in one sentence without using "and"?
-   - PASS: "Add email validation to registration"
-   - FAIL: "Add email validation and password strength checking"
-
-2. **Single Commit Test**: Can this be completed in exactly one commit?
-   - If you anticipate multiple commits, decompose further
-
-3. **Focused Test Test**: Can completion be verified with one focused testing approach?
-   - PASS: "Test password validation with valid/invalid inputs"
-   - FAIL: "Test entire authentication flow end-to-end"
-
-4. **Minimal Test**: Can this task be meaningfully smaller while remaining useful?
-   - If yes, decompose further
-
-**Red flags indicating non-atomic tasks:**
-
-- Description exceeds one sentence
-- More than 5-7 sub-requirements
-- Sub-requirements span multiple unrelated concerns
-
-If ANY test fails, return to planning and re-scope before implementation.
-
-### Calibration Heuristics
-
-These guidelines help calibrate task granularity. They are heuristics, not rigid rules.
-
-**Scope indicators** (consider splitting if):
-
-- Changes span 5+ files with different concerns
-- Expected lines of change exceed 100-150
-- Creates complex dependency chains across components
-
-**Complexity indicators** (consider splitting if):
-
-- Requires multiple significant architectural decisions
-- Contains unknown unknowns requiring exploration
-- Involves cross-cutting concerns affecting multiple subsystems
-- Requires significant context switching between domains
-- Validation approach is complex or multi-faceted
-
-**Verification indicators** (consider splitting if):
-
-- "Done" criteria requires a paragraph to explain
-- No single clear test approach exists
-- Partial rollback would be difficult or non-atomic
-
-**Calibration questions**:
-
-1. Can I describe this in one sentence without "and"?
-2. If interrupted halfway, would partial work be coherent (code compiles, tests pass, no broken functionality)?
-3. Does this have a single clear validation approach?
-4. Would a code reviewer understand this as one logical change?
-
-**Context adaptations**:
-
-- Exploratory work: Smaller tasks help navigate uncertainty
-- Well-understood domains: Slightly larger tasks may be appropriate
-- Emergency fixes: Focus on minimal fix scope
-
-**Examples**:
-
-- Too granular: "Update import statement in auth.rs" (too mechanical)
-- Too broad: "Implement user authentication system" (needs decomposition)
-- Well-calibrated: "Add password validation logic to registration endpoint" (clear, testable, atomic)
+All feature tasks must follow test-driven development with tests implemented first. See the "Development Methodology
+Requirements" section for details on the TDD cycle.
 
 ## Development Methodology Requirements
 
