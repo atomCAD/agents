@@ -15,6 +15,7 @@ Execute targeted validation checks:
 
 - **Historical Consistency**: Flag unexpected style deviations from recent commits
 - **Prohibited Attribution**: Block AI/bot attribution lines (fatal error)
+- **SHA Reference Check**: Flag commit SHA references that could become invalid during rebasing
 
 ## Validation Tasks
 
@@ -58,6 +59,36 @@ Flag as critical error if commit message contains any of these patterns:
 - Any attribution to AI/automated tools
 - Co-author lines referencing bots, AI, or automated systems
 
+### 3. SHA Reference Check
+
+**Warning Conditions:**
+
+Flag commit messages that reference specific commit SHAs/hashes:
+
+- **Git SHA patterns**: 7+ character hex strings that look like commit hashes (e.g., `03cb595`, `f0d47d2eeca4f29`)
+- **Explicit references**: Phrases like "commit abc123d", "in 03cb595", "the previous commit (f0d47d2)"
+- **Merge references**: "cherry-picked from a1b2c3d", "reverts commit def456"
+
+**Why this is problematic:**
+
+- **Rebasing invalidates SHAs**: Interactive rebases change commit hashes
+- **Cherry-picking changes context**: The same changes get new SHAs in different branches
+- **Squashing merges SHAs**: Multiple commits become one with a new hash
+- **Branch reorganization**: Any git history rewriting invalidates specific SHA references
+
+**Preferred alternatives:**
+
+- Descriptive references: "the earlier extraction", "previous authentication changes"
+- Relative references: "the previous commit", "two commits ago" (when contextually clear)
+- Content-based references: "the commit that introduced atomic-changes.md"
+- Time-based references: "yesterday's refactoring", "last week's security fix"
+
+**Exceptions (don't flag):**
+
+- References in revert commit messages following git standard format
+- SHA references in merge commit conflict resolution documentation
+- Historical references to commits that won't be rebased (e.g., tagged releases)
+
 ## Analysis Framework
 
 ### Input Processing
@@ -67,6 +98,7 @@ Flag as critical error if commit message contains any of these patterns:
 3. **Get staged changes**: `git diff --staged`
 4. **Compare style patterns** against recent commits
 5. **Scan for prohibited attribution** patterns
+6. **Check for commit SHA references** that could become invalid
 
 ## Response Format
 
@@ -77,6 +109,7 @@ Flag as critical error if commit message contains any of these patterns:
 status: clean
 consistency_check: passed
 attribution_check: passed
+sha_reference_check: passed
 ---
 Message is consistent with project history and contains no prohibited content.
 ```
@@ -92,6 +125,20 @@ issues:
     suggestion: "Use 'authentication:' for consistency"
 ---
 Style inconsistencies detected with recent project commits.
+```
+
+### SHA Reference Warnings
+
+```yaml
+---
+status: sha_reference_warnings
+warnings:
+  - type: commit_sha_reference
+    description: "References commit SHA '03cb595' which could become invalid during rebasing"
+    suggestion: "Use descriptive reference like 'the earlier extraction' instead"
+    location: "line 5: 'previous commit (03cb595)'"
+---
+Commit message contains SHA references that may become invalid during git operations.
 ```
 
 ### Fatal Attribution Error
@@ -111,9 +158,10 @@ FATAL: Prohibited attribution content must be removed before committing.
 
 1. **Context-aware consistency**: Consider the nature of changes when evaluating style consistency
 2. **Zero tolerance for attribution**: Immediately flag any AI/bot attribution as fatal error
-3. **Reasonable variation**: Allow natural style differences between different types of commits
-4. **Historical awareness**: Use recent commits as the baseline, not ancient history
-5. **Actionable feedback**: Provide specific suggestions for consistency improvements
+3. **Rebase-safe messaging**: Warn about SHA references that could become invalid during git operations
+4. **Reasonable variation**: Allow natural style differences between different types of commits
+5. **Historical awareness**: Use recent commits as the baseline, not ancient history
+6. **Actionable feedback**: Provide specific suggestions for consistency improvements
 
 ## Examples
 
@@ -143,3 +191,38 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
 **Action**: Flag as fatal error requiring immediate removal
+
+### SHA Reference Issue Example
+
+**Problematic content:**
+
+```text
+auth: complete JWT implementation
+
+This builds on commit 03cb595 which added the token validation.
+The previous commit (f0d47d2) had a bug in the refresh logic that
+this commit fixes.
+
+Reverts the changes from a1b2c3d and implements a better approach.
+```
+
+**Issues identified:**
+
+- `03cb595`: SHA reference that could change during rebasing
+- `f0d47d2`: SHA reference in parenthetical that could become invalid
+- `a1b2c3d`: SHA reference in revert context outside standard revert format
+
+**Better alternatives:**
+
+```text
+auth: complete JWT implementation
+
+This builds on the earlier token validation work which added the
+core validation logic. The previous authentication commit had a bug
+in the refresh logic that this commit fixes.
+
+Reverts the earlier refresh token approach and implements a better
+strategy based on sliding window expiration.
+```
+
+**Action**: Warn and suggest descriptive alternatives
