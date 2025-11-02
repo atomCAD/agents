@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [],
     "deny": [
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git checkout:*)",
+      "Bash(git reset:*)"
     ],
     "ask": []
   },
@@ -14,6 +16,24 @@
           {
             "type": "command",
             "command": "echo \"Reminder: Use of 'git add' is prohibited, and staging changes is only allowed when requested by the user or instructed in the workflow. Follow instructions in CLAUDE.md regarding use of git: these instructions are NON-NEGOTIABLE.\" && exit 2"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git checkout:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"Reminder: Use of 'git checkout' is prohibited. Modifying files or switching branches through git is only allowed when requested by the user or instructed in the workflow. Follow instructions in CLAUDE.md regarding use of git: these instructions are NON-NEGOTIABLE.\" && exit 2"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git reset:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"Reminder: Use of 'git reset' is prohibited. Modifying the index or working tree through git is only allowed when requested by the user or instructed in the workflow. Follow instructions in CLAUDE.md regarding use of git: these instructions are NON-NEGOTIABLE.\" && exit 2"
           }
         ]
       }
