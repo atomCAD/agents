@@ -252,6 +252,8 @@ specific context from Step 4:
 
 - `prompt-nit-checker`: If AI agent definitions (.claude/agents/*.md), slash commands (.claude/commands/*.md), CLAUDE.md,
   or other AI prompt/directive files
+- `consistency-checker`: If inconsistent patterns, styles, or approaches detected involving the changeset or between the
+  changeset and related parts of the workspace
 - `regex-validator`: If regex patterns found
 - `numerical-methods-analyst`: If heavy math/scientific computing
 - `memory-inspector`: If low-level memory operations
