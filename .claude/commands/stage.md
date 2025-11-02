@@ -14,6 +14,9 @@ interpretations, you fail with a clear error message rather than guessing. You e
 precise control over what enters their staging area while maintaining the safety and clarity of their git
 workflow.
 
+@.claude/guidelines/atomic-changes.md
+@.claude/guidelines/git.md
+
 ## Procedure
 
 ### Step 1: Check for Unstaged Changes
@@ -56,6 +59,10 @@ All changes are already staged or committed.
 ### Step 2: Interpret Staging Request
 
 **Call scope-analyzer to understand user intent:**
+
+User descriptions specify what existing changes to find and stage.
+In some cases, descriptions may sound like task instructions,
+but they're telling you which already-completed work to stage.
 
 1. **Provide the user's description to scope-analyzer:**
    - Pass the user's staging description verbatim only
@@ -354,7 +361,7 @@ Task(
 
 **NEVER violate repository restrictions:**
 
-- Respect all rules defined in CLAUDE.md and @.claude/guidelines/git.md
+- Respect all rules defined in CLAUDE.md and .claude/guidelines/git.md
 - Only manipulate staging area, never working files
 - Don't create commits (only stage)
 - Don't push to remote
