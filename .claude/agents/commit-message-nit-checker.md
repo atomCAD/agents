@@ -107,24 +107,20 @@ Flag commit messages that reference specific commit SHAs/hashes:
 ```yaml
 ---
 status: clean
-consistency_check: passed
-attribution_check: passed
-sha_reference_check: passed
 ---
-Message is consistent with project history and contains no prohibited content.
+Message contains no prohibited content and style is consistent with recent project commits.
 ```
 
-### Consistency Issues
+### Style Observations
 
 ```yaml
 ---
-status: consistency_issues
-issues:
-  - type: style_deviation
-    description: "Uses 'auth:' prefix but recent commits use 'authentication:'"
-    suggestion: "Use 'authentication:' for consistency"
+status: observations
+style_differences:
+  - pattern: "Uses 'auth:' prefix but recent commits use 'authentication:'"
+  - context: "May be intentional abbreviation or inconsistency to verify"
 ---
-Style inconsistencies detected with recent project commits.
+Style differs from recent commit patterns. Author should confirm this is intentional.
 ```
 
 ### SHA Reference Warnings
@@ -141,15 +137,15 @@ warnings:
 Commit message contains SHA references that may become invalid during git operations.
 ```
 
-### Fatal Attribution Error
+### Prohibited Content Violations
 
 ```yaml
 ---
-status: fatal_error
-critical_errors:
-  - type: prohibited_attribution
-    description: "Contains banned AI attribution: 'Co-Authored-By: Claude'"
-    suggestion: "Remove all AI/bot attribution lines"
+status: violations
+prohibited_content:
+  - type: ai_attribution
+    found: "Co-Authored-By: Claude <noreply@anthropic.com>"
+    action: "Remove all AI/bot attribution lines"
 ---
 FATAL: Prohibited attribution content must be removed before committing.
 ```
@@ -157,15 +153,15 @@ FATAL: Prohibited attribution content must be removed before committing.
 ## Operating Principles
 
 1. **Context-aware consistency**: Consider the nature of changes when evaluating style consistency
-2. **Zero tolerance for attribution**: Immediately flag any AI/bot attribution as fatal error
+2. **Zero tolerance for prohibited content**: Immediately flag any AI/bot attribution as violations
 3. **Rebase-safe messaging**: Warn about SHA references that could become invalid during git operations
 4. **Reasonable variation**: Allow natural style differences between different types of commits
 5. **Historical awareness**: Use recent commits as the baseline, not ancient history
-6. **Actionable feedback**: Provide specific suggestions for consistency improvements
+6. **Neutral observation**: Report style differences without judging whether they're problems - let the caller confirm intent
 
 ## Examples
 
-### Consistency Issue Example
+### Style Observation Example
 
 **Recent commits:**
 
@@ -177,9 +173,10 @@ FATAL: Prohibited attribution content must be removed before committing.
 
 - `parse engine: implement advanced array handling`
 
-**Issue**: Uses "parse engine:" instead of established "parser:" prefix
+**Observation**: Uses "parse engine:" instead of established "parser:" prefix. Report this difference and let the
+author confirm whether "parse engine:" is intentional or should be "parser:" for consistency.
 
-### Attribution Issue Example
+### Prohibited Content Violation Example
 
 **Prohibited content:**
 

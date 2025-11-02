@@ -101,7 +101,6 @@ Return validation results using YAML frontmatter followed by natural language ex
 ```yaml
 ---
 status: accurate
-accuracy: high
 ---
 Message accurately describes the staged changes.
 ```
@@ -111,38 +110,44 @@ Message accurately describes the staged changes.
 ```yaml
 ---
 status: inaccurate
-accuracy: low
-critical_errors:
+requires_regeneration: true
+factual_errors:
   - "Claims 'fully functional' but code is basic placeholder"
   - "Describes transformation that didn't occur"
-suggestions:
+corrections:
   - "Use 'implement basic validation' instead of 'complete system'"
   - "Acknowledge this is initial scaffolding"
 ---
 Message contains factual inaccuracies that misrepresent the actual changes.
 ```
 
-### Accuracy Score Guidelines
+### Messages with Minor Issues
 
-- **high**: Message accurately reflects changes, minor or no issues
-- **medium**: Some inaccuracies but core message is correct
-- **low**: Major factual errors that misrepresent the changes
+```yaml
+---
+status: accurate
+observations:
+  - "Could be more specific about which validation types were added"
+  - "Might mention the specific edge cases now handled"
+---
+Message is factually correct but could provide additional useful context.
+```
 
-### Critical Errors vs Suggestions
+### Validation Categories
 
-**Critical errors** (blocking):
+**Factual inaccuracies** (status: inaccurate):
 
 - Factually incorrect claims about what the code does
 - Wrong completeness descriptions (stub vs complete)
 - Incorrect technical details
 - Misleading transformation descriptions
 
-**Suggestions** (non-blocking):
+**Context-dependent observations** (status: accurate with observations):
 
-- Style improvements
-- Additional context that would help
-- More specific technical details
-- Better organization of information
+- Descriptions that are correct but could be more precise
+- Missing details that would add helpful context
+- Terminology that's accurate but could be clearer
+- Organizational improvements that would aid understanding
 
 ## Example Validations
 
@@ -156,9 +161,8 @@ Message contains factual inaccuracies that misrepresent the actual changes.
 ```yaml
 ---
 status: inaccurate
-accuracy: low
 requires_regeneration: true
-critical_errors:
+factual_errors:
   - Claims implementation is 'fully functional Unicode compliance linter' but the code is just a
     temporary placeholder that blindly rejects ALL non-ASCII (>= 0x80)
   - This simplistic check would incorrectly flag legitimate uses like 'café', 'naïve', proper
@@ -166,7 +170,7 @@ critical_errors:
   - Real Unicode compliance checking requires category-based detection or regex patterns to
     distinguish problematic characters (emojis, decorative symbols) from necessary non-ASCII
     (diacritics, international text)
-suggestions:
+corrections:
   - "Consider: 'Implement basic non-ASCII detection as temporary placeholder' or 'Add
     simplified Unicode checking for initial development'"
   - Acknowledge this is scaffolding that will be replaced with proper Unicode category
@@ -189,9 +193,7 @@ non-ASCII uses like properly spelled words with diacritics.
 ```yaml
 ---
 status: accurate
-accuracy: high
-requires_regeneration: false
-suggestions:
+observations:
   - Could mention specific validation types added (email format, password strength)
 ---
 

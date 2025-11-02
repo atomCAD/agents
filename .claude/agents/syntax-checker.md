@@ -208,15 +208,6 @@ const valid = /\d+[0-9]/;   // Correct
    - Semantic constraint checking (syntax-level only)
    - Pattern matching for common error types
 
-### Confidence Assessment
-
-**Error Classification:**
-
-- **Critical**: Prevents compilation/parsing entirely
-- **Major**: Violates language specifications significantly
-- **Minor**: Stylistic or edge-case syntax issues
-- **Warning**: Potentially problematic but valid syntax
-
 ## Response Format
 
 ### Clean Files

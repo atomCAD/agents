@@ -153,24 +153,43 @@ When guidelines are missing or incomplete, learn from recent commits:
 4. **Reference guidelines**: Always cite which guideline was violated
 5. **Actionable suggestions**: Provide specific fixes for each violation
 
-## Error Severity Levels
+## Validation Results
 
-### Error (blocking)
+### Reporting Guidelines Violations
 
-- Missing required elements specified in guidelines
+Use YAML frontmatter for all validation results:
+
+```yaml
+---
+status: non_compliant
+violations:
+  - type: [violation_type]
+    description: [What the issue is]
+    guideline: [Which guideline section this violates]
+    suggestion: [How to fix it]
+observations:
+  - [Optional elements or style variations to review]
+---
+```
+
+### Guideline Violations
+
+Issues that clearly violate documented project guidelines:
+
+- Missing required elements explicitly specified in guidelines
 - Incorrect format that breaks established conventions
-- Using prohibited patterns or keywords
+- Using prohibited patterns or keywords per guidelines
 
-### Warning (should fix)
+### Guidelines Observations
 
-- Missing optional but recommended elements
-- Minor format deviations from preferred style
-- Inconsistency with established patterns
+Patterns that may warrant review based on project standards. Report these as observations in the YAML frontmatter:
 
-### Info (guidance)
-
-- Suggestions for better alignment with project style
-- Optional improvements for clarity or consistency
+- **Missing optional elements**: Guidelines recommend but don't require these elements. Assess whether including them
+  would improve clarity or consistency in this specific case.
+- **Format variations**: Deviates from typical project style. Verify whether this variation is justified by the nature
+  of this commit or should align with established patterns.
+- **Pattern inconsistencies**: Differs from recent commit patterns. Confirm whether this reflects an intentional
+  evolution of conventions or should match existing style.
 
 ## Example Project Guidelines
 

@@ -144,32 +144,52 @@ Identify comments that violate the "current state only" principle by:
 - "X is now allowed" -> "X is allowed"
 - "After update, validates Y" -> "Validates Y"
 
-## Output Format
+## Output Format Examples
 
-For each problematic comment found:
+### Example 1: Clear Violation
 
-```markdown
-**TEMPORAL REFERENCE DETECTED**
+```yaml
+---
+status: violations_found
+temporal_references:
+  - location: src/validator.js:45
+    current_comment: "CJK characters are now allowed"
+    temporal_indicators: ["now"]
+    assessment: clear_violation
+    suggested_fix: "CJK characters are allowed"
+    reasoning: "Removes temporal reference to code change, describes current behavior only"
+  - location: src/auth.js:120
+    current_comment: "After the refactor, this validates input more strictly"
+    temporal_indicators: ["After the refactor"]
+    assessment: clear_violation
+    suggested_fix: "This validates input strictly"
+    reasoning: "Removes historical context, focuses on current validation behavior"
+---
 
-**Location:** [file:line]
-**Current Comment:**
+Found temporal references describing code changes rather than current behavior.
+```
 
-\`\`\`text
-[original comment]
-\`\`\`
+### Example 2: Mixed Assessment
 
-**Issues:**
+```yaml
+---
+status: violations_found
+temporal_references:
+  - location: src/parser.js:78
+    current_comment: "Letter category is now allowed, only report Emoji and Other"
+    temporal_indicators: ["now"]
+    assessment: requires_review
+    suggested_fix: "Only Emoji and Other categories are violations"
+    reasoning: "Could refer to runtime flow vs code history - review context to determine if violation"
+  - location: src/cache.js:200
+    current_comment: "We no longer validate whitespace here"
+    temporal_indicators: ["no longer"]
+    assessment: clear_violation
+    suggested_fix: "Whitespace validation is not performed here"
+    reasoning: "Removes reference to previous behavior, states current behavior clearly"
+---
 
-- Uses temporal indicator: "[word/phrase]"
-- References [previous state/change/transition]
-
-**Suggested Fix:**
-
-\`\`\`text
-[corrected comment]
-\`\`\`
-
-**Reasoning:** [Brief explanation of why this is better]
+Found temporal references requiring review to distinguish code history from procedural flow.
 ```
 
 ## Integration Guidelines
@@ -206,11 +226,42 @@ For each problematic comment found:
 - Historical comments in changelogs are appropriate
 - Version-specific compatibility notes may need temporal context
 
-### Severity Levels
+### Reporting Temporal Reference Issues
 
-- **High:** Comments that actively mislead about current behavior
-- **Medium:** Comments with unnecessary temporal language
-- **Low:** Comments that could be clearer without temporal context
+Use YAML frontmatter for all analysis results:
+
+```yaml
+---
+status: [violations_found | clean]
+temporal_references:
+  - location: [file:line]
+    current_comment: [original comment text]
+    temporal_indicators: [specific words/phrases detected]
+    assessment: [clear_violation | requires_review | uncertain]
+    suggested_fix: [corrected comment text]
+    reasoning: [why this is problematic and how fix improves it]
+---
+```
+
+### Assessment Categories
+
+When analyzing temporal references, classify each finding:
+
+- **clear_violation:** Context clearly indicates temporal reference to code changes
+  - Comment describes what code "now does" vs what it "used to do"
+  - Example: "CJK characters are now allowed" near validation logic
+  - Clear that temporal language refers to code state change, not runtime flow
+
+- **requires_review:** Temporal language that could be legitimate procedural description
+  - Same phrases that could mean either "code changed" or "at this execution point"
+  - Example: "X is now allowed" - without broader context, unclear if this describes:
+    - Code history: "We changed the code to allow X" (VIOLATION)
+    - Runtime flow: "At this point in execution, X is permitted" (LEGITIMATE)
+  - Broader context needed to distinguish code history from procedural description
+
+- **uncertain:** Weak pattern matches that might be false positives
+  - Edge cases where temporal indicators appear but may not be violations
+  - Context insufficient to make confident determination
 
 ## Quality Principles
 

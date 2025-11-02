@@ -547,36 +547,31 @@ Test keyboard accessibility through code review:
 3. **Visual:** Check color contrast, zoom behavior, focus indicators
 4. **Assistive Technology:** Verify screen reader compatibility and announcements
 
-### Issue Severity Classification
+### Reporting Findings
 
-Critical - Blocks Access:
+For each accessibility issue found, provide:
 
-- Keyboard inaccessible content
-- Missing alt text for informative images
-- Insufficient color contrast (below WCAG minimums)
-- Unlabeled form controls
-- Complete task failure or data loss
+```yaml
+---
+issue_type: [descriptive name]
+description: [Clear description of the accessibility barrier]
+location: [File, component, element, line numbers]
+wcag_criterion: [Specific WCAG 2.1/2.2 success criterion violated]
+affected_users: [Which disability groups encounter this barrier]
+remediation:
+  - [Concrete remediation step 1 with code example when applicable]
+  - [Concrete remediation step 2]
+---
+```
 
-High - Major Barriers:
+**Presenting findings neutrally:**
 
-- Inconsistent focus indicators
-- Missing skip links
-- Poor error messaging
-- Major workarounds required
-- Multiple user groups affected
+Report all findings equally without imposing prioritization categories. Let the team prioritize based on:
 
-Medium - Usability Issues:
-
-- Enhanced content structure needed
-- Improved landmark usage
-- Better error prevention
-- Minor workarounds available
-
-Low - Enhancements:
-
-- Advanced keyboard shortcuts
-- Nice-to-have features
-- Future improvements
+- WCAG compliance requirements (A/AA/AAA levels)
+- Legal/regulatory obligations
+- User impact data and feedback
+- Product context and release timeline
 
 ### Regression Testing
 
@@ -713,15 +708,15 @@ Format Preparation Guidelines:
 Executive Summary:
 
 - Overall compliance level
-- Critical issues count
-- Recommended priority actions
-- Timeline for remediation
+- Total issues found
+- WCAG conformance status
+- Testing scope and methodology
 
 Detailed Findings:
 
 - Issue description and location
 - WCAG success criteria reference
-- Impact assessment (High/Medium/Low)
+- Affected users and accessibility barriers
 - Specific remediation steps
 - Code examples and fixes
 
@@ -732,12 +727,12 @@ Testing Results:
 - Analysis of existing user feedback (if available)
 - Browser and device compatibility
 
-Implementation Roadmap:
+Recommendations:
 
-- Immediate fixes
-- Short-term improvements
-- Long-term enhancements
-- Ongoing maintenance requirements
+- Remediation steps for each finding
+- Testing procedures to verify fixes
+- Documentation updates needed
+- Ongoing maintenance considerations
 
 ### Code Documentation Standards
 

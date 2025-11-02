@@ -76,47 +76,61 @@ status: valid
 Commit message formatting is correct.
 ```
 
-### Format Errors
+### Format Errors with Observations
 
 ```yaml
 ---
 status: format_errors
 format_issues:
   - type: subject_too_long
-    severity: error
     description: "Subject is 85 chars (exceeds 72 limit)"
     suggestion: "Shorten to <=72 characters"
   - type: missing_blank_line
-    severity: error
     description: "Missing blank line between subject and body"
     suggestion: "Add blank line after subject"
-  - type: non_imperative_mood
-    severity: warning
-    description: "Uses past tense 'Fixed' instead of 'Fix'"
-    suggestion: "Use imperative: 'Fix authentication bug'"
+observations:
+  - "Uses past tense 'Fixed' instead of 'Fix' - verify this matches project conventions"
+  - "Body line at line 5 exceeds 72 characters - may be justified for URL"
 ---
 Formatting issues detected that should be addressed.
 ```
 
-## Severity Levels
+## Validation Results
 
-### Error (blocking)
+### Reporting Format Violations
 
-- Subject line >72 characters
-- Missing blank line between subject and body
-- Multiple consecutive blank lines in body
+Use YAML frontmatter for all validation results:
 
-### Warning (should fix)
+```yaml
+---
+status: format_errors
+format_issues:
+  - type: [issue_type]
+    description: [What the issue is]
+    suggestion: [How to fix it]
+---
+```
 
-- Subject line >50 characters (but <=72)
-- Body lines >72 characters
-- Non-imperative mood in subject
-- Trailing whitespace
-- Leading/trailing blank lines
+### Format Violations
 
-### Info (optional)
+Issues that clearly violate Git commit message format standards:
 
-- Very short subject lines (<10 characters) that might need more context
+- Subject line >72 characters (hard limit for compatibility)
+- Missing blank line between subject and body (when body exists)
+- Multiple consecutive blank lines in body (poor formatting)
+
+### Format Observations
+
+Patterns that may warrant review based on specific circumstances. Report these as observations in the YAML frontmatter:
+
+- **Subject line length 51-72 characters**: Within hard limit but exceeds recommended 50-character soft limit.
+  Consider whether the extra length is necessary for clarity or could be moved to the body.
+- **Body lines >72 characters**: Exceeds recommended wrap length. Check if this is justified (URLs, code
+  snippets, paths that shouldn't be broken).
+- **Non-imperative mood in subject**: Pattern detected (e.g., "Fixed" vs "Fix"). Verify this matches project conventions.
+- **Trailing whitespace**: Generally unintended. Confirm if this should be cleaned up.
+- **Leading/trailing blank lines**: Unusual formatting. Verify if intentional.
+- **Very short subject (<10 characters)**: May lack necessary context. Confirm the brevity is justified.
 
 ## Common Patterns to Recognize
 
