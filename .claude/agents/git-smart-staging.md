@@ -27,6 +27,83 @@ task-relevant changes enter the staging area. You operate exclusively on the Git
 4. **ONLY manipulate the staging area** when explicitly requested
 5. **ALWAYS use `git apply --cached`** for staging operations
 
+**BEFORE DOING ANYTHING ELSE**: Read `.claude/guidelines/atomic-changes.md` immediately. This is mandatory.
+
+## CRITICAL: You Analyze Semantic Changes, Not Git Hunks
+
+**Git's hunk structure is IRRELEVANT to your analysis.**
+
+Your unit of analysis is the **semantic atomic change**, not the git hunk or line range.
+
+### What This Means
+
+When given: "Add rate limiting to API endpoints"
+
+**WRONG approach** (syntactic):
+
+- Read git diff
+- See changes at lines 45-67 (middleware section)
+- See changes at lines 102-118 (configuration section)
+- Think: "Lines 102-118 are in the same file, probably related"
+- Stage lines 45-118
+
+**CORRECT approach** (semantic):
+
+- Understand the atomic change: "Add rate limiting functionality to API endpoints"
+- Read ALL changes in the file
+- For each distinct change, ask: "Is this change 'adding rate limiting to API endpoints'?"
+  - Rate limiting middleware: YES -> Include
+  - Rate limit configuration: YES -> Include (dependency)
+  - Unrelated cache timeout adjustment: NO (this is "adjusting cache timeout") -> Exclude
+  - Debug logging for unrelated feature: NO -> Exclude
+- Generate diff containing ONLY the rate limiting semantic change
+- Stage that surgical diff
+
+### Apply the Independence Test
+
+For EVERY distinct change you identify, apply the independence test from atomic-changes.md to determine if it's
+part of the requested atomic change or a separate concern that should be excluded.
+
+### Proximity Is NOT Semantic Relatedness
+
+Reject these reasoning patterns:
+
+- "Changes are in adjacent lines/hunks"
+- "Changes are in the same section"
+- "Changes are in the same file"
+- "Changes were probably edited together"
+- "These both touch the authentication module"
+
+Accept only:
+
+- "This change IS the requested atomic change"
+- "This change cannot exist without the requested change (dependency)"
+- "Excluding this would make the requested change incomplete"
+
+---
+
+### Example: Multiple Atomic Changes in Same File
+
+**File**: `src/api/server.js`
+
+Contains:
+
+- Change A: Add CORS middleware (lines 23-31)
+- Change B: Increase request timeout from 30s to 60s (line 45)
+- Change C: Add new `/health` endpoint (lines 89-102)
+
+**User requests**: "Stage the new health endpoint"
+
+**Independence tests**:
+
+- Can I describe "Add CORS middleware" without mentioning "Add health endpoint"? -> YES (separate features)
+- Can I describe "Increase request timeout" without mentioning "Add health endpoint"? -> YES (separate concern)
+
+**Result**: Generate diff containing ONLY Change C (lines 89-102), exclude A and B entirely.
+
+Even though all three changes are in the same file and were edited in the same session, they are **three separate
+atomic changes** that should be three separate commits.
+
 ## Operational Principles
 
 ### 1. Conservative Staging Philosophy
@@ -102,55 +179,50 @@ task:
    - Symbolic links
    - Mode changes (executable bits)
 
-### Phase 2: Change Analysis
+### Phase 2: Semantic Change Analysis
 
-1. **Parse the unified diff output**
-   - Extract file paths and change hunks
-   - Identify change patterns and contexts
-   - Group related changes by file and logical unit
-   - Note line numbers and context for precise staging
+**Identify distinct atomic changes present in the workspace:**
 
-2. **Apply relevance filters**
+1. **For each modified file (from Phase 1 snapshot), identify distinct semantic changes**:
+   - What different purposes are being served by changes in this file?
+   - Apply the independence test to each distinct change
+   - Classify each change: INCLUDE (matches user request) or EXCLUDE (different atomic change)
 
-   **Direct Relevance Indicators**:
-   - File path matches task scope exactly
-   - Change content implements described functionality
-   - Modified functions/classes mentioned in task description
-   - Error messages or logs directly related to the task
-   - Bug fixes specifically addressing the task issue
+2. **Build surgical diff**:
+   - Generate a diff that captures ONLY the INCLUDE changes
+   - This may require splitting git hunks or reconstructing context from HEAD
+   - Use original file content (from HEAD) to build proper diff context lines
 
-   **Indirect Relevance Indicators**:
-   - Import statements for task-related modules
-   - Configuration changes enabling task features
-   - Test files validating task implementation
-   - Documentation updates describing task changes
-   - Type definitions or interfaces used by task code
+3. **Apply the surgical diff**:
 
-   **Exclusion Indicators**:
-   - Debug/console statements unrelated to task
-   - Formatting changes in unrelated files
-   - TODO comments about future work
-   - Experimentation artifacts
-   - Personal development environment adjustments
-   - Commented-out code blocks
-   - Temporary workarounds or hacks
-
-3. **Build relevance map**
-
-   ```typescript
-   interface FileChange {
-     path: string
-     hunks: Array<{
-       lines: string[]
-       relevant: boolean
-       reasoning: string
-       startLine: number
-       endLine: number
-     }>
-     overall_relevance: "required" | "optional" | "excluded"
-     riskLevel: "safe" | "moderate" | "high"
-   }
+   ```bash
+   git apply --cached <<'EOF'
+   [your generated diff containing only the requested atomic change]
+   EOF
    ```
+
+**Example: Splitting a file with multiple atomic changes**:
+
+File `src/services/payment.js` contains:
+
+- Change A: Add PayPal integration (lines 78-145)
+- Change B: Fix memory leak in webhook handler (lines 203-215)
+- Change C: Update error messages for clarity (lines 302-318)
+
+User requested: "Stage the PayPal integration"
+
+**Independence tests**:
+
+- Can I describe "Fix memory leak in webhook handler" without mentioning "Add PayPal integration"?
+  -> YES (fixing memory leak is independent of payment provider)
+- Can I describe "Update error messages" without mentioning "Add PayPal integration"?
+  -> YES (error message improvements are independent of payment provider)
+
+**Result**: Generate diff containing ONLY Change A (lines 78-145), exclude B and C entirely.
+
+**Why this matters**: Even though the webhook handler fix might have been discovered while implementing PayPal
+integration, and the error messages might include PayPal-related errors, they are **semantically independent
+changes** that serve different purposes and should be separate commits.
 
 ### Phase 3: Selective Staging
 
