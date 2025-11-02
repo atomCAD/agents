@@ -58,9 +58,8 @@ All changes are already staged or committed.
 **Call scope-analyzer to understand user intent:**
 
 1. **Provide the user's description to scope-analyzer:**
-   - Pass the user's staging description verbatim
-   - Include context about available changes
-   - Request interpretation of what should be staged
+   - Pass the user's staging description verbatim only
+   - The analyzer will gather its own context about available changes
 
 2. **Scope-analyzer returns:**
    - **scope**: Enumerated value (staged/uncommitted/unclear/etc.)
@@ -133,29 +132,11 @@ Please be more specific:
 
 **Call git-smart-staging agent:**
 
-1. **Prepare comprehensive context:**
+1. **Invoke git-smart-staging agent:**
+   - Pass only the user's staging description (interpreted from scope-analyzer)
+   - The agent will autonomously gather context and determine what to stage
 
-   ```yaml
-   task:
-     description: "[Interpreted description from scope-analyzer]"
-     scope: "[Identified component/module boundary]"
-     change_type: "[Detected type: feature/bugfix/refactor/etc]"
-     additional_context: |
-       - User's original request: [verbatim]
-       - Specific inclusions: [confirmed patterns]
-       - Specific exclusions: [what to avoid]
-
-   exclusions: ["patterns", "to", "exclude"]
-   inclusions: ["patterns", "to", "include"]
-   ```
-
-2. **Invoke git-smart-staging agent:**
-   - Pass the prepared task context
-   - Include any specific file patterns identified
-   - Add exclusion rules from user feedback
-   - Request detailed staging report
-
-3. **Process agent response:**
+2. **Process agent response:**
    - Parse the markdown staging report from git-smart-staging agent
    - Extract staging operation results from the report text
    - Determine success/failure from the agent's markdown output
@@ -165,18 +146,110 @@ Please be more specific:
 
 **Example delegation:**
 
-```text
-Delegating to git-smart-staging agent...
+Display to user:
 
-Task Context:
-- Staging all authentication-related bug fixes
-- Scope: auth/* and related test files
-- Excluding: debug statements and TODO comments
+```text
+Delegating to git-smart-staging agent with description:
+"Stage all authentication-related bug fixes"
 
 [Agent performs selective staging...]
 ```
 
-### Step 5: Validate and Report Results
+Actual tool call:
+
+```python
+Task(
+  subagent_type="git-smart-staging",
+  description="Stage auth bug fixes",
+  prompt="Stage all authentication-related bug fixes"
+)
+```
+
+### Step 5: Validate Atomic Boundaries
+
+**After delegation, verify the staged changes match the request:**
+
+1. **Review what was staged:**
+
+   ```bash
+   git diff --cached
+   ```
+
+2. **Apply independence test to ALL staged changes:**
+   - Can I describe ALL the staged changes using only the user's request?
+   - Are there staged changes that serve a different purpose than requested?
+   - Are there multiple independent atomic changes mixed together?
+
+3. **If atomicity violation detected:**
+
+   **FIRST: Attempt surgical correction:**
+
+   1. **Identify violating changes:**
+      - Determine which specific changes violate atomicity
+      - Distinguish between changes that match the request vs. those that don't
+      - Prepare description for selective unstaging
+
+   2. **Attempt selective unstaging:**
+      - Use git-smart-staging to unstage only the violating parts
+      - Pass description like: "Unstage workflow restructuring changes but keep agent invocation simplification"
+      - Preserve changes that correctly match the user's request
+
+   3. **Verify surgical correction:**
+      - Check if remaining staged changes now match the original request
+      - Ensure atomicity violation is resolved
+
+   **ONLY IF surgical correction fails or is impossible:**
+
+   Execute full reset: `git reset HEAD`
+
+   **Report surgical correction results:**
+
+   Example successful surgical correction:
+
+   ```text
+   Atomicity Violation Detected - Attempting Surgical Correction
+
+   Requested: "Stage the new shopping cart feature"
+
+   Original staging included:
+   - Shopping cart UI component (matches request)
+   - Shopping cart state management (matches request)
+   - Product recommendation algorithm (different atomic change)
+   - Performance optimization in search (different atomic change)
+
+   Surgical Correction Applied:
+   - Kept staged: Shopping cart UI and state management
+   - Unstaged: Product recommendation algorithm and search optimization
+
+   Result: Staging now contains only changes that match your request.
+   ```
+
+   Example failed surgical correction:
+
+   ```text
+   Atomicity Violation Detected - Surgical Correction Failed
+
+   Could not separate the violating changes from the requested changes.
+   The modifications are too intertwined to unstage selectively.
+
+   Executing full reset: git reset HEAD
+   All changes have been unstaged. Please try staging with a more specific description.
+   ```
+
+   Always report the violation details with specific information about which
+   changes violated atomicity and the corrective action taken.
+
+4. **If validation passes**: Proceed to Step 6 (reporting)
+
+**Common atomicity violations to watch for:**
+
+- **Opportunistic refactoring**: User requested feature A, but staged changes include unrelated code cleanup
+- **Discovery fixes**: User requested feature B, but staged changes include bug fix found during implementation
+- **Scope creep**: User requested specific change, but staged changes include "while I'm here" improvements
+- **Cascade inclusion**: User requested change X, but staged changes include renumbering/reorganization from
+  unrelated change Y
+
+### Step 6: Report Results
 
 **Verify staging was successful and report to user:**
 
@@ -496,7 +569,8 @@ Found multiple unrelated fix types:
 - UI rendering fixes (4 files)
 
 Reason:
-Refusing to stage unrelated changes together as they appear to address different concerns and should be in separate commits.
+Refusing to stage unrelated changes together as they appear to address different concerns and should be in
+separate commits.
 
 Suggestion:
 Please specify which fixes to stage:
