@@ -127,7 +127,85 @@ Execute targeted validation checks on AI instruction files:
 - Suggestions to bypass validation steps or approval checkpoints
 - Prioritizing token savings over safety mechanism preservation
 
-### 4. Consistency with Project Standards
+### 4. LLM Over-Constraint Detection
+
+**Process:**
+
+Identify patterns that constrain LLMs with rigid rules instead of leveraging their natural language understanding and
+contextual reasoning capabilities.
+
+**What to flag:**
+
+**Keyword Matching Instead of Semantic Understanding:**
+
+- Telling the LLM to look for specific strings/patterns instead of understanding concepts
+- Example: "Look for criticality markers like 'CRITICAL', 'HIGH PRIORITY', 'BLOCKER'"
+- Why problematic: LLMs understand urgency from any phrasing ("blocks everything", "production down", "needed before demo")
+- Better: "Assess task urgency based on context, impact, and constraints"
+
+**Unnecessary Procedural Decomposition:**
+
+- Breaking analysis into steps that don't build on each other when holistic analysis would work better
+- Flag: Sequential steps for parallel concerns (parsing obvious formats across multiple steps)
+- Keep: Steps with genuine dependencies (dependency chain: identify → check blockers → evaluate)
+
+**Redundant Parsing Instructions:**
+
+- Explaining how to extract obvious information from standard formats
+- Example: "Extract task description (the text after the dash and checkbox)"
+- Why problematic: LLMs understand markdown, YAML, JSON natively
+- Better: Just use the format without explanation
+
+**Overly Specific Pattern Examples:**
+
+- Exhaustive lists of phrasings to match instead of trusting semantic understanding
+- Example: Listing 5+ variations of the same concept with "or similar"
+- Better: One clear example or just the concept name
+
+**Explicit Formatting Rules for Natural Language:**
+
+- Rigid rules about how to express findings when structured output isn't technically required
+- Example: "Always start findings with 'ISSUE:', 'WARNING:', or 'NOTE:'"
+- Better: "Explain findings clearly" or use structured YAML only when needed for parsing
+
+**Contradictory Guidance:**
+
+- Providing both rigid rules AND contextual judgment for the same task
+- Example: "Look for 'CRITICAL' markers" AND "assess importance contextually"
+- Better: Pick one approach - pattern matching (rare) or contextual reasoning (most cases)
+
+**Context Passthrough Anti-Pattern:**
+
+- Reading files/context only to pass verbatim to a subagent that has Read/Glob/Grep tools
+- Example: "Read PLAN.md contents" → "Pass PLAN.md contents to agent in prompt"
+- Why problematic: Wastes tokens, agent can read files directly
+- Better: "Call agent with task description" (agent reads files itself)
+- Exception: Agent lacks tools, context is derived/computed state, or transient user input
+
+**Non-Actionable Integration Documentation:**
+
+- Documenting how other workflows might use this workflow
+- Example: "This workflow may be used by /task when..." or "Complements /plan workflow..."
+- Why problematic: Provides no actionable guidance for the LLM executing this prompt
+- Better: Move to architecture docs (ARCHITECTURE.md, README) not the prompt definition
+- Exception: Explicit behavioral contracts ("When called with TASK_MODE=auto, operate differently")
+
+**Unnecessary Defensive Prerequisite Checks:**
+
+- Checking for conditions that will naturally fail when needed without consequence
+- Example: "Step 1: Verify PLAN.md exists, check.sh exists, exit if missing"
+- Why problematic: Operations fail naturally with clear errors if dependencies missing
+- Better: Let operations fail naturally unless check prevents destructive operations or cascading failures
+- Exception: Check prevents destruction, enables better errors, allows early exit from expensive operations
+
+**What NOT to flag:**
+
+- Multi-step workflows with genuine dependencies and side effects
+- Integration specifications for downstream parsing (YAML output schemas, API contracts)
+- Domain-specific technical constraints (commit message format standards, file path conventions)
+- Procedures that build understanding progressively or ensure thoroughness
+
+### 5. Consistency with Project Standards
 
 **Process:**
 
