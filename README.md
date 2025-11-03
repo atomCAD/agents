@@ -1,14 +1,12 @@
 # Automated Engineering Workflow
 
-This repository implements a complete automated development workflow using Claude Code. The system can implement
-multi-file features, run validation, and commit changes without human intervention.
+This repository implements a complete automated development workflow using Claude Code. The system can implement multi-file features, run validation, and commit changes without human intervention.
 
 ## What's Implemented
 
 ### Safety Architecture
 
-The core constraint is that AI agents cannot execute git state-changing commands directly. Instead, five
-specialized workflows handle all repository modifications:
+The core constraint is that AI agents cannot execute git state-changing commands directly. Instead, five specialized workflows handle all repository modifications:
 
 - Git operations are restricted to specific, validated workflows
 - All changes go through mandatory validation pipelines
@@ -27,8 +25,7 @@ Five specialized workflows handle the entire development lifecycle:
 /check                  # Smart scope detection
 ```
 
-Runs parallel analysis by specialized agents (syntax, style, security, complexity, best practices). Validates
-findings and generates actionable reports.
+Runs parallel analysis by specialized agents (syntax, style, security, complexity, best practices). Validates findings and generates actionable reports.
 
 #### `/stage <description>` - Intelligent Change Staging
 
@@ -55,8 +52,7 @@ Analyzes staged changes and generates commit messages following project conventi
 /fix convert var to let/const  # Context-aware mode
 ```
 
-Iteratively identifies and fixes trivial issues (formatting, linting, simple type errors) until only serious
-problems remain.
+Iteratively identifies and fixes trivial issues (formatting, linting, simple type errors) until only serious problems remain.
 
 #### `/commit [directive]` - Safe Git Commits
 
@@ -97,22 +93,16 @@ For fully automated workflows, which require the aptly named `--dangerously-skip
    This opens Claude Code in an embedded terminal window within the container.
 
 6. **Provide login credentials**
-   You'll be prompted for your Claude credentials. These are saved in
-   `.git/.config/claude` and persist across container rebuilds.
+   You'll be prompted for your Claude credentials. These are saved in `.git/.config/claude` and persist across container rebuilds.
 
 7. **Launch a new terminal within the devcontainer**
-   You have several options depending on where you want to interact with the
-   command-line tools:
-   - **Bottom Pane**: Terminal -> New Terminal in VS Code (opens a terminal on the
-     bottom pane)
-   - **Side Pane**: Click the Claude Code icon, then hit Ctrl+C twice to exit
-     claude and get a bash prompt (opens a terminal on the side pane)
-   - **External**: Run `devcontainer exec --workspace-folder .` from any terminal
-     emulator at the project root (requires installing devcontainer-cli)
+   You have several options depending on where you want to interact with the command-line tools:
+   - **Bottom Pane**: Terminal -> New Terminal in VS Code (opens a terminal on the bottom pane)
+   - **Side Pane**: Click the Claude Code icon, then hit Ctrl+C twice to exit claude and get a bash prompt (opens a terminal on the side pane)
+   - **External**: Run `devcontainer exec --workspace-folder .` from any terminal emulator at the project root (requires installing devcontainer-cli)
 
 8. **Create task plan**
-   Create a `PLAN.md` file with a listing of discrete, atomic commits to be
-   generated in sequence.
+   Create a `PLAN.md` file with a listing of discrete, atomic commits to be generated in sequence.
 
 9. **Run automation**
    From the terminal in the devcontainer, run the automated task script:
@@ -123,10 +113,7 @@ For fully automated workflows, which require the aptly named `--dangerously-skip
 
 **Why devcontainer for automation?**
 
-The devcontainer provides a secure, isolated environment where Claude can safely run
-with `--dangerously-skip-permissions`. This flag is required for fully automated
-workflows like `examples/task.sh` that need to execute slash commands using
-the command-line API, which lacks interactive permission prompts.
+The devcontainer provides a secure, isolated environment where Claude can safely run with `--dangerously-skip-permissions`. This flag is required for fully automated workflows like `examples/task.sh` that need to execute slash commands using the command-line API, which lacks interactive permission prompts.
 
 **Security benefits:**
 
@@ -177,15 +164,10 @@ The [`examples/task.sh`](examples/task.sh) script demonstrates one possible, alb
 
 ## Current Status
 
-The five core slash commands (`/check`, `/stage`, `/message`, `/fix`, `/commit`) and their associated
-subagents are stable and work reliably.
+The five core slash commands (`/check`, `/stage`, `/message`, `/fix`, `/commit`) and their associated subagents are stable and work reliably.
 
-The `examples/task.sh` automation script is an experimental integration demonstrating one possible route to
-full automation. This script is expected to be fragile and may require significant debugging and refinement for
-practical use. It is not meant as anything more than a proof of concept.
+The `examples/task.sh` automation script is an experimental integration demonstrating one possible route to full automation. This script is expected to be fragile and may require significant debugging and refinement for practical use. It is not meant as anything more than a proof of concept.
 
 ### Known Issues
 
-Many specialized agent definition files are missing from the `.claude/agents/` directory. The slash commands
-currently fall back to general-purpose agents when domain-specific agents are unavailable. This works but may
-produce less optimal results than specialized agents would provide.
+Many specialized agent definition files are missing from the `.claude/agents/` directory. The slash commands currently fall back to general-purpose agents when domain-specific agents are unavailable. This works but may produce less optimal results than specialized agents would provide.

@@ -10,8 +10,7 @@ All git-related agents and workflows MUST reference these guidelines.
 
 ### CRITICAL: Command Injection Prevention
 
-**MANDATORY SECURITY PROTOCOL**: All git commands MUST be executed with validated and sanitized inputs to prevent
-command injection attacks. This is NON-NEGOTIABLE and supersedes any efficiency or convenience considerations.
+**MANDATORY SECURITY PROTOCOL**: All git commands MUST be executed with validated and sanitized inputs to prevent command injection attacks. This is NON-NEGOTIABLE and supersedes any efficiency or convenience considerations.
 
 ### Input Validation Requirements
 
@@ -157,9 +156,7 @@ error: Security validation failed
 security_violation: true
 ---
 
-The requested operation cannot be performed due to security constraints.
-The input provided does not meet the required validation criteria for safe
-execution. Please ensure all parameters conform to expected formats:
+The requested operation cannot be performed due to security constraints. The input provided does not meet the required validation criteria for safe execution. Please ensure all parameters conform to expected formats:
 
 - Commit hashes: 7-40 character hexadecimal strings (a-f, 0-9)
 - Scope: exactly "new" or "amend"
@@ -275,8 +272,7 @@ The following git commands can cause **PERMANENT DATA LOSS** or **UNINTENDED CHA
 4. **BACKUP WHEN UNCERTAIN**: Before attempting something risky, create a backup:
    `git branch backup-auth-before-rebase`
 
-**Remember**: Every git operation should be followed by verification. When in doubt, ask for help rather than
-risk data loss.
+**Remember**: Every git operation should be followed by verification. When in doubt, ask for help rather than risk data loss.
 
 ## Quick Command Reference Table
 
@@ -322,8 +318,7 @@ risk data loss.
 | Undo last commit (keep changes) | `git reset --soft HEAD~1` | Moves changes back to staging (NEVER use --hard) |
 | View reflog for recovery | `git reflog` | Shows history of HEAD changes |
 
-**SAFETY REMINDER:** See the CRITICAL SAFETY WARNING section above for dangerous commands to avoid and safe
-alternatives to use.
+**SAFETY REMINDER:** See the CRITICAL SAFETY WARNING section above for dangerous commands to avoid and safe alternatives to use.
 
 **These rules are non-negotiable and apply to all AI agent interactions within this repository.**
 

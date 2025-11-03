@@ -55,30 +55,17 @@ If any check fails, you are exceeding your role boundaries. Refuse the operation
 
 ### Your Mission
 
-You transform feature requests into well-structured task lists using the GTD Natural Planning Model, maintain existing
-plans with updates and modifications, and ensure all tasks follow atomic commit principles. You operate autonomously
-to create comprehensive development roadmaps that enable predictable, testable progress - **for other agents and
-developers to execute**.
+You transform feature requests into well-structured task lists using the GTD Natural Planning Model, maintain existing plans with updates and modifications, and ensure all tasks follow atomic commit principles. You operate autonomously to create comprehensive development roadmaps that enable predictable, testable progress - **for other agents and developers to execute**.
 
 ## Core Principles
 
-1. **PLAN.md evolves throughout the project** - The plan continuously adapts as work progresses, discoveries are
-   made, and requirements change. The `/plan` command handles both initial creation and ongoing updates seamlessly.
+1. **PLAN.md evolves throughout the project** - The plan continuously adapts as work progresses, discoveries are made, and requirements change. The `/plan` command handles both initial creation and ongoing updates seamlessly.
 
-2. **Planning identifies outcomes and next actions** - The plan defines both "what done looks like" (outcomes) and
-   "what are the next actions?" (tasks). Deep analysis and architectural decisions are themselves tasks to be
-   executed by specialists. Once these investigation tasks complete, their findings trigger plan updates with
-   new, more specific implementation tasks (see Progressive Elaboration Pattern).
+2. **Planning identifies outcomes and next actions** - The plan defines both "what done looks like" (outcomes) and "what are the next actions?" (tasks). Deep analysis and architectural decisions are themselves tasks to be executed by specialists. Once these investigation tasks complete, their findings trigger plan updates with new, more specific implementation tasks (see Progressive Elaboration Pattern).
 
-3. **Outcomes are projects, Tasks are actions** - Outcomes describe desired results that typically require multiple
-   steps (GTD projects), or critical requirements needing explicit validation. Tasks are the concrete, observable
-   actions that move toward those outcomes. Outcomes serve as triggers for generating tasks in future planning
-   steps - when an outcome isn't yet achieved, it prompts creation of additional tasks towards accomplishing that
-   goal.
+3. **Outcomes are projects, Tasks are actions** - Outcomes describe desired results that typically require multiple steps (GTD projects), or critical requirements needing explicit validation. Tasks are the concrete, observable actions that move toward those outcomes. Outcomes serve as triggers for generating tasks in future planning steps - when an outcome isn't yet achieved, it prompts creation of additional tasks towards accomplishing that goal.
 
-4. **Tasks are observable actions** - Every task must be something that produces an observable outcome or artifact,
-   not an internal understanding or mental model. Even planning tasks produce a tangible result (an updated plan or
-   captured requirements).
+4. **Tasks are observable actions** - Every task must be something that produces an observable outcome or artifact, not an internal understanding or mental model. Even planning tasks produce a tangible result (an updated plan or captured requirements).
 
 ## Planning Process (GTD Natural Planning Model)
 
@@ -91,8 +78,7 @@ The planning process follows these six phases to transform a user directive into
   - Each outcome typically requires multiple tasks, OR represents a critical requirement needing explicit validation
   - Outcomes describe capabilities, not implementation steps
   - Each outcome has specific success criteria (how you know it's achieved)
-  - Single-task outcomes should be used sparingly - primarily for critical requirements (performance, security,
-    compliance) that need explicit tracking and validation
+  - Single-task outcomes should be used sparingly - primarily for critical requirements (performance, security, compliance) that need explicit tracking and validation
   - Example: "Users can reset forgotten passwords" has success criteria:
     - Reset link is sent to user's email
     - Token expires after 24 hours
@@ -168,8 +154,7 @@ Use the Read tool to load `.claude/guidelines/plan-file.md` - this contains all 
 
 Use the Read tool to load `PLAN.md`.
 
-**If PLAN.md doesn't exist** (Read tool returns file not found error): See "Initial Plan Creation" error recovery
-procedure at the end of this section.
+**If PLAN.md doesn't exist** (Read tool returns file not found error): See "Initial Plan Creation" error recovery procedure at the end of this section.
 
 **Interpret what the user wants using natural language understanding:**
 
@@ -479,27 +464,21 @@ To create a plan, run with a feature description:
 - `/plan implement user authentication`
 - `/plan add shopping cart functionality`
 
-PLAN.md guides incremental development through atomic,
-testable tasks following TDD principles.
+PLAN.md guides incremental development through atomic, testable tasks following TDD principles.
 ```
 
 ## Task Categorization
 
 Tasks use two orthogonal categorization systems that work together:
 
-- **Specialist types** (Investigation/Design/Implementation/Validation/Planning): Used in this command to identify which
-  agent should execute the task. These appear as prefixes like `[Investigation]` or `[Design]` to enable proper task
-  delegation.
+- **Specialist types** (Investigation/Design/Implementation/Validation/Planning): Used in this command to identify which agent should execute the task. These appear as prefixes like `[Investigation]` or `[Design]` to enable proper task delegation.
 
-- **TDD categories** (Feature/Move-only/Refactor): Defined in `.claude/guidelines/plan-file.md` for workflow
-  classification. These determine the validation and testing requirements for each task.
+- **TDD categories** (Feature/Move-only/Refactor): Defined in `.claude/guidelines/plan-file.md` for workflow classification. These determine the validation and testing requirements for each task.
 
 A single task can belong to both systems. For example:
 
-- `[Implementation] Add user login endpoint` is an Implementation task (specialist type) that would also be a Feature
-  task (TDD category)
-- `[Design] Refactor database schema` is a Design task (specialist type) that would also be a Refactor task (TDD
-  category)
+- `[Implementation] Add user login endpoint` is an Implementation task (specialist type) that would also be a Feature task (TDD category)
+- `[Design] Refactor database schema` is a Design task (specialist type) that would also be a Refactor task (TDD category)
 
 Tasks should be categorized by type to help identify the appropriate specialist for execution:
 
@@ -588,8 +567,7 @@ Tasks should be categorized by type to help identify the appropriate specialist 
 
 ## Progressive Elaboration Pattern
 
-Plans evolve through execution as unknowns become known. This pattern acknowledges that complete upfront planning is
-impossible - discoveries during execution trigger plan expansion.
+Plans evolve through execution as unknowns become known. This pattern acknowledges that complete upfront planning is impossible - discoveries during execution trigger plan expansion.
 
 ### Core Pattern
 
@@ -682,8 +660,7 @@ During implementation discovered missing prerequisite:
 
 ## Dependencies and Prerequisites
 
-Tasks often have explicit dependencies beyond simple ordering. Documenting these ensures proper sequencing and
-identifies potential blockers.
+Tasks often have explicit dependencies beyond simple ordering. Documenting these ensures proper sequencing and identifies potential blockers.
 
 ### Dependency Types
 
@@ -784,8 +761,7 @@ Merge point:
 
 ## Context Requirements
 
-Some tasks require specific contexts, resources, or environmental conditions. Documenting these prevents blocked
-work and ensures smooth execution.
+Some tasks require specific contexts, resources, or environmental conditions. Documenting these prevents blocked work and ensures smooth execution.
 
 ### Types of Context Requirements
 
@@ -978,8 +954,7 @@ Special cases:
 - Task completion without changes: No entry needed
 - Task completion with adjustments: Document what differed
 
-**Important**: When appending entries, include a blank line at the start of the heredoc (after `<<'EOF'`) to separate
-from the previous entry. Do not include a blank line before the closing `EOF`.
+**Important**: When appending entries, include a blank line at the start of the heredoc (after `<<'EOF'`) to separate from the previous entry. Do not include a blank line before the closing `EOF`.
 
 ## Plan Archiving
 
@@ -1014,8 +989,7 @@ When all tasks are completed and the plan is finished:
    rm "ChangeLog.md"
    ```
 
-   **Important**: Replace `short-topic-description` with a brief, hyphenated description of what was implemented
-   (e.g., `user-authentication`, `avatar-upload`, `search-optimization`).
+   **Important**: Replace `short-topic-description` with a brief, hyphenated description of what was implemented (e.g., `user-authentication`, `avatar-upload`, `search-optimization`).
 
 4. **Repository is ready for next plan**: PLAN.md and ChangeLog.md no longer exist in the working directory.
 

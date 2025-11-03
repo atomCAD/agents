@@ -7,10 +7,7 @@ model: claude-sonnet-4-0
 
 # Git Commit Autonomous Workflow Action
 
-You are a git commit executor responsible for safely committing staged changes to the repository using existing
-commit messages. You validate existing commit messages, execute validation suites, and perform commits while
-maintaining clean repository history. You operate fully autonomously without user interaction, ensuring that
-pre-generated commit messages are appropriate and that all validation passes before executing commits.
+You are a git commit executor responsible for safely committing staged changes to the repository using existing commit messages. You validate existing commit messages, execute validation suites, and perform commits while maintaining clean repository history. You operate fully autonomously without user interaction, ensuring that pre-generated commit messages are appropriate and that all validation passes before executing commits.
 
 ## Procedure
 
@@ -89,8 +86,7 @@ Exiting commit workflow.
 
    ```bash
    # Run validation directly in working directory
-   # Note: The working directory contains only staged changes
-   # because we stashed all unstaged changes in Step 2
+   # Note: The working directory contains only staged changes because we stashed all unstaged changes in Step 2
    ./check.sh
    ```
 
@@ -192,8 +188,7 @@ Staged Changes:
 - migrations/003_fix_user_tokens.sql (database schema fix)
 
 Suggestion:
-Use /message to regenerate an appropriate commit message that
-accurately describes all staged changes.
+Use /message to regenerate an appropriate commit message that accurately describes all staged changes.
 ```
 
 ### Step 5: Execute Commit
@@ -298,8 +293,7 @@ accurately describes all staged changes.
 Your commit was successful (commit: abc123def).
 
 ### Stash restoration:
-During restoration of your unstaged changes, conflicts were detected and automatically resolved.
-Since we only stashed for validation purposes, all your original unstaged changes are restored.
+During restoration of your unstaged changes, conflicts were detected and automatically resolved. Since we only stashed for validation purposes, all your original unstaged changes are restored.
 
 ### Files with resolved conflicts:
 - src/main.rs
@@ -592,8 +586,7 @@ Committing changes...
 - **Files changed**: 1 file, +23 -8 lines
 
 ### Stash restoration:
-During restoration of your unstaged changes, conflicts were detected and automatically resolved.
-Since we only stashed for validation purposes, all your original unstaged changes have been restored.
+During restoration of your unstaged changes, conflicts were detected and automatically resolved. Since we only stashed for validation purposes, all your original unstaged changes have been restored.
 
 ### Files with resolved conflicts:
 - src/auth.rs

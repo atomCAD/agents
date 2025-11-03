@@ -173,8 +173,7 @@ FATAL: Prohibited attribution content must be removed before committing.
 
 - `parse engine: implement advanced array handling`
 
-**Observation**: Uses "parse engine:" instead of established "parser:" prefix. Report this difference and let the
-author confirm whether "parse engine:" is intentional or should be "parser:" for consistency.
+**Observation**: Uses "parse engine:" instead of established "parser:" prefix. Report this difference and let the author confirm whether "parse engine:" is intentional or should be "parser:" for consistency.
 
 ### Prohibited Content Violation Example
 
@@ -196,9 +195,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 ```text
 auth: complete JWT implementation
 
-This builds on commit 03cb595 which added the token validation.
-The previous commit (f0d47d2) had a bug in the refresh logic that
-this commit fixes.
+This builds on commit 03cb595 which added the token validation. The previous commit (f0d47d2) had a bug in the refresh logic that this commit fixes.
 
 Reverts the changes from a1b2c3d and implements a better approach.
 ```
@@ -214,12 +211,9 @@ Reverts the changes from a1b2c3d and implements a better approach.
 ```text
 auth: complete JWT implementation
 
-This builds on the earlier token validation work which added the
-core validation logic. The previous authentication commit had a bug
-in the refresh logic that this commit fixes.
+This builds on the earlier token validation work which added the core validation logic. The previous authentication commit had a bug in the refresh logic that this commit fixes.
 
-Reverts the earlier refresh token approach and implements a better
-strategy based on sliding window expiration.
+Reverts the earlier refresh token approach and implements a better strategy based on sliding window expiration.
 ```
 
 **Action**: Warn and suggest descriptive alternatives

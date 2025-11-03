@@ -90,7 +90,7 @@ format_issues:
     suggestion: "Add blank line after subject"
 observations:
   - "Uses past tense 'Fixed' instead of 'Fix' - verify this matches project conventions"
-  - "Body line at line 5 exceeds 72 characters - may be justified for URL"
+  - "Body line at line 5 exceeds 72 characters"
 ---
 Formatting issues detected that should be addressed.
 ```
@@ -123,10 +123,8 @@ Issues that clearly violate Git commit message format standards:
 
 Patterns that may warrant review based on specific circumstances. Report these as observations in the YAML frontmatter:
 
-- **Subject line length 51-72 characters**: Within hard limit but exceeds recommended 50-character soft limit.
-  Consider whether the extra length is necessary for clarity or could be moved to the body.
-- **Body lines >72 characters**: Exceeds recommended wrap length. Check if this is justified (URLs, code
-  snippets, paths that shouldn't be broken).
+- **Subject line length 51-72 characters**: Within hard limit but exceeds recommended 50-character soft limit. Consider whether the extra length is necessary for clarity or could be moved to the body.
+- **Body lines >72 characters**: Exceeds recommended wrap length. Check if this is justified (URLs, code snippets, paths that shouldn't be broken).
 - **Non-imperative mood in subject**: Pattern detected (e.g., "Fixed" vs "Fix"). Verify this matches project conventions.
 - **Trailing whitespace**: Generally unintended. Confirm if this should be cleaned up.
 - **Leading/trailing blank lines**: Unusual formatting. Verify if intentional.
@@ -171,9 +169,7 @@ Patterns that may warrant review based on specific circumstances. Report these a
 ```text
 Fix user authentication timeout issue
 
-The session timeout was not being properly handled when users
-remained idle for extended periods. This change updates the
-session management to:
+The session timeout was not being properly handled when users remained idle for extended periods. This change updates the session management to:
 
 - Extend timeout on user activity
 - Provide clear warning before expiration
@@ -186,12 +182,7 @@ Fixes issue with users being unexpectedly logged out.
 
 ```text
 Fixed the user authentication timeout issue that was causing problems
-
-The session timeout was not being properly handled when users
-remained idle for extended periods of time which was really annoying.
-This change updates the session management to extend timeout on user
-activity and provide clear warning before expiration and gracefully
-handle expired sessions.
+The session timeout was not being properly handled when users remained idle for extended periods of time which was really annoying. This change updates the session management to extend timeout on user activity and provide clear warning before expiration and gracefully handle expired sessions.
 
 Fixes issue with users being unexpectedly logged out.
 

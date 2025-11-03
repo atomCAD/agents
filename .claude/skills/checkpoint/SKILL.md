@@ -5,8 +5,7 @@ description: Manage git checkpoints for safe code experimentation with automatic
 
 # Git Checkpoint Management
 
-This skill provides checkpoint operations for safely experimenting with code changes using git stash to create
-restore points that capture both working tree and staging area state.
+This skill provides checkpoint operations for safely experimenting with code changes using git stash to create restore points that capture both working tree and staging area state.
 
 ## Instructions
 
@@ -26,9 +25,7 @@ Outputs the stash hash (e.g., `abc123def456...`) which you use for subsequent op
 - All untracked files
 - Staging area state
 
-**Namespace convention:** Use a namespace that identifies which workflow or agent created the checkpoint (e.g.,
-"fix-workflow", "commit-validation", "refactoring-agent"). This helps identify the source when debugging stash
-entries.
+**Namespace convention:** Use a namespace that identifies which workflow or agent created the checkpoint (e.g., "fix-workflow", "commit-validation", "refactoring-agent"). This helps identify the source when debugging stash entries.
 
 ### 2. Compare current state with checkpoint
 
@@ -52,8 +49,7 @@ Removes the checkpoint from the stash stack. Use when changes are successful and
 scripts/clear.sh "$CHECKPOINT_HASH"
 ```
 
-Clears the working tree with safety verification. Only succeeds if the provided checkpoint hash exactly matches
-the current working tree state (verified by comparing tree objects).
+Clears the working tree with safety verification. Only succeeds if the provided checkpoint hash exactly matches the current working tree state (verified by comparing tree objects).
 
 **Safety guarantee:** Cannot clear the wrong state - prevents accidental data loss.
 
@@ -81,8 +77,7 @@ Create a checkpoint before attempting risky changes:
 CHECKPOINT=$(scripts/create.sh "before-refactoring")
 ```
 
-Make experimental changes. This might involve invoking an agent to attempt a
-refactoring, running a complex transformation script, or manually editing files.
+Make experimental changes. This might involve invoking an agent to attempt a refactoring, running a complex transformation script, or manually editing files.
 
 Once changes are complete, review them:
 
@@ -90,8 +85,7 @@ Once changes are complete, review them:
 scripts/compare.sh "$CHECKPOINT"
 ```
 
-Evaluate whether the changes accomplish the goal. Consider correctness,
-completeness, and any unintended side effects.
+Evaluate whether the changes accomplish the goal. Consider correctness, completeness, and any unintended side effects.
 
 If changes didn't work out, restore the checkpoint:
 

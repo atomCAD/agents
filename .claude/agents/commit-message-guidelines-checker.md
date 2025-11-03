@@ -184,12 +184,9 @@ Issues that clearly violate documented project guidelines:
 
 Patterns that may warrant review based on project standards. Report these as observations in the YAML frontmatter:
 
-- **Missing optional elements**: Guidelines recommend but don't require these elements. Assess whether including them
-  would improve clarity or consistency in this specific case.
-- **Format variations**: Deviates from typical project style. Verify whether this variation is justified by the nature
-  of this commit or should align with established patterns.
-- **Pattern inconsistencies**: Differs from recent commit patterns. Confirm whether this reflects an intentional
-  evolution of conventions or should match existing style.
+- **Missing optional elements**: Guidelines recommend but don't require these elements. Assess whether including them would improve clarity or consistency in this specific case.
+- **Format variations**: Deviates from typical project style. Verify whether this variation is justified by the nature of this commit or should align with established patterns.
+- **Pattern inconsistencies**: Differs from recent commit patterns. Confirm whether this reflects an intentional evolution of conventions or should match existing style.
 
 ## Example Project Guidelines
 
@@ -220,5 +217,4 @@ Use imperative mood
 Start with capital letter
 No period at end of subject
 Reference issues when fixing bugs
-
 ```

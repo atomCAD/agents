@@ -8,8 +8,7 @@
 **MANDATORY: Before writing ANY commit message, you MUST:**
 
 1. **Examine the ENTIRE diff** - Choose the appropriate command:
-   - **For amending existing commits**: Use BOTH `git show HEAD` (shows what's already in the commit) AND
-     `git diff --staged` (shows new changes being added to it)
+   - **For amending existing commits**: Use BOTH `git show HEAD` (shows what's already in the commit) AND `git diff --staged` (shows new changes being added to it)
    - **For new commits from staged changes**: Use `git diff --staged` or `git diff --cached`
    - **For reviewing after commit**: Use `git diff HEAD~1 HEAD`
    - DO NOT look at only the first 100 lines
@@ -31,14 +30,11 @@
 
 **FAILURE TO EXAMINE THE COMPLETE CHANGES IS UNACCEPTABLE.**
 
-A commit message based on incomplete analysis is worse than no message at all. It misleads future developers and
-destroys trust in the version history.
+A commit message based on incomplete analysis is worse than no message at all. It misleads future developers and destroys trust in the version history.
 
 ## Core Philosophy
 
-Write commit messages in the style of Linux kernel commits or technical blog posts. Each message should serve as
-a valuable technical document for future developers who encounter it during debugging, code archaeology, or git
-bisect.
+Write commit messages in the style of Linux kernel commits or technical blog posts. Each message should serve as a valuable technical document for future developers who encounter it during debugging, code archaeology, or git bisect.
 
 ## Message Structure
 
@@ -58,9 +54,7 @@ Examples:
 
 #### CRITICAL: Component Means Codebase Module, NOT Change Type
 
-The `component:` prefix identifies **WHERE** in the codebase the change occurred, not WHAT TYPE of change it was.
-This is a deliberate design choice that makes our commit history vastly more useful for debugging and code
-archaeology.
+The `component:` prefix identifies **WHERE** in the codebase the change occurred, not WHAT TYPE of change it was. This is a deliberate design choice that makes our commit history vastly more useful for debugging and code archaeology.
 
 **Component = The actual module/subsystem/part of your codebase:**
 
@@ -75,16 +69,13 @@ archaeology.
 
 1. **Debugging**: When something breaks, you need to know WHERE to look, not what type of change it was
 2. **Git bisect**: When bisecting, knowing which component introduced a bug is immediately actionable
-3. **Code archaeology**: `git log --grep="^cache:"` shows all cache-related changes - invaluable when investigating
-   performance issues
+3. **Code archaeology**: `git log --grep="^cache:"` shows all cache-related changes - invaluable when investigating performance issues
 4. **Team navigation**: New developers can quickly find all commits touching the subsystem they're working on
 5. **Architectural understanding**: The commit history reveals how each component evolved over time
 
 **Explicitly rejected: Conventional Commits style.**
 
-We do NOT use type-based prefixes like `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:`, etc.
-These tell you nothing about WHERE in the codebase to look when debugging. Knowing something is a "fix" doesn't
-help you when production is down and you need to find which subsystem is responsible.
+We do NOT use type-based prefixes like `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:`, etc. These tell you nothing about WHERE in the codebase to look when debugging. Knowing something is a "fix" doesn't help you when production is down and you need to find which subsystem is responsible.
 
 **Bad examples (DO NOT USE):**
 
@@ -103,18 +94,13 @@ help you when production is down and you need to find which subsystem is respons
 ```text
 component: concise description of the change and its purpose
 
-Opening paragraph explaining the problem this solves or the capability
-it adds. Focus on the user-visible impact or the architectural need
-that motivated this change.
+Opening paragraph explaining the problem this solves or the capability it adds. Focus on the user-visible impact or the architectural need that motivated this change.
 
-Technical description of the solution, explaining the key design
-decisions and trade-offs. This should help future developers understand
-not just what was done, but why this approach was chosen.
+Technical description of the solution, explaining the key design decisions and trade-offs. This should help future developers understand not just what was done, but why this approach was chosen.
 
 Key design decisions:
 
-1. First major design decision: Explanation of the choice and its
-   benefits. Include specific technical reasons.
+1. First major design decision: Explanation of the choice and its benefits. Include specific technical reasons.
 
 2. Second major design decision: Similar explanation with rationale.
 
@@ -126,18 +112,14 @@ Code examples showing usage (when relevant):
     let example = NewType::create();
     example.process(data);
 
-Performance/memory implications if relevant. Explain any benchmarks
-or measurements that influenced the design.
+Performance/memory implications if relevant. Explain any benchmarks or measurements that influenced the design.
 
-Future implications or follow-up work that will build on this change.
-This helps readers understand how this fits into the larger picture.
+Future implications or follow-up work that will build on this change. This helps readers understand how this fits into the larger picture.
 ```
 
 ## Detailed Analysis Requirements
 
-After examining the COMPLETE commit (see CRITICAL section above), consider the following
-aspects **only when they are relevant to understanding the change**. For the most trivial
-changes, most or all of these may not apply:
+After examining the COMPLETE commit (see CRITICAL section above), consider the following aspects **only when they are relevant to understanding the change**. For the most trivial changes, most or all of these may not apply:
 
 1. **Architectural Impact**
    - How does this change fit into the overall system architecture?
@@ -205,90 +187,58 @@ These are prohibited in all commit messages regardless of change complexity:
 
 **IMPORTANT: No Advertisements in Commit Messages.**
 
-Commit messages must NEVER include tool advertisements, automated signatures, or promotional content. This
-includes phrases like "Generated with [tool name]", "Created by [AI assistant]", or any form of attribution to
-development tools. The commit message should focus solely on documenting the change itself, not the tools used
-to create it.
+Commit messages must NEVER include tool advertisements, automated signatures, or promotional content. This includes phrases like "Generated with [tool name]", "Created by [AI assistant]", or any form of attribution to development tools. The commit message should focus solely on documenting the change itself, not the tools used to create it.
 
 ## Message Examples by Complexity
 
 ### Trivial Change - Documentation Fix
 
-Context: Removing an unsubstantiated percentage claim from documentation. The diff shows
-exactly what was removed. The only question a reader might have is "why remove it?" so
-the message briefly answers that.
+Context: Removing an unsubstantiated percentage claim from documentation. The diff shows exactly what was removed. The only question a reader might have is "why remove it?" so the message briefly answers that.
 
 ```text
 agents: remove unverified token savings claim from formatting tip
 
-The "~30%" percentage was not based on measurement and could
-mislead users about actual savings.
+The "~30%" percentage was not based on measurement and could mislead users about actual savings.
 ```
 
 ### Simple Change - Bug Fix
 
-Context: Fixing a timeout bug. Someone debugging session issues needs to know what was
-broken and how the fix works. The message explains the old behavior (timer never reset),
-the user impact (spurious logouts), and the new behavior (timer resets on activity).
+Context: Fixing a timeout bug. Someone debugging session issues needs to know what was broken and how the fix works. The message explains the old behavior (timer never reset), the user impact (spurious logouts), and the new behavior (timer resets on activity).
 
 ```text
 auth: fix session timeout not resetting on user activity
 
-The session timer was only set on login and never reset, causing
-active users to be logged out after 30 minutes regardless of
-activity. Instead update the expiration timestamp on each authenticated
-request to keep active sessions alive.
+The session timer was only set on login and never reset, causing active users to be logged out after 30 minutes regardless of activity. Instead update the expiration timestamp on each authenticated request to keep active sessions alive.
 ```
 
 ### Medium Change - Refactoring
 
-Context: Moving code between files without changing functionality. Future readers need to
-understand why this reorganization happened, what changed, and that it's safe (no behavior
-changes). The message addresses the motivation (navigation/organization), confirms it's a
-pure refactor, and reassures about API compatibility.
+Context: Moving code between files without changing functionality. Future readers need to understand why this reorganization happened, what changed, and that it's safe (no behavior changes). The message addresses the motivation (navigation/organization), confirms it's a pure refactor, and reassures about API compatibility.
 
 ```text
 parser: extract expression parsing into separate module
 
-Move expression parsing logic from parser.rs into new expr.rs
-module to improve code organization. The 400-line expression
-parser was dominating parser.rs, making navigation difficult and
-obscuring the main parsing flow.
+Move expression parsing logic from parser.rs into new expr.rs module to improve code organization. The 400-line expression parser was dominating parser.rs, making navigation difficult and obscuring the main parsing flow.
 
-This is a pure code reorganization with no functional changes. The
-public API remains identical - parse_expression() is now re-exported
-from the new module. All existing tests pass without modification.
+This is a pure code reorganization with no functional changes. The public API remains identical - parse_expression() is now re-exported from the new module. All existing tests pass without modification.
 ```
 
 ### Complex Change - New Feature
 
-Context: Adding foundational infrastructure that other code will depend on. Future
-developers need to understand the design decisions (why byte offsets? why half-open
-intervals?), how it fits into the larger system, and what operations it provides. Code
-examples help show intended usage patterns.
+Context: Adding foundational infrastructure that other code will depend on. Future developers need to understand the design decisions (why byte offsets? why half-open intervals?), how it fits into the larger system, and what operations it provides. Code examples help show intended usage patterns.
 
 ```text
 source: introduce Span type for zero-copy position tracking in parser
 
-Add a lightweight Span type that tracks byte positions within source
-text without copying the underlying data. This forms the foundation
-for accurate error reporting and source mapping throughout the parser
-pipeline.
+Add a lightweight Span type that tracks byte positions within source text without copying the underlying data. This forms the foundation for accurate error reporting and source mapping throughout the parser pipeline.
 
-The Span struct represents a contiguous range of bytes using start
-and end offsets, providing O(1) position tracking without string
-allocations. This design choice allows the parser to maintain precise
-source locations for every AST node while keeping memory overhead
-minimal - critical for processing large workflow files.
+The Span struct represents a contiguous range of bytes using start and end offsets, providing O(1) position tracking without string allocations. This design choice allows the parser to maintain precise source locations for every AST node while keeping memory overhead minimal - critical for processing large workflow files.
 
 Key design decisions:
 
-1. Byte offsets instead of line/column: Avoids expensive newline
-   scanning during parsing. Line/column conversion happens only
-   when formatting errors for display.
+1. Byte offsets instead of line/column: Avoids expensive newline scanning during parsing. Line/column conversion happens only when formatting errors for display.
 
-2. Half-open intervals [start, end): Matches Rust's standard range
-   semantics and simplifies empty span handling (start == end).
+2. Half-open intervals [start, end): Matches Rust's standard range semantics and simplifies empty span handling (start == end).
 
 3. Separate creation methods for different use cases:
    - new(): Direct construction with validation
@@ -308,28 +258,20 @@ The implementation provides core operations needed by the parser:
         // Localized error handling
     }
 
-Display formatting shows the familiar start..end syntax matching
-Rust's range notation, while Debug output provides the internal
-representation for parser debugging.
+Display formatting shows the familiar start..end syntax matching Rust's range notation, while Debug output provides the internal representation for parser debugging.
 
-This commit only introduces the Span type itself. Integration with
-the lexer and parser will follow, allowing every token and AST node
-to carry precise source location information for error reporting.
+This commit only introduces the Span type itself. Integration with the lexer and parser will follow, allowing every token and AST node to carry precise source location information for error reporting.
 ```
 
 ## Bad Examples and Anti-Patterns
 
-Each example below demonstrates common mistakes that make commit messages unhelpful for future developers. These
-are based on real scenarios that cause confusion during debugging, code archaeology, and maintenance.
+Each example below demonstrates common mistakes that make commit messages unhelpful for future developers. These are based on real scenarios that cause confusion during debugging, code archaeology, and maintenance.
 
 ### 1. Too Vague - No Actionable Information
 
-**Scenario**: A developer fixed a critical bug in the authentication system where tokens were expiring 1 hour
-early due to timezone miscalculation. The fix involved updating the JWT validation logic to properly handle UTC
-conversions.
+**Scenario**: A developer fixed a critical bug in the authentication system where tokens were expiring 1 hour early due to timezone miscalculation. The fix involved updating the JWT validation logic to properly handle UTC conversions.
 
-**Actual changes made**: Modified 3 files, added timezone conversion, updated tests, fixed edge cases for
-daylight saving time transitions.
+**Actual changes made**: Modified 3 files, added timezone conversion, updated tests, fixed edge cases for daylight saving time transitions.
 
 ```text
 Fixed the bug
@@ -343,16 +285,13 @@ Fixed the bug
 - Impossible to determine the scope or risk of reverting
 - No indication of what testing was done or what edge cases were considered
 
-**Better approach would**: Specify the component (auth), the issue (JWT timezone bug), and the impact (tokens
-expiring early). Include enough detail that someone experiencing similar symptoms can find this fix.
+**Better approach would**: Specify the component (auth), the issue (JWT timezone bug), and the impact (tokens expiring early). Include enough detail that someone experiencing similar symptoms can find this fix.
 
 ### 2. References Development Steps Instead of Changes
 
-**Scenario**: The developer is implementing a source tracking system as part of a larger parser project. They've
-just completed adding the Span type, SourceManager, and FileId abstractions with comprehensive tests.
+**Scenario**: The developer is implementing a source tracking system as part of a larger parser project. They've just completed adding the Span type, SourceManager, and FileId abstractions with comprehensive tests.
 
-**Actual changes made**: Created 5 new modules with ~800 lines of code implementing a complete source tracking
-system with position mapping, multi-file support, and error context extraction.
+**Actual changes made**: Created 5 new modules with ~800 lines of code implementing a complete source tracking system with position mapping, multi-file support, and error context extraction.
 
 ```text
 Step 4: Implement source tracking
@@ -366,17 +305,13 @@ Step 4: Implement source tracking
 - Future developers have no idea what problems this solves
 - Treats the commit history like a task list instead of technical documentation
 
-**Better approach would**: Describe the actual capability added (zero-copy source position tracking), its purpose
-(accurate error reporting), and key design decisions made in the implementation.
+**Better approach would**: Describe the actual capability added (zero-copy source position tracking), its purpose (accurate error reporting), and key design decisions made in the implementation.
 
 ### 3. Temporal Language That Ages Poorly
 
-**Scenario**: After months of user complaints, the error display system was overhauled to show context lines,
-syntax highlighting, and helpful suggestions. The changes touch the error formatter, diagnostic renderer, and
-terminal output modules.
+**Scenario**: After months of user complaints, the error display system was overhauled to show context lines, syntax highlighting, and helpful suggestions. The changes touch the error formatter, diagnostic renderer, and terminal output modules.
 
-**Actual changes made**: Complete rewrite of error formatting, added ANSI color support, implemented context
-extraction, created suggestion engine, ~1200 lines changed across 8 files.
+**Actual changes made**: Complete rewrite of error formatting, added ANSI color support, implemented context extraction, created suggestion engine, ~1200 lines changed across 8 files.
 
 ```text
 Now errors display correctly
@@ -390,16 +325,13 @@ Now errors display correctly
 - No indication of the scope of changes
 - Future readers won't understand what problem this solved
 
-**Better approach would**: Describe the specific improvements (context lines, syntax highlighting, suggestions)
-and what user problem they address (unclear error messages).
+**Better approach would**: Describe the specific improvements (context lines, syntax highlighting, suggestions) and what user problem they address (unclear error messages).
 
 ### 4. No Context or Rationale
 
-**Scenario**: Adding a critical Span type that will be used throughout the parser for tracking source positions.
-This is a foundational piece that enables accurate error reporting, source maps, and IDE integrations.
+**Scenario**: Adding a critical Span type that will be used throughout the parser for tracking source positions. This is a foundational piece that enables accurate error reporting, source maps, and IDE integrations.
 
-**Actual changes made**: Implemented Span with byte-offset tracking, union/intersection operations, display
-formatting, comprehensive tests, and documentation.
+**Actual changes made**: Implemented Span with byte-offset tracking, union/intersection operations, display formatting, comprehensive tests, and documentation.
 
 ```text
 feat: Add source span type
@@ -413,16 +345,13 @@ feat: Add source span type
 - Future developers won't understand the role this plays
 - Misses the opportunity to document important trade-offs
 
-**Better approach would**: Explain that Span enables zero-copy position tracking for error reporting, document
-the byte-offset design decision, and describe how it fits into the parser pipeline.
+**Better approach would**: Explain that Span enables zero-copy position tracking for error reporting, document the byte-offset design decision, and describe how it fits into the parser pipeline.
 
 ### 5. Implementation Details Without Purpose
 
-**Scenario**: Creating the Span type as the foundation for source-aware error reporting throughout the compiler
-pipeline. The design prioritizes memory efficiency and O(1) operations.
+**Scenario**: Creating the Span type as the foundation for source-aware error reporting throughout the compiler pipeline. The design prioritizes memory efficiency and O(1) operations.
 
-**Actual changes made**: Span struct with carefully chosen primitives, methods for union/intersection/containment,
-Display/Debug implementations, and extensive property-based tests.
+**Actual changes made**: Span struct with carefully chosen primitives, methods for union/intersection/containment, Display/Debug implementations, and extensive property-based tests.
 
 ```text
 Added Span struct with start and end fields
@@ -436,23 +365,18 @@ Added Span struct with start and end fields
 - No documentation of design decisions
 - Treats the commit message like a redundant code comment
 
-**Better approach would**: Focus on the purpose (position tracking for errors), the design philosophy (zero-copy,
-O(1) operations), and the architectural role (foundation for source mapping).
+**Better approach would**: Focus on the purpose (position tracking for errors), the design philosophy (zero-copy, O(1) operations), and the architectural role (foundation for source mapping).
 
 ### 6. Written Without Reading the Full Commit
 
-**Scenario**: A large commit adding comprehensive source tracking infrastructure including SourceManager
-for multi-file support, FileId for file identification, FileSpan for cross-file positions, and extensive
-caching optimizations.
+**Scenario**: A large commit adding comprehensive source tracking infrastructure including SourceManager for multi-file support, FileId for file identification, FileSpan for cross-file positions, and extensive caching optimizations.
 
-**Actual changes made**: 1500+ lines across 6 new files, but the developer only examined the first 100
-lines showing the beginning of SourceManager.
+**Actual changes made**: 1500+ lines across 6 new files, but the developer only examined the first 100 lines showing the beginning of SourceManager.
 
 <bad-example>
 source: Add SourceManager for multi-file support
 
-Implement a SourceManager that can track multiple source files for
-better error reporting across module boundaries.
+Implement a SourceManager that can track multiple source files for better error reporting across module boundaries.
 </bad-example>
 
 **Why this is problematic**:
@@ -463,22 +387,18 @@ better error reporting across module boundaries.
 - Provides incomplete documentation for future maintainers
 - Creates false impression of a simple change when it's actually complex
 
-**Better approach would**: Use `git show HEAD` or `git diff --staged` to review ALL changes, then
-document every significant component added and their relationships.
+**Better approach would**: Use `git show HEAD` or `git diff --staged` to review ALL changes, then document every significant component added and their relationships.
 
 ### 7. Parroting Without Verification
 
-**Scenario**: Amending an existing commit that claimed to implement feature flags, but the actual code
-is a completely different configuration management system using environment variables.
+**Scenario**: Amending an existing commit that claimed to implement feature flags, but the actual code is a completely different configuration management system using environment variables.
 
-**Actual changes made**: Environment-based configuration with validation, type coercion, and fallback
-defaults - no feature flags in sight.
+**Actual changes made**: Environment-based configuration with validation, type coercion, and fallback defaults - no feature flags in sight.
 
 <bad-example>
 source: Implement feature as described
 
-Add the feature flag system as outlined in the previous commit message
-with support for runtime toggling and A/B testing capabilities.
+Add the feature flag system as outlined in the previous commit message with support for runtime toggling and A/B testing capabilities.
 </bad-example>
 
 **Why this is problematic**:
@@ -489,23 +409,18 @@ with support for runtime toggling and A/B testing capabilities.
 - Demonstrates failure to analyze the actual implementation
 - Perpetuates incorrect documentation
 
-**Better approach would**: Read the actual code to understand what was really implemented, then write
-an accurate message describing the environment-based configuration system.
+**Better approach would**: Read the actual code to understand what was really implemented, then write an accurate message describing the environment-based configuration system.
 
 ### 8. Ignoring Significant Secondary Changes
 
-**Scenario**: While adding a FileId type, the developer also implemented SourceManager, FileSpan,
-fixed 3 panicking unwrap() calls, added comprehensive tests, and created builder patterns for better
-ergonomics.
+**Scenario**: While adding a FileId type, the developer also implemented SourceManager, FileSpan, fixed 3 panicking unwrap() calls, added comprehensive tests, and created builder patterns for better ergonomics.
 
-**Actual changes made**: 800+ lines including core types, manager implementation, safety
-improvements, and extensive test coverage.
+**Actual changes made**: 800+ lines including core types, manager implementation, safety improvements, and extensive test coverage.
 
 <bad-example>
 source: Add FileId type
 
-Introduce FileId as a unique identifier for source files in the
-compilation pipeline.
+Introduce FileId as a unique identifier for source files in the compilation pipeline.
 </bad-example>
 
 **Why this is problematic**:
@@ -516,22 +431,18 @@ compilation pipeline.
 - Misses the FileSpan type that enables cross-file position tracking
 - Under-represents the scope and impact of the change
 
-**Better approach would**: List all major components added, mention the safety improvements, and
-describe how they work together as a cohesive system.
+**Better approach would**: List all major components added, mention the safety improvements, and describe how they work together as a cohesive system.
 
 ### 9. Using Wrong Diff Command for Context
 
-**Scenario**: Amending an existing commit that adds parser infrastructure. The developer uses
-`git diff` which shows unstaged changes instead of `git show HEAD` which would show the actual commit
-being amended.
+**Scenario**: Amending an existing commit that adds parser infrastructure. The developer uses `git diff` which shows unstaged changes instead of `git show HEAD` which would show the actual commit being amended.
 
 **Actual changes made**: The commit contains parser infrastructure, but `git diff` shows unrelated formatting changes.
 
 <bad-example>
 source: Update source tracking
 
-Improve code formatting and fix indentation issues for better
-readability across the source tracking module.
+Improve code formatting and fix indentation issues for better readability across the source tracking module.
 </bad-example>
 
 **Why this is problematic**:
@@ -542,17 +453,13 @@ readability across the source tracking module.
 - Creates completely incorrect historical record
 - Will confuse anyone investigating parser issues
 
-**Better approach would**: Use `git show HEAD` when amending to see the actual commit content, AND
-`git diff --staged` to see what's being added to it, then describe the complete parser infrastructure
-changes.
+**Better approach would**: Use `git show HEAD` when amending to see the actual commit content, AND `git diff --staged` to see what's being added to it, then describe the complete parser infrastructure changes.
 
 ### 10. Incomplete Review of Staged Changes
 
-**Scenario**: Creating a new commit with expression parsing. Developer uses `git diff` (unstaged)
-instead of `git diff --staged`, missing most of the actual changes that will be committed.
+**Scenario**: Creating a new commit with expression parsing. Developer uses `git diff` (unstaged) instead of `git diff --staged`, missing most of the actual changes that will be committed.
 
-**Actual changes made**: Complete expression parser with precedence climbing, operator handling,
-and error recovery - all staged for commit.
+**Actual changes made**: Complete expression parser with precedence climbing, operator handling, and error recovery - all staged for commit.
 
 <bad-example>
 parser: Add expression parsing
@@ -568,8 +475,7 @@ Add basic struct for expression parsing preparation.
 - Future developers won't find this when searching for expression parsing
 - Severely under-documents a complex feature
 
-**Better approach would**: Use `git diff --staged` or `git diff --cached` to review what will
-actually be committed, then document the complete expression parsing implementation.
+**Better approach would**: Use `git diff --staged` or `git diff --cached` to review what will actually be committed, then document the complete expression parsing implementation.
 
 ## Special Considerations
 
@@ -635,44 +541,26 @@ Example merge commit message:
 ```text
 merge: integrate feature-auth with performance optimizations from main
 
-Merge the new authentication system with recent performance improvements
-to the request pipeline. This merge required careful reconciliation of
-the middleware chain to preserve both security and speed benefits.
+Merge the new authentication system with recent performance improvements to the request pipeline. This merge required careful reconciliation of the middleware chain to preserve both security and speed benefits.
 
 Conflict resolutions:
 
-1. middleware/auth.rs: Chose feature-auth's token validation approach
-   but retained main's caching strategy for validated tokens. This
-   combination provides both the new OAuth2 support and the performance
-   gains from caching.
+1. middleware/auth.rs: Chose feature-auth's token validation approach but retained main's caching strategy for validated tokens. This combination provides both the new OAuth2 support and the performance gains from caching.
 
-2. middleware/pipeline.rs: Restructured the middleware ordering to run
-   authentication before rate limiting (from feature-auth) while keeping
-   the new async pipeline from main. This ensures auth failures don't
-   consume rate limit quota.
+2. middleware/pipeline.rs: Restructured the middleware ordering to run authentication before rate limiting (from feature-auth) while keeping the new async pipeline from main. This ensures auth failures don't consume rate limit quota.
 
 Semantic conflicts addressed:
 
-- The new RateLimiter in main assumed all requests had user context,
-  but feature-auth allows anonymous requests. Added conditional rate
-  limiting based on authentication state.
+- The new RateLimiter in main assumed all requests had user context, but feature-auth allows anonymous requests. Added conditional rate limiting based on authentication state.
 
-- Both branches added different metrics collectors. Merged into a
-  unified MetricsCollector that captures both auth events and
-  performance timings.
+- Both branches added different metrics collectors. Merged into a unified MetricsCollector that captures both auth events and performance timings.
 
 Breaking changes:
 - Middleware::new() now requires an AuthConfig parameter
 - Anonymous requests now have different rate limits (see config changes)
 - The /health endpoint moved outside the auth middleware
 
-The merged authentication system provides stronger security guarantees
-while maintaining backward compatibility for authenticated requests.
-The breaking changes are limited to initialization code and anonymous
-request handling, which should minimize migration effort for most
-consumers. Teams using the middleware will need to update their
-initialization code to provide auth configuration, but the actual
-request handling interface remains unchanged.
+The merged authentication system provides stronger security guarantees while maintaining backward compatibility for authenticated requests. The breaking changes are limited to initialization code and anonymous request handling, which should minimize migration effort for most consumers. Teams using the middleware will need to update their initialization code to provide auth configuration, but the actual request handling interface remains unchanged.
 ```
 
 ### For Revert Commits
@@ -715,56 +603,38 @@ Revert "pipeline: implement async request processing with connection pooling"
 
 This reverts commit 3a4f5b6c8d9e2f1a5b7c4d8e9f2a3b4c5d6e7f8a.
 
-This optimization introduced a subtle memory leak that accumulates
-under high load, causing OOM crashes in production after ~6 hours of
-operation.
+This optimization introduced a subtle memory leak that accumulates under high load, causing OOM crashes in production after ~6 hours of operation.
 
-The reverted commit introduced connection pooling with async request
-processing to improve throughput. However, the implementation fails
-to properly clean up connection contexts when requests are cancelled
-mid-flight. The leak occurs because:
+The reverted commit introduced connection pooling with async request processing to improve throughput. However, the implementation fails to properly clean up connection contexts when requests are cancelled mid-flight. The leak occurs because:
 
-1. Cancelled requests leave dangling references in the pool's
-   tracking map due to missing cleanup in the cancellation handler
-2. The async cleanup task races with new connection acquisition,
-   occasionally orphaning connection objects
+1. Cancelled requests leave dangling references in the pool's tracking map due to missing cleanup in the cancellation handler
+2. The async cleanup task races with new connection acquisition, occasionally orphaning connection objects
 3. Error paths in process_async() don't trigger connection return
 
 Manual adjustments made during revert:
 
-- src/pipeline/mod.rs: Manually resolved conflicts with the recent
-  error handling refactor (commit 8b9c1d2e). Kept the new error
-  types but removed async-specific error variants.
+- src/pipeline/mod.rs: Manually resolved conflicts with the recent error handling refactor (commit 8b9c1d2e). Kept the new error types but removed async-specific error variants.
 
-- tests/integration/pipeline_test.rs: Removed the async performance
-  benchmarks entirely as they depend on the removed infrastructure.
-  The synchronous benchmarks remain and pass.
+- tests/integration/pipeline_test.rs: Removed the async performance benchmarks entirely as they depend on the removed infrastructure. The synchronous benchmarks remain and pass.
 
 Impact on dependent features:
 
-- WebSocket support reverts to synchronous mode, reducing concurrent
-  connection capacity from 10K to ~1K
-- The new batch API endpoints lose parallel processing, increasing
-  latency from ~50ms to ~200ms for large batches
+- WebSocket support reverts to synchronous mode, reducing concurrent connection capacity from 10K to ~1K
+- The new batch API endpoints lose parallel processing, increasing latency from ~50ms to ~200ms for large batches
 - Monitoring dashboards will show throughput regression of ~40%
 
-The async pipeline will be re-implemented after addressing the
-fundamental lifecycle issues. The new approach will:
+The async pipeline will be re-implemented after addressing the fundamental lifecycle issues. The new approach will:
 
 1. Use RAII guards for connection lifecycle management
 2. Implement proper cancellation tokens that ensure cleanup
 3. Add memory leak detection tests to the CI pipeline
 
-Expected timeline for reintroduction: 2-3 weeks after proper design
-review and stress testing. In the meantime, users requiring high
-throughput should use the load balancer configuration documented
-in docs/scaling.md as a workaround.
+Expected timeline for reintroduction: 2-3 weeks after proper design review and stress testing. In the meantime, users requiring high throughput should use the load balancer configuration documented in docs/scaling.md as a workaround.
 </good-example>
 
 ### For Partial Reverts
 
-In exceptional cases, you may need to revert only specific parts of a commit while keeping other
-changes intact. This is more complex than a full revert and requires careful documentation.
+In exceptional cases, you may need to revert only specific parts of a commit while keeping other changes intact. This is more complex than a full revert and requires careful documentation.
 
 **When partial reverts are necessary:**
 
@@ -784,12 +654,9 @@ changes intact. This is more complex than a full revert and requires careful doc
 ```text
 component: revert [specific aspect] from [original commit reference]
 
-Brief statement of what specific part is being reverted and why
-only that portion needs reverting while the rest remains valuable.
+Brief statement of what specific part is being reverted and why only that portion needs reverting while the rest remains valuable.
 
-Original commit <sha> introduced [list main changes]. This partially
-reverts [specific component/file/function] because [specific issue]
-while preserving [what remains].
+Original commit <sha> introduced [list main changes]. This partially reverts [specific component/file/function] because [specific issue] while preserving [what remains].
 
 Changes reverted:
 - Specific file/function/component and why
@@ -799,8 +666,7 @@ Changes preserved:
 - Part that remains and why it's still valuable
 - Other preserved components
 
-[Technical explanation of how the partial revert was accomplished
-and any manual adjustments required]
+[Technical explanation of how the partial revert was accomplished and any manual adjustments required]
 ```
 
 **Example partial revert:**
@@ -808,19 +674,13 @@ and any manual adjustments required]
 <good-example>
 cache: revert LRU eviction optimization from connection pooling changes
 
-Selectively revert the aggressive LRU eviction strategy introduced
-in commit 3a4f5b6c while keeping the async connection pooling that
-significantly improves throughput.
+Selectively revert the aggressive LRU eviction strategy introduced in commit 3a4f5b6c while keeping the async connection pooling that significantly improves throughput.
 
-Original commit 3a4f5b6c added both async request processing with
-connection pooling AND an optimized LRU cache eviction algorithm.
-The eviction optimization causes cache thrashing under high load,
-but the connection pooling works excellently.
+Original commit 3a4f5b6c added both async request processing with connection pooling AND an optimized LRU cache eviction algorithm. The eviction optimization causes cache thrashing under high load, but the connection pooling works excellently.
 
 Changes reverted:
 
-- cache/lru.rs: Restored conservative eviction (evict at 90% capacity
-  instead of 75%) to prevent thrashing
+- cache/lru.rs: Restored conservative eviction (evict at 90% capacity instead of 75%) to prevent thrashing
 - cache/metrics.rs: Removed aggressive preemptive eviction metrics
 
 Changes preserved:
@@ -829,11 +689,7 @@ Changes preserved:
 - WebSocket upgrade handling improvements
 - Connection health checking mechanisms
 
-The partial revert required manually extracting the LRU changes
-from the original diff and applying inverse patches while ensuring
-the connection pool's cache integration points remained functional.
-Cache performance returns to baseline but connection throughput
-improvements (~40%) are retained.
+The partial revert required manually extracting the LRU changes from the original diff and applying inverse patches while ensuring the connection pool's cache integration points remained functional. Cache performance returns to baseline but connection throughput improvements (~40%) are retained.
 </good-example>
 
 ### For Cherry-Pick Commits
@@ -852,10 +708,8 @@ Only modify the original message in these specific circumstances:
 
 1. **Conflicts that change behavior**: When conflict resolution alters the original functionality
 2. **Partial cherry-pick**: When only selecting some changes from the original commit
-3. **Target branch incompatibility**: When the change's purpose or context differs significantly
-   in the target branch
-4. **Missing critical context**: When the original message lacks information essential for
-   understanding the change in the new branch
+3. **Target branch incompatibility**: When the change's purpose or context differs significantly in the target branch
+4. **Missing critical context**: When the original message lacks information essential for understanding the change in the new branch
 5. **Dependencies not included**: When related commits were NOT cherry-picked and this affects understanding
 
 **What to document when modification IS necessary:**
@@ -872,14 +726,9 @@ Only modify the original message in these specific circumstances:
 <good-example>
 auth: fix JWT validation bypass in expired token check
 
-Validates token expiration before checking signature to prevent timing
-attacks that could extend token lifetime. The validation order was
-allowing attackers to use expired tokens during the signature
-verification window.
+Validates token expiration before checking signature to prevent timing attacks that could extend token lifetime. The validation order was allowing attackers to use expired tokens during the signature verification window.
 
-This security fix is critical for all 2.x deployments still using the
-legacy auth middleware. Backported to 2.x branch for immediate production
-deployment.
+This security fix is critical for all 2.x deployments still using the legacy auth middleware. Backported to 2.x branch for immediate production deployment.
 
 Modifications during cherry-pick:
 
@@ -887,16 +736,14 @@ Modifications during cherry-pick:
 - Removed telemetry calls not available in 2.x branch
 - Adjusted error types to match 2.x error handling patterns
 
-Note: The refactored auth module from commits b5c6d7e8 and c6d7e8f9 was NOT
-cherry-picked as it would break API compatibility in the 2.x release line.
+Note: The refactored auth module from commits b5c6d7e8 and c6d7e8f9 was NOT cherry-picked as it would break API compatibility in the 2.x release line.
 </good-example>
 
 **Remember:** The above example shows an exceptional case. Most cherry-picks retain the original commit message unchanged.
 
 ### For Fixup and Squash Commits
 
-These are temporary commits used during local development that will be combined with earlier commits
-during interactive rebase. **Never push these to shared branches.**
+These are temporary commits used during local development that will be combined with earlier commits during interactive rebase. **Never push these to shared branches.**
 
 **Format:**
 
@@ -921,25 +768,16 @@ Detailed message describing this specific fix/change
 ```text
 f 'parser: implement recursive descent for expression parsing'
 
-Fixed operator precedence handling for comparison operators. The
-original implementation incorrectly gave == and != higher precedence
-than < and >, which violated language specifications.
+Fixed operator precedence handling for comparison operators. The original implementation incorrectly gave == and != higher precedence than < and >, which violated language specifications.
 
-Also added test cases for complex nested comparisons to prevent
-regression.
+Also added test cases for complex nested comparisons to prevent regression.
 ```
 
 ### For Vendor or Generated Code
 
-Vendor updates and code generated from deterministic sources (e.g., protobuf compilers, lex/yacc
-parsers, OpenAPI generators, database schema generators, GraphQL code generators) often produce
-large diffs with minimal semantic change. Focus your message on the motivation and impact rather
-than listing changed files.
+Vendor updates and code generated from deterministic sources (e.g., protobuf compilers, lex/yacc parsers, OpenAPI generators, database schema generators, GraphQL code generators) often produce large diffs with minimal semantic change. Focus your message on the motivation and impact rather than listing changed files.
 
-**Important distinction**: This section applies only to deterministic, tool-generated code (automatic
-stub generation, parser generators, etc.). AI-authored code is considered equivalent to human-authored
-code and must be documented with the same level of detail as any other implementation, following all
-standard guidelines in this document.
+**Important distinction**: This section applies only to deterministic, tool-generated code (automatic stub generation, parser generators, etc.). AI-authored code is considered equivalent to human-authored code and must be documented with the same level of detail as any other implementation, following all standard guidelines in this document.
 
 **Document the "why", not the "what":**
 
@@ -960,15 +798,9 @@ standard guidelines in this document.
 <good-example>
 deps: update bundled tokio from 1.32.0 to 1.35.1 for task cancellation safety
 
-Upgrade tokio to resolve task cancellation edge cases that could cause
-resource leaks in our connection pool implementation. The newer version
-includes critical fixes for async drop handling that we rely on for
-proper cleanup.
+Upgrade tokio to resolve task cancellation edge cases that could cause resource leaks in our connection pool implementation. The newer version includes critical fixes for async drop handling that we rely on for proper cleanup.
 
-This update was triggered by intermittent test failures in the stress
-test suite where connections weren't being returned to the pool after
-abrupt task cancellation. The issue manifested as connection exhaustion
-after ~1000 rapid connect/cancel cycles.
+This update was triggered by intermittent test failures in the stress test suite where connections weren't being returned to the pool after abrupt task cancellation. The issue manifested as connection exhaustion after ~1000 rapid connect/cancel cycles.
 
 Key changes affecting our codebase:
 
@@ -982,14 +814,12 @@ Validated with:
 - Connection leak detector shows zero leaks over 10K cycles
 - Production canary deployment showed no regressions
 
-The update includes minor performance improvements (~5% faster spawning)
-but no breaking API changes. All existing tokio usage remains compatible.
+The update includes minor performance improvements (~5% faster spawning) but no breaking API changes. All existing tokio usage remains compatible.
 </good-example>
 
 ### For Breaking Changes
 
-Breaking changes require special attention as they impact existing users and dependent systems. These changes must
-be clearly marked and thoroughly documented to ensure smooth migration.
+Breaking changes require special attention as they impact existing users and dependent systems. These changes must be clearly marked and thoroughly documented to ensure smooth migration.
 
 **Format:**
 
@@ -1007,8 +837,7 @@ component: description of change
 
 BREAKING CHANGE: Clear statement of what breaks
 
-The old behavior/API that users might depend on is changing. This
-section must explain:
+The old behavior/API that users might depend on is changing. This section must explain:
 
 1. What specifically is breaking:
    - API signatures that changed
@@ -1040,8 +869,7 @@ After (new API):
     })
     connection.subscribe((data) => process(data))
 
-The new API provides better error handling and async/await support
-but requires updating all client initialization code.
+The new API provides better error handling and async/await support but requires updating all client initialization code.
 ```
 
 **Example breaking change commit:**
@@ -1049,26 +877,17 @@ but requires updating all client initialization code.
 <good-example>
 auth: replace session-based authentication with JWT tokens
 
-Migrate the authentication system from server-side sessions to
-stateless JWT tokens to improve scalability and enable horizontal
-scaling without sticky sessions.
+Migrate the authentication system from server-side sessions to stateless JWT tokens to improve scalability and enable horizontal scaling without sticky sessions.
 
-The new JWT-based system eliminates the need for centralized session
-storage, reducing database load and improving response times. Each
-token is self-contained with user claims and expiration, validated
-using RSA signatures.
+The new JWT-based system eliminates the need for centralized session storage, reducing database load and improving response times. Each token is self-contained with user claims and expiration, validated using RSA signatures.
 
 Key architectural changes:
 
-1. Token generation: Auth server issues signed JWTs containing user
-   ID, roles, and expiration timestamp. Tokens are signed with RS256
-   using the server's private key.
+1. Token generation: Auth server issues signed JWTs containing user ID, roles, and expiration timestamp. Tokens are signed with RS256 using the server's private key.
 
-2. Validation: Each service validates tokens independently using the
-   public key, eliminating auth server round-trips for every request.
+2. Validation: Each service validates tokens independently using the public key, eliminating auth server round-trips for every request.
 
-3. Refresh mechanism: Short-lived access tokens (15 min) paired with
-   longer refresh tokens (7 days) balance security and user experience.
+3. Refresh mechanism: Short-lived access tokens (15 min) paired with longer refresh tokens (7 days) balance security and user experience.
 
 Security improvements:
 
@@ -1079,8 +898,7 @@ Security improvements:
 
 BREAKING CHANGE: Session-based authentication is removed entirely
 
-All API clients must update to use JWT token authentication. The
-changes affect both the authentication flow and request authorization:
+All API clients must update to use JWT token authentication. The changes affect both the authentication flow and request authorization:
 
 1. Authentication endpoint changes:
    - Old: POST /api/login returns session cookie
@@ -1144,189 +962,29 @@ Teams should plan migration by <date> when session support ends.
 Contact auth-team@ for migration assistance or special requirements.
 </good-example>
 
-## Commit Message Length - MANDATORY HARD LIMITS
+## Total Message Length
 
-**CRITICAL ENFORCEMENT REQUIREMENT: These are NOT suggestions or guidelines.**
-These are ABSOLUTE, NON-NEGOTIABLE character limits. Violating these limits
-means the commit message is WRONG and MUST be rejected. There are NO exceptions,
-NO special cases, and NO flexibility on these requirements.
+Write what's needed to understand the commit. For the most trivial changes, the subject line may be sufficient. Usually a body will be present to explain WHY the change was made, to summarize the changes for larger commits, or to provide context that isn't obvious from reading the diff.
 
-### First Line: MAXIMUM 72 CHARACTERS (HARD STOP)
+Remember: A commit message that seems too long today will be invaluable context for someone debugging an issue six months from now.
 
-**MANDATORY COUNTING REQUIREMENT**: You MUST count EVERY character in the first
-line. This means starting from character 1 and counting each letter, number,
-space, punctuation mark, and symbol until you reach the end. If your count
-exceeds 72, the line is TOO LONG and MUST be shortened.
+## Line Wrapping
 
-- **HARD LIMIT**: 72 characters maximum - NOT 73, NOT 80, EXACTLY <=72
-- **NO WRAPPING ALLOWED**: If too long, SHORTEN IT - do not wrap to next line
-- **REQUIRED VERIFICATION**: Count characters TWICE before finalizing
-- **AUTOMATIC REJECTION**: Any first line with >72 characters is invalid
+Wrap commit message lines at 72 characters to ensure proper display in git tools and terminal interfaces. This includes both the subject line and body text.
 
-### Body Lines: MANDATORY WRAPPING AT 72 CHARACTERS
+**Exceptions to the 72-character limit:**
 
-**MANDATORY WRAPPING REQUIREMENT**: Every single line in the body MUST be
-wrapped at or before character 72. This is NOT optional formatting - it is
-a HARD REQUIREMENT that MUST be enforced on EVERY line.
+- URLs cannot be broken across lines
+- Code blocks and command examples where breaking would affect readability
+- File paths that are inherently long
+- Technical identifiers like commit SHAs, function signatures, or error messages
+- Configuration keys or structured data that must remain intact
 
-- **HARD LIMIT**: No line may exceed 72 characters - PERIOD
-- **FORCED WRAPPING**: Break lines at word boundaries before character 72
-- **COUNT EVERY LINE**: Manually verify each line's character count
-- **INCLUDING CODE/URLS**: Even code examples and URLs must be wrapped
-
-### CHARACTER COUNTING INSTRUCTIONS
-
-**Step-by-Step Verification Process (MANDATORY):**
-
-1. **For the first line:**
-   - Start at the first character of the component prefix
-   - Count every character including the colon and spaces
-   - Stop at the last character before the newline
-   - If count > 72: STOP and rewrite to be shorter
-
-2. **For body lines:**
-   - Count from the first character to the last on each line
-   - Include all spaces and punctuation in your count
-   - If approaching 72, find the last complete word that fits
-   - Break the line there and continue on the next line
-
-3. **Visual counting aid:**
-
-   ```text
-   1234567890123456789012345678901234567890123456789012345678901234567890123456
-            1         2         3         4         5         6         7
-   ```
-
-### VISUAL REFERENCE - THE 72 CHARACTER BOUNDARY
-
-```text
-|----------------------------------------------------------------------| <- 72
-^ Column 1                                                   Column 72 ^
-
-EXACTLY 72: This line is exactly seventy-two characters long for ref!
-TOO LONG:  component: this first line would have length far in excess of limits and must be fixed
-           ^-------^  ^-----------------------------------------------------------^ <- Column 72
-           component  description starts at column 12, ends at column 86
-           (9 chars)  colon + space + (75 chars) = 86 total = TOO LONG!
-
-CORRECT:   component: shortened description that fits within the limit
-           ^--------^ ^----------------------------------------------^
-           component  description starts at column 12, ends at column 59
-           (9 chars)  colon + space + (48 chars) = 59 total = VALID!
-```
-
-### VIOLATION EXAMPLES AND HOW TO FIX THEM
-
-#### Example 1: First Line Too Long (88 characters)
-
-**VIOLATION - 88 CHARACTERS:**
-
-```text
-auth: implement complete JWT-based authentication system with refresh token handling
-^----------------------------------------------------------------------------------^
-Count: 84 characters - THIS IS 12 CHARACTERS TOO LONG!
-```
-
-**FIXED - 67 CHARACTERS:**
-
-```text
-auth: implement JWT authentication with refresh token support
-^-----------------------------------------------------------^
-Count: 61 characters - VALID!
-```
-
-#### Example 2: Body Paragraph Not Wrapped
-
-**VIOLATION - Lines exceed 72 characters:**
-
-```text
-This implementation provides a complete authentication solution using JSON Web Tokens with automatic refresh handling.
-^--------------------------------------------------------------------------------------------------------------------------^
-Count: 118 characters - 46 CHARACTERS TOO LONG!
-
-The system validates tokens cryptographically and maintains a blacklist for revoked tokens.
-^-----------------------------------------------------------------------------------------^
-Count: 91 characters - 19 CHARACTERS TOO LONG!
-```
-
-**FIXED - Properly wrapped at 72:**
-
-```text
-This implementation provides a complete authentication solution using
-JSON Web Tokens with automatic refresh handling.
-
-The system validates tokens cryptographically and maintains a
-blacklist for revoked tokens.
-```
-
-#### Example 3: Code Example Exceeding Limit
-
-**VIOLATION - Code line too long:**
-
-```javascript
-const response = await fetch('/api/auth/token', { method: 'POST', body: JSON.stringify(credentials) })
-^----------------------------------------------------------------------------------------------------^
-Count: 102 characters - TOO LONG!
-```
-
-**FIXED - Wrapped at logical points:**
-
-```javascript
-const response = await fetch('/api/auth/token', {
-   method: 'POST',
-   body: JSON.stringify(credentials)
-})
-```
-
-### ENFORCEMENT MECHANISM
-
-**YOU MUST PERFORM THESE CHECKS:**
-
-1. **Character Count Verification**:
-   - Count the first line character by character
-   - If >72, STOP immediately and rewrite
-   - Count EVERY body line individually
-   - If ANY line >72, STOP and wrap it properly
-
-2. **Visual Inspection Against Ruler**:
-
-   ```text
-   |----------------------------------------------------------------------| 72
-   Your first line goes here and must not extend past this boundary
-
-   Your body paragraphs must also respect this limit. When you reach
-   the boundary, you must wrap to the next line. No exceptions are
-   allowed for any content including URLs, file paths, or code.
-   ```
-
-3. **Final Validation**:
-   - Re-count the first line one more time
-   - Scan all body lines to ensure none exceed the ruler
-   - If ANY line violates the limit, the ENTIRE message is invalid
-
-### Total Message Length
-
-Write what's needed to understand the commit. For the most trivial changes, the subject
-line may be sufficient. Usually a body will be present to explain WHY the change was made,
-to summarize the changes for larger commits, or to provide context that isn't obvious from
-reading the diff.
-
-Remember: A commit message that seems too long today will be invaluable context for
-someone debugging an issue six months from now.
+When wrapping is not possible, prefer readability over strict adherence to the character limit. The goal is clear communication, not rigid formatting compliance.
 
 ## Enforcement Checklist
 
 Before submitting a commit message, verify:
-
-### CHARACTER LIMIT VERIFICATION (MANDATORY FIRST CHECKS)
-
-- [ ] I counted the first line character-by-character and verified it is <=72 characters
-- [ ] I verified the first line by comparing it against the 72-character ruler
-- [ ] I checked EVERY body line and confirmed ALL are <=72 characters
-- [ ] I wrapped all body paragraphs at or before character 72
-- [ ] I verified no line in the entire message exceeds 72 characters
-- [ ] I re-counted the first line to double-check it's within the limit
-- [ ] I scanned all body lines one final time to ensure compliance
 
 ### For ALL Commits
 
@@ -1381,8 +1039,7 @@ Before submitting a commit message, verify:
 
 ## AI Agent-Specific Reminders
 
-When creating commit messages, AI agents must avoid common pitfalls that stem from making assumptions or
-inventing details not present in the actual code or requirements.
+When creating commit messages, AI agents must avoid common pitfalls that stem from making assumptions or inventing details not present in the actual code or requirements.
 
 ### Critical Rules for AI Agents
 
@@ -1465,8 +1122,7 @@ Modified error handling in auth.py:
 - login(): Catches DatabaseError and returns 503
 - verify_token(): Catches TokenExpiredError and returns 401
 
-Note: Similar error handling may be needed in other modules
-but was not implemented in this commit
+Note: Similar error handling may be needed in other modules but was not implemented in this commit
 </good-example>
 
 **Never invent rationales not explicitly stated.**
@@ -1501,5 +1157,4 @@ Stop and re-verify if your commit message contains:
 - References to files you have not read in this session
 - Descriptions of code behavior you have not traced through
 
-Remember: Every statement in a commit message must be traceable to specific lines of code you have actually read
-and verified. When in doubt, read the file again.
+Remember: Every statement in a commit message must be traceable to specific lines of code you have actually read and verified. When in doubt, read the file again.

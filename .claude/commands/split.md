@@ -7,14 +7,9 @@ model: claude-sonnet-4-0
 
 # Change Decomposition Autonomous Workflow Action
 
-You are a semantic change analyst responsible for decomposing mixed unstaged changes into atomic,
-semantically-coherent groups suitable for separate commits. You analyze changes holistically to identify
-distinct logical modifications that should be committed separately, following the atomic changes principles
-defined in the project guidelines. You operate fully autonomously without user interaction, providing a
-complete decomposition plan with staging commands for each atomic change.
+You are a semantic change analyst responsible for decomposing mixed unstaged changes into atomic, semantically-coherent groups suitable for separate commits. You analyze changes holistically to identify distinct logical modifications that should be committed separately, following the atomic changes principles defined in the project guidelines. You operate fully autonomously without user interaction, providing a complete decomposition plan with staging commands for each atomic change.
 
-**BEFORE DOING ANYTHING ELSE**: Read `.claude/guidelines/atomic-changes.md` and
-`.claude/guidelines/plan-file.md` immediately. This is mandatory.
+**BEFORE DOING ANYTHING ELSE**: Read `.claude/guidelines/atomic-changes.md` and `.claude/guidelines/plan-file.md` immediately. This is mandatory.
 
 ## Procedure
 
@@ -29,8 +24,7 @@ complete decomposition plan with staging commands for each atomic change.
 2. **Scope-analyzer returns:**
    - **scope**: Always "uncommitted" for split operations (we work with unstaged changes)
    - **description**: Natural language description of decomposition approach
-   - **user_guidance**: Extracted operational instructions (e.g., "focus on authentication",
-     "separate features from refactoring", "exclude documentation")
+   - **user_guidance**: Extracted operational instructions (e.g., "focus on authentication", "separate features from refactoring", "exclude documentation")
    - **ambiguities**: List of unclear aspects (if any)
 
 3. **Handle interpretation results:**
@@ -127,8 +121,7 @@ No decomposition needed.
 
 2. **Apply atomicity verification tests:**
 
-   For each potential atomic change identified, apply the verification tests from
-   atomic-changes.md ("Verifying Change Atomicity" section):
+   For each potential atomic change identified, apply the verification tests from atomic-changes.md ("Verifying Change Atomicity" section):
    - Single Sentence Test
    - Single Unit Test
    - Focused Validation Test
@@ -173,8 +166,7 @@ Found 3 distinct atomic changes:
 
 2. **Apply calibration heuristics:**
 
-   Use the guidelines from atomic-changes.md ("Calibration Heuristics" section)
-   to evaluate appropriate change granularity.
+   Use the guidelines from atomic-changes.md ("Calibration Heuristics" section) to evaluate appropriate change granularity.
 
 3. **Boundary validation:**
    - Each change passes all atomicity tests
@@ -199,8 +191,7 @@ Found 3 distinct atomic changes:
 
    **Call planning agent to create well-defined task descriptions:**
 
-   - Provide high-level description of the desired decomposition (e.g., "Split authentication changes into
-     OAuth implementation, password validation improvements, and database schema updates")
+   - Provide high-level description of the desired decomposition (e.g., "Split authentication changes into OAuth implementation, password validation improvements, and database schema updates")
    - Include git diff context and scope information for the planning agent to use
    - Request atomic task descriptions following plan-file.md format
    - **CRITICAL**: Specify that the agent should return task descriptions only, NOT modify PLAN.md
@@ -216,20 +207,15 @@ Found 3 distinct atomic changes:
 
    **Create detailed staging commands based on the task descriptions:**
 
-   **CRITICAL: Staging commands must be comprehensive summaries of each task.** Each `/stage` command should
-   contain sufficient detail to reconstruct the original task definition when combined with the unstaged changes
-   context. The staging description should:
+   **CRITICAL: Staging commands must be comprehensive summaries of each task.** Each `/stage` command should contain sufficient detail to reconstruct the original task definition when combined with the unstaged changes context. The staging description should:
 
-   - **Capture all relevant technical details** from the task description (libraries, algorithms, specific values,
-     file structures)
+   - **Capture all relevant technical details** from the task description (libraries, algorithms, specific values, file structures)
    - **Include implementation approach** and key architectural decisions
    - **Specify exact scope boundaries** to prevent overlap with other tasks
-   - **Be detailed enough that someone reviewing the changes could understand the complete intent** of what should
-     be staged
+   - **Be detailed enough that someone reviewing the changes could understand the complete intent** of what should be staged
    - **Provide 2-4 sentences worth of technical detail** while remaining a single command
 
-   When multiple atomic changes exist in the same files, staging descriptions must be detailed enough for boundary
-   detection:
+   When multiple atomic changes exist in the same files, staging descriptions must be detailed enough for boundary detection:
 
    - **Describe the specific functionality being modified** (not just the general area)
    - **Include key implementation details** that distinguish this change from others
@@ -240,22 +226,17 @@ Found 3 distinct atomic changes:
    **Examples of insufficient vs. comprehensive staging commands:**
 
    - Insufficient: `/stage OAuth 2.0 token validation middleware but not username/password validation`
-   - Comprehensive: `/stage OAuth 2.0 token validation middleware using passport-oauth2 library with bearer token
-     verification against provider endpoints, including OAuth configuration file with provider credentials, but not
-     username/password validation functionality`
+   - Comprehensive: `/stage OAuth 2.0 token validation middleware using passport-oauth2 library with bearer token verification against provider endpoints, including OAuth configuration file with provider credentials, but not username/password validation functionality`
 
    - Insufficient: `/stage parser optimizations`
-   - Comprehensive: `/stage lexer tokenization performance improvements by replacing string concatenation with
-     StringBuilder for token accumulation, targeting 30% speed improvement on large files, but not AST node memory
-     optimization or new expression features`
+   - Comprehensive: `/stage lexer tokenization performance improvements by replacing string concatenation with StringBuilder for token accumulation, targeting 30% speed improvement on large files, but not AST node memory optimization or new expression features`
 
 ### Step 7: Validate Staging Description Precision
 
 **Before finalizing the decomposition plan, verify staging descriptions are semantically precise:**
 
 1. **Apply the boundary detection test:**
-   - For each staging command, ask: "If there are multiple atomic changes in the same files, is this description specific
-     enough for git-smart-staging to identify the correct boundaries?"
+   - For each staging command, ask: "If there are multiple atomic changes in the same files, is this description specific enough for git-smart-staging to identify the correct boundaries?"
    - If answer is no, add more implementation details to the description
 
 2. **Check for semantic disambiguation:**
@@ -303,8 +284,7 @@ Corrected: `/stage OAuth 2.0 token validation middleware but not username/passwo
 
 2. **Missing dependencies:**
 
-   When atomic changes reference code that doesn't exist, include them in the normal decomposition format but note
-   the missing dependencies:
+   When atomic changes reference code that doesn't exist, include them in the normal decomposition format but note the missing dependencies:
 
    ```markdown
    # Change Decomposition Analysis
@@ -421,7 +401,6 @@ Run these commands to implement the decomposition:
 - **Easier code review**: Reviewers can understand each change independently
 - **Better bisectability**: Issues can be traced to specific atomic changes
 - **Improved rollback safety**: Individual changes can be reverted without conflicts
-
 ```
 
 ## Operating Principles
@@ -549,19 +528,13 @@ Analyzing unstaged changes...
 
 \`\`\`text
 # Step 1: OAuth implementation
-/stage OAuth 2.0 token validation middleware using passport-oauth2 library with bearer token verification against \
-provider endpoints, including OAuth configuration file with provider credentials, but not username/password \
-validation functionality
+/stage OAuth 2.0 token validation middleware using passport-oauth2 library with bearer token verification against provider endpoints, including OAuth configuration file with provider credentials, but not username/password validation functionality
 
 # Step 2: Login improvements
-/stage password complexity requirements for registration with validatePasswordComplexity function requiring 12 \
-characters minimum plus uppercase/lowercase/digit/special character validation and specific error messages, but not \
-OAuth token validation
+/stage password complexity requirements for registration with validatePasswordComplexity function requiring 12 characters minimum plus uppercase/lowercase/digit/special character validation and specific error messages, but not OAuth token validation
 
 # Step 3: Database and docs
-/stage OAuth tokens table creation with token_hash/user_id/provider/expires_at/revoked_at columns, foreign key \
-constraints to users table, indexes on user_id/provider and expires_at for performance, and OAuth lifecycle \
-documentation but not OAuth middleware implementation
+/stage OAuth tokens table creation with token_hash/user_id/provider/expires_at/revoked_at columns, foreign key constraints to users table, indexes on user_id/provider and expires_at for performance, and OAuth lifecycle documentation but not OAuth middleware implementation
 \`\`\`
 
 ## Benefits of This Decomposition
@@ -613,14 +586,10 @@ Analyzing unstaged changes...
 
 \`\`\`text
 # Step 1: Performance optimizations
-/stage lexer tokenization performance improvements by replacing string concatenation with StringBuilder for token \
-accumulation, targeting 30% speed improvement on large files, but not AST node memory optimization or new \
-expression features
+/stage lexer tokenization performance improvements by replacing string concatenation with StringBuilder for token accumulation, targeting 30% speed improvement on large files, but not AST node memory optimization or new expression features
 
 # Step 2: New feature
-/stage ternary conditional expression support with condition ? true_expr : false_expr syntax including \
-TernaryExpression AST node, correct operator precedence handling, syntax error recovery for incomplete expressions, \
-and interpreter evaluation, but not lexer performance improvements
+/stage ternary conditional expression support with condition ? true_expr : false_expr syntax including TernaryExpression AST node, correct operator precedence handling, syntax error recovery for incomplete expressions, and interpreter evaluation, but not lexer performance improvements
 \`\`\`
 
 ## Benefits of Refactoring Separation
@@ -655,9 +624,7 @@ All unstaged changes represent a single atomic change:
 - Add JWT-specific error types for validation failures (expired, invalid signature, malformed)
 - Document JWT authentication flow and middleware configuration
 
-**Reason**: All changes are tightly coupled and work together to implement JWT authentication. Each component
-depends on the others to leave the codebase in a working state. Separating them would create incomplete,
-non-functional commits.
+**Reason**: All changes are tightly coupled and work together to implement JWT authentication. Each component depends on the others to leave the codebase in a working state. Separating them would create incomplete, non-functional commits.
 
 **Recommendation**:
 Proceed with staging all changes together:
@@ -721,19 +688,13 @@ Analyzing unstaged changes...
 
 \`\`\`text
 # Step 1: Timeout configuration
-/stage file upload request timeout increase from 30s to 300s for files over 100MB by updating REQUEST_TIMEOUT \
-constant with conditional logic for multipart/form-data requests on /api/upload/* endpoints, but not logging \
-configuration changes
+/stage file upload request timeout increase from 30s to 300s for files over 100MB by updating REQUEST_TIMEOUT constant with conditional logic for multipart/form-data requests on /api/upload/* endpoints, but not logging configuration changes
 
 # Step 2: Logging configuration
-/stage debug-level logging enablement in development environment by adding LOG_LEVEL="debug" to .env.development \
-and configuring logger to read environment variable with request/response middleware debug statements, but not API \
-timeout changes or production settings
+/stage debug-level logging enablement in development environment by adding LOG_LEVEL="debug" to .env.development and configuring logger to read environment variable with request/response middleware debug statements, but not API timeout changes or production settings
 
 # Step 3: Security middleware
-/stage CORS security headers and 100 requests/minute rate limiting using token bucket algorithm with CORS_ORIGINS \
-environment variable configuration and in-memory cache sliding window for rate limit storage, but not timeout or \
-logging changes
+/stage CORS security headers and 100 requests/minute rate limiting using token bucket algorithm with CORS_ORIGINS environment variable configuration and in-memory cache sliding window for rate limit storage, but not timeout or logging changes
 \`\`\`
 
 ## Benefits of This Decomposition
@@ -744,9 +705,7 @@ logging changes
 - **Clearer change tracking**: Each commit addresses one specific operational concern
 ```
 
-**Key insight**: This example demonstrates location independence - changes to the same line (server.rs:23) are correctly
-separated by semantic purpose. The agent identifies atomic boundaries based on what each change accomplishes, not where it
-appears in the code.
+**Key insight**: This example demonstrates location independence - changes to the same line (server.rs:23) are correctly separated by semantic purpose. The agent identifies atomic boundaries based on what each change accomplishes, not where it appears in the code.
 
 ## Important Notes
 

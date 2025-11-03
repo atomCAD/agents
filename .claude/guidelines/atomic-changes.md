@@ -1,13 +1,10 @@
 # Atomic Changes
 
-This guideline defines the fundamental concept of **atomic changes** - the smallest meaningful units of work that can
-be independently completed, tested, and delivered. Atomic changes are the foundation for multiple workflows including
-task planning in PLAN.md documents and decomposing mixed changesets into separate commits.
+This guideline defines the fundamental concept of **atomic changes** - the smallest meaningful units of work that can be independently completed, tested, and delivered. Atomic changes are the foundation for multiple workflows including task planning in PLAN.md documents and decomposing mixed changesets into separate commits.
 
 ## Scope of This Document
 
-This guideline specifies **what atomic changes are and how to identify them**. It provides the foundational concepts
-used by multiple tools and workflows:
+This guideline specifies **what atomic changes are and how to identify them**. It provides the foundational concepts used by multiple tools and workflows:
 
 - **`/plan` workflow**: Uses atomic changes as tasks in PLAN.md documents
 - **`/split` workflow**: Uses atomic changes to decompose mixed diffs into separate commits
@@ -39,8 +36,7 @@ This document uses specific terms with precise meanings:
 
 ### Atomic Change
 
-An atomic change is the smallest meaningful modification to a system that can be independently completed, tested, and
-delivered. It represents the quantum unit of work - you cannot decompose it further without losing atomicity.
+An atomic change is the smallest meaningful modification to a system that can be independently completed, tested, and delivered. It represents the quantum unit of work - you cannot decompose it further without losing atomicity.
 
 **Key characteristics:**
 
@@ -50,12 +46,9 @@ delivered. It represents the quantum unit of work - you cannot decompose it furt
 - Has clear pass/fail validation
 - Leaves the codebase in a working state
 
-**Example:** Adding password validation logic to a registration endpoint is atomic. Implementing an entire user
-authentication system is not - it must be decomposed into multiple atomic changes.
+**Example:** Adding password validation logic to a registration endpoint is atomic. Implementing an entire user authentication system is not - it must be decomposed into multiple atomic changes.
 
-**Related concept**: An atomic change represents a "minimal increment" in the sense that it cannot be decomposed
-further while remaining atomic. However, "minimal" when used elsewhere in this document refers to the property
-of being as small as possible, not as a synonym for "atomic change" itself.
+**Related concept**: An atomic change represents a "minimal increment" in the sense that it cannot be decomposed further while remaining atomic. However, "minimal" when used elsewhere in this document refers to the property of being as small as possible, not as a synonym for "atomic change" itself.
 
 ## Change Categories
 
@@ -78,9 +71,7 @@ Every atomic change must be categorized as one of three types:
    - Extracting duplicated code without adding features (use Refactor)
    - Moving files or modules without adding features (use Move-only)
 
-   **Decision criteria**: If adding new behavior, fixing broken behavior, or changing how the program responds to
-   inputs, it's a feature. If only changing code organization or quality without behavior changes, use Move-only
-   or Refactor.
+   **Decision criteria**: If adding new behavior, fixing broken behavior, or changing how the program responds to inputs, it's a feature. If only changing code organization or quality without behavior changes, use Move-only or Refactor.
 
 2. **Move-only** - Relocates code with minimal changes
 
@@ -97,9 +88,7 @@ Every atomic change must be categorized as one of three types:
    - Renaming beyond what's required for new location
    - Combining/splitting functions
 
-   **Purpose**: Move-only changes isolate code relocation from logic changes. Movement diffs are large and difficult to
-   review - the reviewer should only need to verify the code is identical in the new location. Never mix movement
-   with refactoring in the same change, as it makes review significantly harder.
+   **Purpose**: Move-only changes isolate code relocation from logic changes. Movement diffs are large and difficult to review - the reviewer should only need to verify the code is identical in the new location. Never mix movement with refactoring in the same change, as it makes review significantly harder.
 
    **"Minimal changes" defined**: Only modifications strictly necessary for code to function in new location:
    - Indentation adjustments to match new location's style
@@ -117,9 +106,7 @@ Every atomic change must be categorized as one of three types:
    - Renaming variables, functions, or parameters
    - Changing logic, algorithms, or control flow
 
-   **Boundary with Refactor**: If improving *how the code works* (not just *where it lives*), use Refactor
-   instead. Ask: "Would this change be needed if the code stayed in its original location?" If yes, it's a
-   refactor.
+   **Boundary with Refactor**: If improving *how the code works* (not just *where it lives*), use Refactor instead. Ask: "Would this change be needed if the code stayed in its original location?" If yes, it's a refactor.
 
    **Decision criteria**: If improving how code works (not just where it lives), it's a refactor.
 
@@ -138,19 +125,15 @@ Every atomic change must be categorized as one of three types:
    - Relocating code (use Move-only)
    - Fixing bugs that change behavior (use Feature)
 
-   **Decision criteria**: If the program's external behavior remains identical (same inputs produce same outputs),
-   it's a refactor. If changing what the program does or where code lives, use Feature or Move-only.
+   **Decision criteria**: If the program's external behavior remains identical (same inputs produce same outputs), it's a refactor. If changing what the program does or where code lives, use Feature or Move-only.
 
 ## Decomposition Principles
 
 ### Atomic Changes Are Indivisible
 
-Each change must be **atomic** (see "Atomic Change" in Key Terminology) - the smallest meaningful modification to the
-system.
+Each change must be **atomic** (see "Atomic Change" in Key Terminology) - the smallest meaningful modification to the system.
 
-**Critical principle**: Changes should be as **simple as possible** while still remaining atomic. If a change can be
-broken down further without losing atomicity, it should be. Atomic changes are definitional, not aspirational - if you
-discover during work that something requires multiple units of delivery, the original decomposition was incorrect.
+**Critical principle**: Changes should be as **simple as possible** while still remaining atomic. If a change can be broken down further without losing atomicity, it should be. Atomic changes are definitional, not aspirational - if you discover during work that something requires multiple units of delivery, the original decomposition was incorrect.
 
 ### Verifying Change Atomicity
 
@@ -236,14 +219,11 @@ When identifying atomic changes, **ignore** where modifications appear in the co
 
 #### Why Location Doesn't Matter
 
-1. **Multiple files, one change**: A single atomic change might touch authentication logic in `auth.rs`, its tests in
-   `auth_test.rs`, and imports in `main.rs`. This is still one change: "Add password hashing to authentication."
+1. **Multiple files, one change**: A single atomic change might touch authentication logic in `auth.rs`, its tests in `auth_test.rs`, and imports in `main.rs`. This is still one change: "Add password hashing to authentication."
 
-2. **One file, multiple changes**: A single file might contain two unrelated atomic changes: simplifying validation logic
-   (refactor) and adding a new validation rule (feature). These must be separate despite touching the same file.
+2. **One file, multiple changes**: A single file might contain two unrelated atomic changes: simplifying validation logic (refactor) and adding a new validation rule (feature). These must be separate despite touching the same file.
 
-3. **Adjacent lines, different changes**: Consecutive lines might belong to different atomic changes. Location proximity
-   means nothing - semantic purpose defines the boundary.
+3. **Adjacent lines, different changes**: Consecutive lines might belong to different atomic changes. Location proximity means nothing - semantic purpose defines the boundary.
 
 #### Decomposition Protocol
 
@@ -341,8 +321,7 @@ Diff touches:
 
 **Change**: Implement user authentication system
 
-**Why it's not atomic**: This encompasses login, logout, session management, password reset, etc. Should be broken into multiple
-atomic changes.
+**Why it's not atomic**: This encompasses login, logout, session management, password reset, etc. Should be broken into multiple atomic changes.
 
 #### Example 2: Too Vague (No Validation Criteria)
 
@@ -354,11 +333,9 @@ atomic changes.
 
 **Change**: Add lodash dependency
 
-**Why it's not atomic**: Adding a dependency without using it creates a dangling, unused resource. Atomic changes must
-accomplish something meaningful. Combine dependency addition with its first use.
+**Why it's not atomic**: Adding a dependency without using it creates a dangling, unused resource. Atomic changes must accomplish something meaningful. Combine dependency addition with its first use.
 
-**Better**: Implement array sorting utility (includes adding lodash, creating sortBy helper, writing tests, and using
-it in user list component)
+**Better**: Implement array sorting utility (includes adding lodash, creating sortBy helper, writing tests, and using it in user list component)
 
 #### Example 4: Not Atomic (Combines Multiple Types)
 
@@ -375,5 +352,4 @@ it in user list component)
 
 **Why it's not atomic**: No specification of what sorting means, edge cases, or validation criteria.
 
-**Better**: Add sorting to user list (specify ascending/descending by name and date, maintaining sort across pagination,
-persisting sort state)
+**Better**: Add sorting to user list (specify ascending/descending by name and date, maintaining sort across pagination, persisting sort state)

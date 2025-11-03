@@ -1,8 +1,6 @@
 # Untestable Code Paths
 
-This document describes code paths in the checkpoint scripts that are defensive
-error handling for exceptional conditions that cannot be reliably tested in a
-bash integration test environment.
+This document describes code paths in the checkpoint scripts that are defensive error handling for exceptional conditions that cannot be reliably tested in a bash integration test environment.
 
 ## 1. create.sh: Stash Verification Failure (lines 28-43)
 
@@ -23,8 +21,7 @@ fi
 ```
 
 **Why untestable:**
-This path is only triggered when `git stash push` succeeds (exit 0) but the
-stash cannot be found in `git stash list`. This can only occur due to:
+This path is only triggered when `git stash push` succeeds (exit 0) but the stash cannot be found in `git stash list`. This can only occur due to:
 
 - Git internal bugs
 - Race conditions (another process modifying stash list)
@@ -39,9 +36,7 @@ stash cannot be found in `git stash list`. This can only occur due to:
 - Race conditions are non-deterministic
 
 **Recommendation:**
-This is defensive programming that protects against catastrophic failures. The
-error message correctly instructs the calling agent to stop and report the
-error. Manual code review confirms the logic is correct.
+This is defensive programming that protects against catastrophic failures. The error message correctly instructs the calling agent to stop and report the error. Manual code review confirms the logic is correct.
 
 ## 2. restore.sh: Pop Verification Failure (lines 109-123)
 
@@ -64,20 +59,17 @@ fi
 ```
 
 **Why untestable:**
-This requires `git stash pop` to succeed but the stash count not decrease by
-exactly 1. This is impossible in normal git operation and would indicate:
+This requires `git stash pop` to succeed but the stash count not decrease by exactly 1. This is impossible in normal git operation and would indicate:
 
 - Multiple stashes with identical hashes (git corruption)
 - Stash not actually removed despite pop success (git bug)
 - Concurrent modification of stash list
 
 **Why these can't be tested:**
-Same reasons as #1, plus the additional complexity that git's stash hash
-uniqueness is cryptographically guaranteed.
+Same reasons as #1, plus the additional complexity that git's stash hash uniqueness is cryptographically guaranteed.
 
 **Recommendation:**
-Defensive programming for impossible edge cases. The verification logic is
-correct by inspection.
+Defensive programming for impossible edge cases. The verification logic is correct by inspection.
 
 ## 3. drop.sh: Drop Verification Failure (lines 45-59)
 
@@ -117,6 +109,4 @@ All three untestable code paths are:
 3. **Properly documented** with clear error messages
 4. **Instruct the calling agent** to stop and report errors
 
-These paths exist to catch the impossible edge cases and git failures. They
-provide safety guarantees that make the checkpoint system robust against
-catastrophic failures.
+These paths exist to catch the impossible edge cases and git failures. They provide safety guarantees that make the checkpoint system robust against catastrophic failures.

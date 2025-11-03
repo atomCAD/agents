@@ -163,24 +163,15 @@ Message is factually correct but could provide additional useful context.
 status: inaccurate
 requires_regeneration: true
 factual_errors:
-  - Claims implementation is 'fully functional Unicode compliance linter' but the code is just a
-    temporary placeholder that blindly rejects ALL non-ASCII (>= 0x80)
-  - This simplistic check would incorrectly flag legitimate uses like 'café', 'naïve', proper
-    names, and allowed extended ASCII
-  - Real Unicode compliance checking requires category-based detection or regex patterns to
-    distinguish problematic characters (emojis, decorative symbols) from necessary non-ASCII
-    (diacritics, international text)
+  - Claims implementation is 'fully functional Unicode compliance linter' but the code is just a temporary placeholder that blindly rejects ALL non-ASCII (>= 0x80)
+  - This simplistic check would incorrectly flag legitimate uses like 'café', 'naïve', proper names, and allowed extended ASCII
+  - Real Unicode compliance checking requires category-based detection or regex patterns to distinguish problematic characters (emojis, decorative symbols) from necessary non-ASCII (diacritics, international text)
 corrections:
-  - "Consider: 'Implement basic non-ASCII detection as temporary placeholder' or 'Add
-    simplified Unicode checking for initial development'"
-  - Acknowledge this is scaffolding that will be replaced with proper Unicode category
-    detection
+  - "Consider: 'Implement basic non-ASCII detection as temporary placeholder' or 'Add simplified Unicode checking for initial development'"
+  - Acknowledge this is scaffolding that will be replaced with proper Unicode category detection
 ---
 
-The commit message fundamentally misrepresents the implementation. The is_non_ascii function
-is an oversimplified temporary rule, not a complete Unicode compliance implementation. It's a
-placeholder that doesn't meet the actual design requirements which explicitly allow certain
-non-ASCII uses like properly spelled words with diacritics.
+The commit message fundamentally misrepresents the implementation. The is_non_ascii function is an oversimplified temporary rule, not a complete Unicode compliance implementation. It's a placeholder that doesn't meet the actual design requirements which explicitly allow certain non-ASCII uses like properly spelled words with diacritics.
 ```
 
 ### Example 2: Accurate Message
@@ -197,8 +188,7 @@ observations:
   - Could mention specific validation types added (email format, password strength)
 ---
 
-The commit message accurately describes the addition of multiple validation checks to the
-registration form. The code changes match the described functionality.
+The commit message accurately describes the addition of multiple validation checks to the registration form. The code changes match the described functionality.
 ```
 
 ## Operating Principles
@@ -228,5 +218,4 @@ Your validation should:
 - **Ensure transformation claims reflect actual before/after states**
 - **Flag unsupported performance or functionality claims**
 
-Remember: Your goal is preventing inaccurate commit history, not perfect prose. Focus on
-factual correctness over stylistic preferences.
+Remember: Your goal is preventing inaccurate commit history, not perfect prose. Focus on factual correctness over stylistic preferences.

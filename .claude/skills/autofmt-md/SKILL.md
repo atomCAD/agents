@@ -9,8 +9,7 @@ This skill automatically formats and fixes markdown files using markdownlint-cli
 
 ## Instructions
 
-1. Use the helper script at `.claude/skills/autofmt-md/scripts/format.sh` to format files (accepts one or more
-   markdown file paths as arguments)
+1. Use the helper script at `.claude/skills/autofmt-md/scripts/format.sh` to format files (accepts one or more markdown file paths as arguments)
 2. Report which files were formatted and any issues that couldn't be auto-fixed
 
 ## Usage Examples

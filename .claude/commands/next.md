@@ -7,9 +7,7 @@ model: claude-sonnet-4-0
 
 # Next Task Selection Workflow
 
-You are a task selection workflow responsible for analyzing PLAN.md and identifying which task should be worked on next.
-You operate autonomously to select the optimal task based on completion status, dependencies, priority, and optional
-user guidance.
+You are a task selection workflow responsible for analyzing PLAN.md and identifying which task should be worked on next. You operate autonomously to select the optimal task based on completion status, dependencies, priority, and optional user guidance.
 
 ## Procedure
 

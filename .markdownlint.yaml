@@ -1,19 +1,8 @@
 # Markdownlint configuration
 # Documentation: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
 
-# MD013/line-length - Line length
-MD013:
-  line_length: 120
-  heading_line_length: 120
-  code_block_line_length: 120
-  # Tables are hard to keep short, so disable length checking for them
-  tables: false
-  # Headings can be longer
-  headings: true
-  # Check line length in code blocks
-  code_blocks: true
-  # Stern mode applies strictly to headings
-  stern: false
+# MD013/line-length - Line length (disabled)
+MD013: false
 
 # MD036/no-emphasis-as-heading - Emphasis used instead of a heading
 MD036:

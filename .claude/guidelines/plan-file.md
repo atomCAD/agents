@@ -1,23 +1,16 @@
 # PLAN.md Format and Structure
 
-PLAN.md documents guide incremental feature development through test-driven development (TDD). Each plan breaks down
-a feature into atomic tasks, where each task represents a single commit developed using the red-green-refactor cycle.
+PLAN.md documents guide incremental feature development through test-driven development (TDD). Each plan breaks down a feature into atomic tasks, where each task represents a single commit developed using the red-green-refactor cycle.
 
-**Prerequisite**: This document assumes familiarity with atomic changes. See [atomic-changes.md](atomic-changes.md) for
-the foundational concepts of what makes a change atomic, change categories (Feature/Move-only/Refactor), atomicity
-verification tests, and the location-independence principle. This document focuses on how to represent atomic changes
-in PLAN.md format.
+**Prerequisite**: This document assumes familiarity with atomic changes. See [atomic-changes.md](atomic-changes.md) for the foundational concepts of what makes a change atomic, change categories (Feature/Move-only/Refactor), atomicity verification tests, and the location-independence principle. This document focuses on how to represent atomic changes in PLAN.md format.
 
 ## File Location
 
-The active PLAN.md file lives in the repository root directory. Only one active PLAN.md should exist in the root
-at any time. When a plan is completed, it is archived to `.attic/plans/PLAN-YYYY-MM-DD-topic.md` and committed to
-version control.
+The active PLAN.md file lives in the repository root directory. Only one active PLAN.md should exist in the root at any time. When a plan is completed, it is archived to `.attic/plans/PLAN-YYYY-MM-DD-topic.md` and committed to version control.
 
 ## Scope of This Document
 
-This guideline specifies **how to create and maintain PLAN.md documents**. It is for PLAN.md **authors** (those
-creating and maintaining the document), not PLAN.md **consumers** (developers executing the plan).
+This guideline specifies **how to create and maintain PLAN.md documents**. It is for PLAN.md **authors** (those creating and maintaining the document), not PLAN.md **consumers** (developers executing the plan).
 
 ### In Scope
 
@@ -30,21 +23,16 @@ creating and maintaining the document), not PLAN.md **consumers** (developers ex
 7. **Document Lifecycle** - How PLAN.md files are created, used, and completed
 8. **Task-Commit Alignment** - The 1:1 relationship between tasks and commits
 
-**Note**: Foundational concepts about atomic changes, change categories, atomicity verification, and decomposition
-principles are covered in [atomic-changes.md](atomic-changes.md). This document focuses on PLAN.md-specific formatting
-and workflow.
+**Note**: Foundational concepts about atomic changes, change categories, atomicity verification, and decomposition principles are covered in [atomic-changes.md](atomic-changes.md). This document focuses on PLAN.md-specific formatting and workflow.
 
 ### Out of Scope
 
-1. **Atomic Change Fundamentals** - Covered in [atomic-changes.md](atomic-changes.md) (definitions, categories,
-   verification tests, decomposition principles)
+1. **Atomic Change Fundamentals** - Covered in [atomic-changes.md](atomic-changes.md) (definitions, categories, verification tests, decomposition principles)
 2. **Slash Commands/Tools** - References to `/message`, `/commit`, or other external tooling
 3. **Promotional Content** - "Benefits" section explaining why PLAN.md is good
 4. **Generic Development Philosophy** - Anti-patterns that aren't specifically about PLAN.md task structure
-5. **Strategic Architecture Advice** - General advice about when to use patterns (unless it's about how to represent
-   them as tasks)
-6. **Content that teaches how to use an existing PLAN.md effectively, rather than how to create and maintain the
-   PLAN.md document itself**
+5. **Strategic Architecture Advice** - General advice about when to use patterns (unless it's about how to represent them as tasks)
+6. **Content that teaches how to use an existing PLAN.md effectively, rather than how to create and maintain the PLAN.md document itself**
 
 ## Key Terminology
 
@@ -52,8 +40,7 @@ This document uses specific terms with precise meanings:
 
 ### Sub-requirement
 
-A sub-requirement is a bulleted item beneath a task checkbox that specifies one discrete aspect of the task's
-implementation or validation. Sub-requirements break down what needs to be done within a single atomic task.
+A sub-requirement is a bulleted item beneath a task checkbox that specifies one discrete aspect of the task's implementation or validation. Sub-requirements break down what needs to be done within a single atomic task.
 
 **Common types of sub-requirements:**
 
@@ -74,18 +61,13 @@ The following shows how sub-requirements break down a task's implementation:
 
 ### Atomic Task
 
-An atomic task in PLAN.md is an [atomic change](atomic-changes.md#atomic-change) represented as a checkbox item in the
-Tasks section. Each task becomes exactly one git commit when implemented.
+An atomic task in PLAN.md is an [atomic change](atomic-changes.md#atomic-change) represented as a checkbox item in the Tasks section. Each task becomes exactly one git commit when implemented.
 
-**See [atomic-changes.md](atomic-changes.md) for**: Definition, key characteristics, change categories, atomicity
-verification tests, and decomposition principles.
+**See [atomic-changes.md](atomic-changes.md) for**: Definition, key characteristics, change categories, atomicity verification tests, and decomposition principles.
 
 ### Outcome
 
-An outcome is a desired result that requires either multiple tasks to achieve OR explicit validation of critical
-requirements. Outcomes represent "what" needs to be accomplished (the end state) while tasks represent "how" to get
-there (the specific actions). In GTD (Getting Things Done) terminology, outcomes correspond to "projects" - meaningful
-capabilities that cannot be completed in a single action.
+An outcome is a desired result that requires either multiple tasks to achieve OR explicit validation of critical requirements. Outcomes represent "what" needs to be accomplished (the end state) while tasks represent "how" to get there (the specific actions). In GTD (Getting Things Done) terminology, outcomes correspond to "projects" - meaningful capabilities that cannot be completed in a single action.
 
 **Key characteristics:**
 
@@ -94,14 +76,9 @@ capabilities that cannot be completed in a single action.
 - User-facing value or capabilities
 - Success criteria that define "done"
 
-**When to use**: For complex features that span multiple atomic tasks, list explicit outcomes with their success
-criteria in an Outcomes section. For simple features accomplishable in 1-2 tasks, outcomes can be omitted and success
-criteria specified at the plan level instead (see Optional Elements). Single-task outcomes should be used sparingly -
-primarily for critical requirements (performance, security, compliance) that need explicit tracking and validation.
+**When to use**: For complex features that span multiple atomic tasks, list explicit outcomes with their success criteria in an Outcomes section. For simple features accomplishable in 1-2 tasks, outcomes can be omitted and success criteria specified at the plan level instead (see Optional Elements). Single-task outcomes should be used sparingly - primarily for critical requirements (performance, security, compliance) that need explicit tracking and validation.
 
-**Example**: "Users can reset forgotten passwords" (outcome requiring multiple tasks) vs. "Add password reset endpoint"
-(task that contributes to that outcome). Single-task example: "API responds within 500ms" (critical performance
-requirement with explicit validation needs).
+**Example**: "Users can reset forgotten passwords" (outcome requiring multiple tasks) vs. "Add password reset endpoint" (task that contributes to that outcome). Single-task example: "API responds within 500ms" (critical performance requirement with explicit validation needs).
 
 ## Document Structure
 
@@ -132,9 +109,7 @@ Every PLAN.md document should start with this header structure:
 
 ### Outcomes Section Format
 
-The Outcomes section lists **desired results** (projects in GTD terminology) - things that typically require more than one
-action to complete, or critical requirements needing explicit validation. Each outcome represents a meaningful capability
-or deliverable that emerges from completing one or more tasks.
+The Outcomes section lists **desired results** (projects in GTD terminology) - things that typically require more than one action to complete, or critical requirements needing explicit validation. Each outcome represents a meaningful capability or deliverable that emerges from completing one or more tasks.
 
 #### Outcome Characteristics
 
@@ -145,8 +120,7 @@ or deliverable that emerges from completing one or more tasks.
 
 #### Single-Task Outcomes
 
-While most outcomes require multiple tasks, some critical requirements warrant explicit tracking as outcomes even if
-implementable in a single task. Use single-task outcomes sparingly and only when:
+While most outcomes require multiple tasks, some critical requirements warrant explicit tracking as outcomes even if implementable in a single task. Use single-task outcomes sparingly and only when:
 
 **Valid use cases:**
 
@@ -162,13 +136,11 @@ implementable in a single task. Use single-task outcomes sparingly and only when
 - Routine bug fixes - track as tasks unless they address critical security/performance issues
 - Tasks that are already part of a larger outcome - avoid redundant tracking
 
-**Guideline**: If a single-task item is important enough that its validation deserves explicit documentation separate
-from the task itself, it can be an outcome. Otherwise, keep it as a task.
+**Guideline**: If a single-task item is important enough that its validation deserves explicit documentation separate from the task itself, it can be an outcome. Otherwise, keep it as a task.
 
 #### Outcome Format
 
-Outcomes can use either checkboxes or standard bullet points, with sub-requirements for success criteria, principles, and
-constraints. Checkboxes are useful for tracking when an outcome has been fully achieved and verified:
+Outcomes can use either checkboxes or standard bullet points, with sub-requirements for success criteria, principles, and constraints. Checkboxes are useful for tracking when an outcome has been fully achieved and verified:
 
 ```markdown
 ## Outcomes
@@ -198,8 +170,7 @@ constraints. Checkboxes are useful for tracking when an outcome has been fully a
 
 #### Relationship to Tasks
 
-Each outcome will typically have multiple tasks associated with it. Tasks are the concrete next actions that move toward
-achieving the outcomes:
+Each outcome will typically have multiple tasks associated with it. Tasks are the concrete next actions that move toward achieving the outcomes:
 
 ```markdown
 ## Outcomes
@@ -248,8 +219,7 @@ Apply these questions to verify outcome quality:
 ### Optional Elements
 
 - **Dependencies**: External libraries, APIs, or prerequisite features
-- **Success Criteria**: How to verify the feature is complete (use this for simple plans; for complex multi-task
-  features, specify success criteria within the Outcomes section instead)
+- **Success Criteria**: How to verify the feature is complete (use this for simple plans; for complex multi-task features, specify success criteria within the Outcomes section instead)
 - **Technical Notes**: Architecture decisions, design patterns, or constraints
 
 ### Task List Format
@@ -271,8 +241,7 @@ Tasks use markdown checkbox syntax:
 
 ##### Example: Task with explicit dependency
 
-When tasks have explicit dependencies, document them as sub-requirements (see "Sub-requirement" in Key
-Terminology):
+When tasks have explicit dependencies, document them as sub-requirements (see "Sub-requirement" in Key Terminology):
 
 ```markdown
 - [ ] Implement user profile caching
@@ -309,21 +278,17 @@ Terminology):
 
 ## Task Decomposition Principles
 
-**See [atomic-changes.md](atomic-changes.md) for**: Change categories (Feature, Move-only, Refactor), atomicity
-verification tests, calibration heuristics, and decomposition principles.
+**See [atomic-changes.md](atomic-changes.md) for**: Change categories (Feature, Move-only, Refactor), atomicity verification tests, calibration heuristics, and decomposition principles.
 
 ### Foundational Principle: Task-Commit Relationship
 
-**The 1:1 task-commit relationship is not aspirational - it's definitional.** A "task" in PLAN.md means "an
-atomic task that becomes exactly one commit."
+**The 1:1 task-commit relationship is not aspirational - it's definitional.** A "task" in PLAN.md means "an atomic task that becomes exactly one commit."
 
-This is not a goal to work toward - it defines what a task IS. If something requires multiple commits, it's
-not one task. If multiple "tasks" fit in one commit, they're not properly decomposed.
+This is not a goal to work toward - it defines what a task IS. If something requires multiple commits, it's not one task. If multiple "tasks" fit in one commit, they're not properly decomposed.
 
 ### Task Category Labels
 
-Tasks must be labeled with their category (see [atomic-changes.md](atomic-changes.md#change-categories) for
-definitions):
+Tasks must be labeled with their category (see [atomic-changes.md](atomic-changes.md#change-categories) for definitions):
 
 **Feature tasks** (no category prefix):
 
@@ -345,8 +310,7 @@ definitions):
 
 #### TDD Requirement for Feature Tasks
 
-All feature tasks must follow test-driven development with tests implemented first. See the "Development Methodology
-Requirements" section for details on the TDD cycle.
+All feature tasks must follow test-driven development with tests implemented first. See the "Development Methodology Requirements" section for details on the TDD cycle.
 
 ## Development Methodology Requirements
 
@@ -442,8 +406,7 @@ Feature tasks follow the TDD cycle:
 - [ ] Implement user authentication system
 ```
 
-**Why**: This encompasses login, logout, session management, password reset, etc. Should be broken into multiple
-atomic tasks.
+**Why**: This encompasses login, logout, session management, password reset, etc. Should be broken into multiple atomic tasks.
 
 #### Example 2: Too Vague (No Test Criteria)
 
@@ -459,8 +422,7 @@ atomic tasks.
 - [ ] Add lodash dependency
 ```
 
-**Why**: Each task must accomplish something meaningful. Adding a dependency without using it leaves the repository
-in a "dangling" state where the dependency appears unnecessary. Instead, add dependencies when they're actually used:
+**Why**: Each task must accomplish something meaningful. Adding a dependency without using it leaves the repository in a "dangling" state where the dependency appears unnecessary. Instead, add dependencies when they're actually used:
 
 **Better:**
 
@@ -515,8 +477,7 @@ This section provides guidance for PLAN.md authors on how to structure tasks for
 
 #### Example: Infrastructure decomposed by layer
 
-When documenting layered infrastructure, structure it as separate tasks where each layer can be independently
-tested:
+When documenting layered infrastructure, structure it as separate tasks where each layer can be independently tested:
 
 ```markdown
 - [ ] Add User model with email validation
@@ -539,8 +500,7 @@ tested:
 
 ### Cross-Component Features
 
-When a feature requires changes across multiple components, **decompose it into atomic tasks per layer**, each
-testable independently:
+When a feature requires changes across multiple components, **decompose it into atomic tasks per layer**, each testable independently:
 
 **WRONG (not minimal - spans multiple layers):**
 
@@ -554,8 +514,7 @@ testable independently:
   - Add avatar display to UserProfile component
 ```
 
-**Why wrong**: This task spans data layer, API layer, and UI layer. It's multiple atomic tasks combined and would
-require multiple meaningful commits.
+**Why wrong**: This task spans data layer, API layer, and UI layer. It's multiple atomic tasks combined and would require multiple meaningful commits.
 
 **CORRECT (atomic tasks):**
 
@@ -583,8 +542,7 @@ require multiple meaningful commits.
   - Verify display works in various states (loading, success, fallback)
 ```
 
-**Note for authors**: Each task is atomic and complete: one layer, fully tested, independently valuable. The
-complete "feature" emerges from the series of atomic tasks.
+**Note for authors**: Each task is atomic and complete: one layer, fully tested, independently valuable. The complete "feature" emerges from the series of atomic tasks.
 
 ### Bug Fixes
 
@@ -619,9 +577,7 @@ When documenting refactoring, structure the task to verify behavior preservation
 
 ## Update Protocol
 
-**IMPORTANT**: PLAN.md and ChangeLog.md are tracked in version control throughout development. All updates to the plan
-are logged in a separate ChangeLog.md file. When a plan is completed, both files are concatenated and archived to
-`.attic/plans/` for permanent record.
+**IMPORTANT**: PLAN.md and ChangeLog.md are tracked in version control throughout development. All updates to the plan are logged in a separate ChangeLog.md file. When a plan is completed, both files are concatenated and archived to `.attic/plans/` for permanent record.
 
 ### ChangeLog.md Format
 
@@ -644,13 +600,11 @@ EOF
 - Detailed explanation in the body
 - Each update creates a new entry
 - Use `cat >>` to append without reading the entire file
-- Spacing: When appending entries, include a blank line at the start of the heredoc (after `<<'EOF'`) to separate
-  from the previous entry. Do not include a blank line before the closing `EOF`.
+- Spacing: When appending entries, include a blank line at the start of the heredoc (after `<<'EOF'`) to separate from the previous entry. Do not include a blank line before the closing `EOF`.
 
 ### Initial Plan Creation
 
-When creating a new PLAN.md for the first time, create an initial ChangeLog.md entry documenting the plan's creation.
-This establishes context for the plan's evolution and helps track the overall development approach.
+When creating a new PLAN.md for the first time, create an initial ChangeLog.md entry documenting the plan's creation. This establishes context for the plan's evolution and helps track the overall development approach.
 
 #### Required Elements for Initial Entry
 
@@ -668,10 +622,7 @@ cat >> "ChangeLog.md" <<'EOF'
 
 ## 2025-10-08 - Initial plan created
 
-Created plan for user authentication system. Decomposed into 8 tasks following
-TDD approach with focus on security best practices. Starting with data model,
-then authentication logic, then API endpoints to ensure solid foundation.
-Assumes bcrypt for password hashing and JWT for session management.
+Created plan for user authentication system. Decomposed into 8 tasks following TDD approach with focus on security best practices. Starting with data model, then authentication logic, then API endpoints to ensure solid foundation. Assumes bcrypt for password hashing and JWT for session management.
 EOF
 ```
 
@@ -689,8 +640,7 @@ When a task is completed and committed:
 - No adjustments to approach or scope during implementation
 - No sub-requirements added, removed, or modified
 
-**When no ChangeLog entry is needed:** The task completion is finished after marking the checkbox. No further
-updates to PLAN.md are required.
+**When no ChangeLog entry is needed:** The task completion is finished after marking the checkbox. No further updates to PLAN.md are required.
 
 **REQUIRES ChangeLog entry when:**
 
@@ -709,10 +659,7 @@ cat >> "ChangeLog.md" <<'EOF'
 
 ## 2025-10-09 - Update email validation requirements
 
-Modified task "Add email validation to user registration" during implementation.
-Originally planned to use regex validation, but discovered the email-validator
-library provides better internationalization support. Updated sub-requirements
-to reflect library-based approach instead of custom regex.
+Modified task "Add email validation to user registration" during implementation. Originally planned to use regex validation, but discovered the email-validator library provides better internationalization support. Updated sub-requirements to reflect library-based approach instead of custom regex.
 EOF
 ```
 
@@ -721,26 +668,20 @@ EOF
 Each task in PLAN.md has a strict 1:1 relationship with a single git commit. This is a fundamental principle:
 
 - **One task = One commit**: Every task becomes exactly one commit when completed
-- **Never split tasks across commits**: If implementation requires multiple commits, the original task was
-  incorrectly scoped
+- **Never split tasks across commits**: If implementation requires multiple commits, the original task was incorrectly scoped
 - **Never combine tasks in one commit**: Each task should be minimal and atomic enough to stand alone
 
 #### Task Descriptions Guide Commit Scope
 
-Task descriptions define the *planned* work scope as atomic tasks. Sub-requirements break down what needs to be
-implemented and tested within that single atomic unit. The task provides clear direction for what belongs in one
-commit.
+Task descriptions define the *planned* work scope as atomic tasks. Sub-requirements break down what needs to be implemented and tested within that single atomic unit. The task provides clear direction for what belongs in one commit.
 
 #### When Task Scoping Was Wrong
 
-During implementation, you may discover that your task scoping doesn't match the 1:1 task-commit principle. The
-most common issue is **tasks that are too large** (requiring multiple commits). Less frequently, you may find tasks
-that are too small (multiple tasks fit in one commit). Both indicate planning errors that should be corrected.
+During implementation, you may discover that your task scoping doesn't match the 1:1 task-commit principle. The most common issue is **tasks that are too large** (requiring multiple commits). Less frequently, you may find tasks that are too small (multiple tasks fit in one commit). Both indicate planning errors that should be corrected.
 
 **If you discover during implementation that a task needs multiple commits:**
 
-**Common Planning Error:** This indicates the **original planning was incorrect**. The task was not truly atomic
-(see "Atomic Task" in Key Terminology). To fix this:
+**Common Planning Error:** This indicates the **original planning was incorrect**. The task was not truly atomic (see "Atomic Task" in Key Terminology). To fix this:
 
 1. **Stop implementation** of the oversized task
 2. **Return to planning**: Decompose the task into properly-scoped atomic tasks
@@ -752,8 +693,8 @@ that are too small (multiple tasks fit in one commit). Both indicate planning er
 
    ## YYYY-MM-DD - Rescope oversized task
 
-   Discovered task "[Original task]" was not atomic during implementation - it required
-   multiple commits. Decomposed into [N] atomic tasks:
+   Discovered task "[Original task]" was not atomic during implementation - it required multiple commits. Decomposed into [N] atomic tasks:
+
    - [New task 1]
    - [New task 2]
    - [New task N]
@@ -762,14 +703,11 @@ that are too small (multiple tasks fit in one commit). Both indicate planning er
 
 5. **Resume implementation** with correctly-scoped tasks
 
-**Why this matters:** Oversized tasks break atomic commit principles, make code review difficult, and can leave
-the codebase in incomplete states between commits. Catching and rescoping them preserves the value of
-incremental development.
+**Why this matters:** Oversized tasks break atomic commit principles, make code review difficult, and can leave the codebase in incomplete states between commits. Catching and rescoping them preserves the value of incremental development.
 
 ##### Less Common: Over-Granular Tasks
 
-Occasionally, you may discover during implementation that multiple tasks could be combined into one commit without
-violating atomicity. This is less common than oversized tasks but still indicates planning that was too granular.
+Occasionally, you may discover during implementation that multiple tasks could be combined into one commit without violating atomicity. This is less common than oversized tasks but still indicates planning that was too granular.
 
 **If you discover multiple tasks could be combined into one commit:**
 
@@ -781,10 +719,7 @@ This indicates the **original planning was too granular**. The tasks were not tr
 4. **Add ChangeLog entry** explaining the consolidation
 5. **Resume implementation** with correctly-scoped task
 
-**Why this matters:** Over-granular tasks break atomicity by creating intermediate committed states where the codebase
-violates project invariants. For example, splitting "Add feature X" into "Add dependency" and "Implement feature X"
-creates a commit with dangling, unused code. Each commit must leave the codebase in a valid, working state in
-compliance with project guidelines (passing tests, linting, no unused dependencies or dead code, etc.).
+**Why this matters:** Over-granular tasks break atomicity by creating intermediate committed states where the codebase violates project invariants. For example, splitting "Add feature X" into "Add dependency" and "Implement feature X" creates a commit with dangling, unused code. Each commit must leave the codebase in a valid, working state in compliance with project guidelines (passing tests, linting, no unused dependencies or dead code, etc.).
 
 **Example of Over-Granular Tasks:**
 
@@ -811,22 +746,13 @@ This combines the work into a single atomic task with sub-requirements, matching
 
 #### The Core Principle
 
-**The plan should reflect the actual atomic tasks needed to build the feature** (see "Atomic Task" in Key
-Terminology for full definition). Follow the plan as written - it exists to guide implementation.
+**The plan should reflect the actual atomic tasks needed to build the feature** (see "Atomic Task" in Key Terminology for full definition). Follow the plan as written - it exists to guide implementation.
 
-**When to update the plan:** Only when it becomes clear the task as written is impossible or relies on false
-assumptions (e.g., "Integrate with API endpoint /users" but that endpoint doesn't exist, or "Use library X for
-feature Y" but library X doesn't support the needed functionality), or is poorly scoped. Implementation difficulty
-alone is not a reason to change the plan. The threshold is high: the plan should only be changed when the task
-cannot be completed as specified, not merely because it's harder than expected.
+**When to update the plan:** Only when it becomes clear the task as written is impossible or relies on false assumptions (e.g., "Integrate with API endpoint /users" but that endpoint doesn't exist, or "Use library X for feature Y" but library X doesn't support the needed functionality), or is poorly scoped. Implementation difficulty alone is not a reason to change the plan. The threshold is high: the plan should only be changed when the task cannot be completed as specified, not merely because it's harder than expected.
 
-**Task decomposition principle:** Break tasks down as much as possible, but no further. Tasks should be decomposed
-until further breakdown would violate project invariants - creating commits with dead code, unused dependencies, or
-leaving the codebase in a non-compliant state. When tasks are correctly scoped at this level, they naturally map
-1:1 to commits without adjustment.
+**Task decomposition principle:** Break tasks down as much as possible, but no further. Tasks should be decomposed until further breakdown would violate project invariants - creating commits with dead code, unused dependencies, or leaving the codebase in a non-compliant state. When tasks are correctly scoped at this level, they naturally map 1:1 to commits without adjustment.
 
-**In practice:** Most planning errors lean toward tasks that are too large rather than too small. When in doubt
-during planning, favor smaller, more focused atomic tasks.
+**In practice:** Most planning errors lean toward tasks that are too large rather than too small. When in doubt during planning, favor smaller, more focused atomic tasks.
 
 ### Adding New Tasks
 
@@ -846,8 +772,7 @@ cat >> "ChangeLog.md" <<'EOF'
 
 ## 2025-10-10 - Add password reset tasks
 
-Discovered requirement for password reset flow during authentication implementation.
-Added 3 new tasks covering email validation, token generation, and reset UI.
+Discovered requirement for password reset flow during authentication implementation. Added 3 new tasks covering email validation, token generation, and reset UI.
 EOF
 ```
 
@@ -869,8 +794,7 @@ cat >> "ChangeLog.md" <<'EOF'
 
 ## 2025-10-12 - Reorder database migration tasks
 
-Moved schema migration task before API implementation to resolve dependency issue.
-Cannot implement API endpoints without the database schema in place.
+Moved schema migration task before API implementation to resolve dependency issue. Cannot implement API endpoints without the database schema in place.
 EOF
 ```
 
@@ -894,8 +818,7 @@ cat >> "ChangeLog.md" <<'EOF'
 Removed task: Add visual password strength indicator to registration form
   - [Sub-requirements preserved verbatim]
 
-Reason: Discovered the form validation library already provides this functionality
-built-in. No additional implementation needed.
+Reason: Discovered the form validation library already provides this functionality built-in. No additional implementation needed.
 EOF
 ```
 
@@ -970,8 +893,7 @@ When all tasks are completed and committed:
    rm "ChangeLog.md"
    ```
 
-   **Important**: Replace `short-topic-description` with a brief, hyphenated description of what was implemented
-   (e.g., `user-authentication`, `avatar-upload`, `search-optimization`).
+   **Important**: Replace `short-topic-description` with a brief, hyphenated description of what was implemented (e.g., `user-authentication`, `avatar-upload`, `search-optimization`).
 
 4. **Repository is ready for next plan**: Working directory contains no PLAN.md or ChangeLog.md files.
 

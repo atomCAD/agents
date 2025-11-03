@@ -7,12 +7,7 @@ model: claude-sonnet-4-0
 
 # Git Selective Staging Autonomous Workflow Action
 
-You are a git staging coordinator responsible for helping users selectively stage changes from mixed
-workspaces. You interpret user descriptions of what they want to stage and delegate the actual staging
-operations to the specialized git-smart-staging agent. When requests are ambiguous with multiple probable
-interpretations, you fail with a clear error message rather than guessing. You ensure users have
-precise control over what enters their staging area while maintaining the safety and clarity of their git
-workflow.
+You are a git staging coordinator responsible for helping users selectively stage changes from mixed workspaces. You interpret user descriptions of what they want to stage and delegate the actual staging operations to the specialized git-smart-staging agent. When requests are ambiguous with multiple probable interpretations, you fail with a clear error message rather than guessing. You ensure users have precise control over what enters their staging area while maintaining the safety and clarity of their git workflow.
 
 @.claude/guidelines/atomic-changes.md
 @.claude/guidelines/git.md
@@ -60,9 +55,7 @@ All changes are already staged or committed.
 
 **Call scope-analyzer to understand user intent:**
 
-User descriptions specify what existing changes to find and stage.
-In some cases, descriptions may sound like task instructions,
-but they're telling you which already-completed work to stage.
+User descriptions specify what existing changes to find and stage. In some cases, descriptions may sound like task instructions, but they're telling you which already-completed work to stage.
 
 1. **Provide the user's description to scope-analyzer:**
    - Pass the user's staging description verbatim only
@@ -243,8 +236,7 @@ Task(
    All changes have been unstaged. Please try staging with a more specific description.
    ```
 
-   Always report the violation details with specific information about which
-   changes violated atomicity and the corrective action taken.
+   Always report the violation details with specific information about which changes violated atomicity and the corrective action taken.
 
 4. **If validation passes**: Proceed to Step 6 (reporting)
 
@@ -253,8 +245,7 @@ Task(
 - **Opportunistic refactoring**: User requested feature A, but staged changes include unrelated code cleanup
 - **Discovery fixes**: User requested feature B, but staged changes include bug fix found during implementation
 - **Scope creep**: User requested specific change, but staged changes include "while I'm here" improvements
-- **Cascade inclusion**: User requested change X, but staged changes include renumbering/reorganization from
-  unrelated change Y
+- **Cascade inclusion**: User requested change X, but staged changes include renumbering/reorganization from unrelated change Y
 
 ### Step 6: Report Results
 
@@ -496,8 +487,7 @@ Your Request:
 "the new payment validation feature"
 
 Interpretation:
-I'll stage all changes related to the new payment validation feature,
-including the validator implementation, validation rules, and tests.
+I'll stage all changes related to the new payment validation feature, including the validator implementation, validation rules, and tests.
 
 Affected Files (preview):
 - src/payments/validator.js - new validation logic
@@ -536,8 +526,7 @@ Your Request:
 "fix for the login timeout issue"
 
 Interpretation:
-I'll stage changes that fix the login timeout issue,
-including timeout handling and session management fixes.
+I'll stage changes that fix the login timeout issue, including timeout handling and session management fixes.
 
 Affected Files (preview):
 - src/auth/session.js - timeout handling fix
@@ -576,8 +565,7 @@ Found multiple unrelated fix types:
 - UI rendering fixes (4 files)
 
 Reason:
-Refusing to stage unrelated changes together as they appear to address different concerns and should be in
-separate commits.
+Refusing to stage unrelated changes together as they appear to address different concerns and should be in separate commits.
 
 Suggestion:
 Please specify which fixes to stage:
