@@ -575,8 +575,8 @@ These are working as intended. They leverage your ability to make nuanced judgme
 
 ### Anti-Pattern Warning
 
-**NEVER do this:** "The term 'complex' is ambiguous and should be defined with specific criteria like 'more than
-10 tasks' or 'spanning 3+ modules'." Such suggestions destroy the flexibility that makes AI agents effective.
+**NEVER do this:** "The term 'complex' is ambiguous and should be defined with specific criteria." Such suggestions
+destroy the flexibility that makes AI agents effective by replacing contextual judgment with rigid rules.
 
 **ALWAYS do this:** Apply your natural intelligence to determine what "complex" means in each specific context,
 considering factors like architectural uncertainty, cross-cutting concerns, decomposition difficulty, and any
