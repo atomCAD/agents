@@ -1,5 +1,15 @@
 # AI Agent Instructions
 
+## MANDATORY FIRST STEP: QUERY TYPE ANALYSIS
+
+Before processing ANY user input, you MUST state: "[ANSWER/ACTION]: "
+
+- ANSWER: Contains why/how/what/when/where/who OR asks about capability
+- ACTION: Contains imperative verbs (do, make, create, fix, implement, run, execute)
+
+If ANSWER: Analysis only, no tool calls except for information gathering
+If ACTION: Proceed with implementation
+
 ## About This Template
 
 This is a PROJECT TEMPLATE for AI-driven coding and project management workflows. It establishes baseline
