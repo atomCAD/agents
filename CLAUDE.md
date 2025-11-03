@@ -203,12 +203,7 @@ with the project's git guidelines, you MUST:
 
    b. **SECOND: Check for matching slash commands**
       - Check the "Available Slash Commands" section in this document
-      - If a matching command exists, SUGGEST it to the user with a filled-in directive
-      - The directive should be precise, convey clear intent, and remain on one line
-      - Example: `/commit Fix navigation dropdown not closing on mobile devices`
-      - Present the exact command the user can copy and execute
-      - Explain what the command will do and why it's appropriate
-      - Let the USER execute the command, maintaining their control over operations
+      - If a matching command exists, execute the matching slash command directly via the SlashCommand tool
 
    c. **THIRD: Check for appropriate subagents (if no slash command matches)**
       - Check your internal registry for available subagents (automatically registered from `.claude/agents/`)
@@ -256,94 +251,6 @@ with the project's git guidelines, you MUST:
 - "Stage README.md" (may include unintended changes - need to specify which changes)
 - "Add all Python files" (too broad - specify which changes/features to stage)
 
-#### Examples: Priority-Based Delegation Hierarchy
-
-##### Example 1: Slash Command Available (Highest Priority)
-
-**User Request**: "I've finished making changes to the authentication system. Can you commit them with a good
-message?"
-
-**CORRECT Response** (suggesting slash command):
-
-```text
-I see you want to commit your authentication system changes. I can suggest the appropriate slash command for this:
-
-**Suggested command:**
-`/commit Authentication system improvements`
-
-**What this will do:**
-1. Check that you have staged changes ready
-2. Run validation on your code
-3. Generate a proper commit message based on your changes
-4. Ask for your approval before creating the commit
-
-**Rationale:** The `/commit` workflow handles git operations safely with built-in validation and user approval
-steps. More importantly, the workflow is complex and performing all its steps would poison the context of the
-current session, causing the agent to lose track of the original work. Using the slash command keeps the context
-fresh while delegating the complex operation to a specialized workflow.
-
-By running this command yourself, you also maintain full control over what gets committed. The workflow will
-automatically stage the appropriate changes based on your description - you don't need to manually stage files
-first.
-```
-
-##### Example 2: Subagent Available (Second Priority)
-
-**User Request**: "Can you analyze the performance of my database queries and suggest optimizations?"
-
-**CORRECT Response** (delegating to subagent):
-
-```text
-I'll delegate this to our database performance specialist subagent who has expertise in query optimization.
-
-[Delegating to database performance subagent in .claude/agents/db-performance.md]
-
-The specialist will:
-1. Analyze your current query patterns
-2. Identify performance bottlenecks
-3. Suggest specific optimizations
-4. Provide implementation guidance
-```
-
-##### Example 3: No Slash Command or Subagent (Third Priority)
-
-**User Request**: "Can you fix the indentation in config.json?"
-
-**CORRECT Response** (direct execution):
-
-```text
-I'll fix the indentation in config.json directly since this is a simple formatting task.
-
-[Reading and editing the file with proper JSON formatting]
-
-Done! I've corrected the indentation in config.json to use consistent 2-space indentation.
-```
-
-**INCORRECT Responses** (breaking the hierarchy):
-
-```text
-# Wrong: Trying to execute a slash command instead of suggesting it
-I'll run the /commit command for you...
-[Attempting to execute directly]
-
-# Wrong: Direct execution when a slash command exists
-I'll create the commit directly with git...
-[Ignoring available slash command]
-
-# Wrong: Direct execution when a subagent exists
-I'll analyze your database queries myself...
-[Ignoring specialized subagent]
-```
-
-**Why this hierarchy works:**
-
-- Slash commands give users maximum control while preventing context poisoning from complex workflows
-- Slash commands handle staging automatically based on user descriptions, avoiding unintended changes
-- Subagents provide specialized expertise for complex domains
-- Direct execution handles simple tasks efficiently without delegation overhead
-- The general-purpose agent handles complex multi-step tasks when no specialized tool exists
-- Clear priority order prevents confusion and ensures appropriate handling
-
 #### Execution Rules Under This Exception
 
 When this exception applies:
@@ -356,36 +263,16 @@ When this exception applies:
 
 #### Safe Staging Method When Explicitly Requested
 
-When a user explicitly requests staging specific changes (and no slash command exists):
+When a user explicitly requests staging specific changes:
 
-**ALWAYS use `git apply --cached` with LLM-generated diffs:**
+**ALWAYS use the `/stage` workflow:**
 
 ```bash
-# Generate the exact diff from changes discussed with user
-# For line edits: include context lines read from the actual file
-cat <<'EOF' | git apply --cached
-diff --git a/file.rs b/file.rs
-index abc123..def456 100644
---- a/file.rs
-+++ b/file.rs
-@@ -10,5 +10,5 @@
- context line before (from file)
--old line being replaced (from file)
-+new line replacing it (your change)
- context line after (from file)
-EOF
-
-# Verify what was staged
-git diff --cached
+/stage <description of changes to stage>
 ```
 
-**NOTE**: Always spot check the git index after applying the diff to ensure it was correctly applied. Use
-`git diff --cached` to review the actual staged changes and verify they match what you intended. If the diff
-didn't apply cleanly, you may need to use `git diff HEAD -- file.rs` to see the original state of the file
-(before any changes) and regenerate your diff from that baseline.
-
-**NEVER use `git add` directly** - even when explicitly requested. The `git apply --cached` method provides
-precise control and ensures only the specific changes discussed are staged.
+The `/stage` workflow intelligently stages specific changes from mixed workspaces using precise
+`git apply --cached` operations with specialized validation.
 
 #### This Exception Does NOT Apply To
 
@@ -430,39 +317,59 @@ When a user requests a git state change:
 #### When asked to commit changes directly
 
 ```text
-I cannot directly execute git commit commands. This operation is restricted to maintain repository safety.
+I'll help you commit your changes using the proper workflow sequence.
 
-**Suggested command you can run:**
-`/commit [Description of your changes]`
+First, let's stage the relevant changes:
+```
 
-This will handle validation and generate an appropriate commit message for your approval.
+```xml
+<function_calls>
+<invoke name="SlashCommand">
+<parameter name="command">/stage [description of changes to stage]</parameter>
+</invoke>
+</function_calls>
+```
 
-Alternatively, you can manually run: git commit -m "your message"
+```text
+Next, let's generate an appropriate commit message:
+```
+
+```xml
+<function_calls>
+<invoke name="SlashCommand">
+<parameter name="command">/message [any exceptional guidance to the message agent]</parameter>
+</invoke>
+</function_calls>
+```
+
+```text
+Finally, let's create the commit:
+```
+
+```xml
+<function_calls>
+<invoke name="SlashCommand">
+<parameter name="command">/commit</parameter>
+</invoke>
+</function_calls>
 ```
 
 #### When asked to stage files
 
 ```text
-I cannot execute git add commands directly as this would modify the repository state.
+I'll use the /stage workflow to stage your changes safely.
 
-You can stage files yourself using:
-- git add <specific-file> for individual files
-- git add -p for interactive staging
-
-Or use the authorized workflows in .claude/commands/ if applicable.
+This workflow intelligently stages only the specific changes you describe from your workspace using precise git operations.
 ```
 
-#### When asked to review or check code
+Then execute the workflow:
 
-```text
-I can analyze your code for issues.
-
-**Suggested command you can run:**
-`/check [scope]`
-
-This will perform comprehensive validation including syntax, style, security, and best practices.
-
-Example: `/check staged` to check only staged changes
+```xml
+<function_calls>
+<invoke name="SlashCommand">
+<parameter name="command">/stage [description of changes to stage]</parameter>
+</invoke>
+</function_calls>
 ```
 
 ## Security Considerations
