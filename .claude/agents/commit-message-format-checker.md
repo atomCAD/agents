@@ -191,7 +191,6 @@ Fixes issue with users being unexpectedly logged out.
 **Issues**:
 
 - Past tense "Fixed" instead of imperative "Fix"
-- Trailing whitespace on subject line
 - Missing blank line after subject
 - Body lines too long (>72 characters)
 - Extra blank line at end
