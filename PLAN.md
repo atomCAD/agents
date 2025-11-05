@@ -58,10 +58,10 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Verify validation agents don't enforce line length limits
   - Test that long commit message lines remain intact
 
-- [ ] [Implementation] Create /task slash command workflow
+- [x] [Implementation] Create /task slash command workflow
   - Prerequisites: next-task-selector agent must exist
   - Write YAML frontmatter with required fields
-  - Implement 11-step TDD procedure covering prerequisites, task selection, validation
+  - Implement 8-step TDD procedure covering prerequisites, task selection, validation
   - Add RED phase: write failing tests, verify failures
   - Add GREEN phase: minimal implementation, verify tests pass
   - Add REFACTOR phase: improve code quality while maintaining passing tests
