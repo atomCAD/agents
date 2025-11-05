@@ -910,7 +910,3 @@ PLAN.md documents follow a structured format:
 - Separate ChangeLog.md file documenting all plan modifications
 - Update protocol for marking complete, adding, reordering, and removing tasks
 - Archive completed plans to `.attic/plans/` with concatenated changelog, committed to version control
-
----
-*Last Updated: 2025-10-23*
-*Version: 2.0*

@@ -321,6 +321,3 @@ The following git commands can cause **PERMANENT DATA LOSS** or **UNINTENDED CHA
 **SAFETY REMINDER:** See the CRITICAL SAFETY WARNING section above for dangerous commands to avoid and safe alternatives to use.
 
 **These rules are non-negotiable and apply to all AI agent interactions within this repository.**
-
-*Last Updated: 2025-08-25*
-*Version: 1.0*
