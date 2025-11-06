@@ -61,12 +61,6 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Example: Replace 5 separate Task calls with single message containing 5 Task calls
   - Context: Current implementation runs validation agents sequentially, should run in parallel
 
-- [ ] [Implementation] Configure /message workflow to NOT word-wrap git commit messages
-  - Add explicit "NO word-wrapping" directive to commit-message-author.md
-  - Update .claude/guidelines/git-commit-messages.md with anti-wrapping guidance
-  - Verify validation agents don't enforce line length limits
-  - Test that long commit message lines remain intact
-
 - [x] [Implementation] Create /task slash command workflow
   - Prerequisites: next-task-selector agent must exist
   - Write YAML frontmatter with required fields

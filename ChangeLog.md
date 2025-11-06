@@ -320,3 +320,7 @@ Added task "Add commit message disk write validation to /message workflow" to im
 ## 2025-11-06 - Add task selection output to /task command
 
 Added task to enhance /task command with transparent task selection output. After selecting the next task to implement, the command should clearly inform the user which task was selected, its source (PLAN.md line number or ad-hoc specification), and its type classification before proceeding with implementation. This addresses user request for improved transparency in the task selection process.
+
+## 2025-11-06 - Removed obsolete message word-wrap task
+
+Removed the task "Configure /message workflow to NOT word-wrap git commit messages" as it no longer applies to the current implementation.
