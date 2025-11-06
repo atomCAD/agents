@@ -52,6 +52,15 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Test integration with staged changes for scope categorization
   - Modify file: /workspace/.claude/commands/check.md
 
+- [ ] [Implementation] Modify task-inference.md to run specialist agents in parallel
+  - Update validation methodology to use single message with multiple Task tool calls
+  - Replace sequential specialist agent calls with parallel execution pattern
+  - Follow Claude Code best practice: "make all independent tool calls in parallel"
+  - Improve token efficiency and execution speed
+  - Test with multiple specialist agents (prompt-engineer, syntax-checker, etc.)
+  - Example: Replace 5 separate Task calls with single message containing 5 Task calls
+  - Context: Current implementation runs validation agents sequentially, should run in parallel
+
 - [ ] [Implementation] Configure /message workflow to NOT word-wrap git commit messages
   - Add explicit "NO word-wrapping" directive to commit-message-author.md
   - Update .claude/guidelines/git-commit-messages.md with anti-wrapping guidance
