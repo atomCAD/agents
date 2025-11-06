@@ -42,7 +42,7 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Include examples following existing agent templates
   - Save to /workspace/.claude/agents/task-inference.md
 
-- [ ] [Implementation] Integrate task-inference into /check workflow
+- [x] [Implementation] Integrate task-inference into /check workflow
   - Prerequisites: task-inference agent definition must exist
   - Add Step 1.5 calling task-inference agent between scope and team selection
   - Update Step 4c scope logic from file-based to task-objective-based criteria

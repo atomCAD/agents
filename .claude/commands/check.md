@@ -30,19 +30,42 @@ You are a code quality specialist responsible for comprehensive code review and 
 
 - **If scope is determined** (staged/uncommitted/latest-commit/user-specified):
   - Include in output: "Checking [natural language description from scope-analyzer]. [Include user guidance if present]."
-  - Continue to Step 2
+  - Continue to team determination phase
 - **If scope is unclear**:
   - Report error: "Unable to determine what to check. Request is ambiguous or contradictory."
   - Suggest clarification options (e.g., "Specify: 'staged', 'uncommitted', 'latest commit', or specific files/paths")
   - **EXIT THE WORKFLOW**: Exit immediately with failure status
 
-### Step 2: Determine Quality Check Team
+### Step 2: Task Inference Analysis
+
+**Call the `task-inference` agent to understand what task was implemented:**
+
+- Pass the scope analysis output to `task-inference`
+- Agent will analyze the changes and return task definition in YAML format
+- Extract the inferred task information for use in subsequent steps:
+  - **Atomic Change**: Single sentence description of what was implemented
+  - **Change Type**: Feature, Refactor, or Move-only
+  - **Task Objective**: Specific implementation goals and requirements
+  - **Confidence Level**: How certain the analysis is about the task identification
+
+**Decision point:**
+
+- **If confidence is high or medium**: Apply task-objective-based scope verification during critical evaluation
+  - Issues are in-scope if fixing them is required to complete the task objective
+  - Issues are out-of-scope if they don't relate to the inferred task, even if in analyzed files
+- **If confidence is low**: Apply file-based scope verification during critical evaluation
+  - Issues are in-scope if they exist within the analyzed scope from scope-analyzer
+  - Proceed with traditional file-based categorization
+  - Note task inference ambiguity in final report
+
+### Step 3: Determine Quality Check Team
 
 **Call the `analyst-roster` agent to determine which quality check agents to engage:**
 
-1. Pass the scope description (natural language from Step 1's `description` field) and any user guidance to `analyst-roster`
+1. Pass BOTH the scope description (natural language from scope-analyzer's `description` field) AND the task definition (from task-inference) to `analyst-roster`
    - Do NOT pass the technical scope value (staged/uncommitted/etc.) as it would not be understood
    - Pass the full natural language description that explains what will be analyzed
+   - Include the atomic change description and task objective to enable task-aware analyst selection
 2. Parse the agent list from its markdown response format
 3. Extract any role qualifiers (text after colons) for each agent
 
@@ -65,7 +88,7 @@ Parse to extract:
 - Agent names (before any colon)
 - Role qualifiers (after colon, if present)
 
-### Step 3: Parallel Quality Analysis
+### Step 4: Parallel Quality Analysis
 
 **CRITICAL: Call ALL selected agents in a SINGLE message with multiple tool calls for parallel execution:**
 
@@ -80,8 +103,8 @@ If specialized agents fail to start (e.g., agent not found, configuration error)
 
 **Provide each agent with:**
 
-- The scope description (natural language) from Step 1
-- User guidance from Step 1 (if any)
+- The scope description (natural language) from scope-analyzer
+- User guidance from scope-analyzer (if any)
 - Path to relevant files/changes (ONLY if a path was provided by scope-analyzer)
 - Role qualifier (if provided by analyst-roster)
 - Directive: READ-ONLY analysis, generate findings report, make NO file modifications
@@ -172,7 +195,7 @@ Call general-purpose with:
 
 **Important:** Each call to `general-purpose` should be made in parallel with different role instructions. The agent will handle each request independently, maintaining the specialization of the original failed agents.
 
-### Step 4a: Specialist Assessment
+### Step 5a: Specialist Assessment
 
 **Purpose**: Obtain independent expert evaluation of each identified issue.
 
@@ -224,9 +247,9 @@ Please provide independent assessment:
 3. If no, explain why this is acceptable."
 ```
 
-**Wait for ALL specialist assessments before proceeding to Step 4b.**
+**Wait for ALL specialist assessments before proceeding to report integration.**
 
-### Step 4b: Report Integration
+### Step 5b: Report Integration
 
 **Purpose**: Synthesize multiple specialist perspectives into unified assessments.
 
@@ -255,7 +278,7 @@ Please provide:
 3. Final determination on whether this is a genuine issue"
 ```
 
-### Step 4c: Critical Evaluation
+### Step 5c: Critical Evaluation
 
 **Purpose**: Apply rigorous critical analysis to validate genuine issues.
 
@@ -281,13 +304,18 @@ After receiving specialist assessments, apply critical evaluation to **ALL issue
    - Are we applying inappropriate standards from different contexts?
 
 4. **Scope Verification**
-   - Is the issue within the analyzed scope (not in pre-existing code)?
-   - Can it be fixed without modifying out-of-scope files?
-   - Is this new code or existing code?
+   - **For high/medium confidence task inference:**
+     - Is fixing this issue required to complete the task objective identified by task-inference?
+     - Does the fix align with the inferred task requirements?
+     - Can it be fixed without modifying files outside the task objective scope?
+   - **For low confidence task inference (fallback to file-based):**
+     - Is the issue within the analyzed scope from scope-analyzer?
+     - Is it in files that were actually changed, not pre-existing code?
+     - Can it be fixed without expanding beyond the analyzed files?
 
 Only discard issues that aren't actually problems or where the "fix" would make things worse. Valid issues that pass the critical evaluation get categorized by scope: in-scope issues go in "In-scope and doable" or "In-scope but blocked", while out-of-scope issues go in "Out-of-scope but legitimate". Remember: if fixing an issue would genuinely improve the code - even slightly - it's worth reporting in the appropriate section.
 
-### Step 4d: Issue Categorization
+### Step 5d: Issue Categorization
 
 **Purpose**: Categorize validated issues into actionable groups.
 
@@ -301,14 +329,45 @@ Based on specialist reports and critical evaluation, categorize each issue:
 **Decision criteria:**
 
 - Is this a genuine issue (confirmed by specialist, not a false positive)?
-- Is the issue within the scope defined in Step 1?
-- Can the fix be completed without requiring out-of-scope changes?
+- **Scope determination (depends on task inference confidence from task-inference):**
+  - **For high/medium confidence:** Is fixing this issue required to complete the task objective?
+  - **For low confidence:** Is the issue within the scope defined by scope-analyzer?
+- Can the fix be completed without requiring changes outside the determined scope?
 - Are there blocking factors preventing immediate resolution?
-- Should this be tracked even if outside current scope?
+- Should this be tracked even if outside determined scope?
 
 #### REQUIREMENT: Only discard as false positive if specialist explicitly confirms it's not a genuine issue regardless of current scope
 
-### Step 5: Implementation Strategy Development
+#### Examples: Task-Objective-Based vs File-Based Scope Decisions
+
+##### Example 1: Feature Implementation Task
+
+- **Task Inference (High Confidence):** "Implement password validation with configurable rules"
+- **Quality Issue Found:** Unused import in unrelated user profile module
+- **Task-Based Decision:** **Out-of-scope but legitimate** - Removing unused import is not required to complete password validation task, but is still a valid improvement
+- **File-Based Decision:** If user profile module was in staged changes, would be **In-scope and doable**
+
+##### Example 2: Security Fix Task
+
+- **Task Inference (High Confidence):** "Fix SQL injection vulnerability in user search endpoint"
+- **Quality Issue Found:** Similar SQL injection pattern in admin search endpoint
+- **Task-Based Decision:** **In-scope and doable** - Fixing similar vulnerability patterns aligns with security fix objective, even if not in original scope
+- **File-Based Decision:** If admin search was not in staged changes, would be **Out-of-scope but legitimate**
+
+##### Example 3: Refactor Task
+
+- **Task Inference (Medium Confidence):** "Extract authentication logic into separate module"
+- **Quality Issue Found:** Inconsistent error handling in authentication functions
+- **Task-Based Decision:** **In-scope and doable** - Improving error handling consistency supports the refactoring objective
+- **File-Based Decision:** Would depend on whether error handling changes were in the analyzed files
+
+##### Example 4: Low Confidence Task Inference
+
+- **Task Inference (Low Confidence):** "Multiple unrelated maintenance changes"
+- **Quality Issue Found:** Missing error handling in database connection code
+- **Fallback to File-Based Decision:** Is the database connection code within the analyzed scope from scope-analyzer?
+
+### Step 6: Implementation Strategy Development
 
 **For each issue marked as "In-scope and doable" or "In-scope but blocked":**
 
@@ -336,7 +395,7 @@ Call `architecture-strategist` agent to assess each strategy:
 - Identify correct order of operations
 - Flag any conflicting strategies that need resolution
 
-### Step 6: Report Generation
+### Step 7: Report Generation
 
 **Generate focused quality report with the following structure:**
 
@@ -346,7 +405,13 @@ Call `architecture-strategist` agent to assess each strategy:
 # Code Quality Check Report
 
 ## Scope Analyzed
-- **Description**: [natural language description from Step 1]
+- **Description**: [natural language description from scope-analyzer]
+- **Task Inference**:
+  - **Atomic Change**: [single sentence from task-inference]
+  - **Task Objective**: [specific implementation goals from task-inference]
+  - **Change Type**: [feature/refactor/move-only from task-inference]
+  - **Confidence**: [high/medium/low from task-inference]
+- **Scope Determination Method**: [Task-objective-based (high/medium confidence) OR File-based (low confidence)]
 - **Files**: [number of files checked]
 - **Lines**: [lines of code analyzed]
 - **Timestamp**: [when check was performed]
