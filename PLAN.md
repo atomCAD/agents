@@ -34,7 +34,7 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
 
 ## Tasks
 
-- [ ] [Design] Create task-inference agent definition
+- [x] [Design] Create task-inference agent definition
   - Write YAML frontmatter with required fields
   - Define agent purpose: bridge scope analysis (WHERE) and quality analysis (WHAT)
   - Specify YAML input/output format for task objective inference
