@@ -492,6 +492,7 @@ Claude Code automatically registers subagents from `.claude/agents/` and maintai
 6. Delegate early rather than attempting and then delegating
 7. Provide context to subagents about the broader goal
 8. Synthesize subagent responses into cohesive solutions
+9. **Execute multiple read-only specialists in parallel**: When consulting multiple analysts or other read-only specialists, generate all tool calls in a single message with multiple tool calls so they can run in parallel for better efficiency and token economy
 
 ### Critical Delegation Principles
 

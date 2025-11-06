@@ -247,7 +247,7 @@ Check test results align with expectations:
 Debug and retry until passing. If repeatedly failing:
 
 - Analyze root cause in depth
-- Call specialized agents for domain expertise (rust-engineer, etc.)
+- **Call specialized agents in parallel using a single message with multiple tool calls** for domain expertise (rust-engineer, etc.)
 - Use Opus model to brainstorm alternative approaches
 - Research similar patterns in the codebase for guidance
 - Try fundamentally different implementation strategies
@@ -260,7 +260,7 @@ Debug and retry until passing. If repeatedly failing:
 1. **Get expert assessments:**
    - Call analyst-roster to get suggestions for which critic agents might be relevant
    - Evaluate the roster recommendations - select only critics that actually make sense for this task
-   - Call the selected critic agents to assess the implementation
+   - **Call the selected critic agents in parallel using a single message with multiple tool calls** to assess the implementation
    - Review critic suggestions critically - evaluate whether they genuinely improve the code
    - Identify specific improvements worth implementing
 

@@ -52,7 +52,7 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Test integration with staged changes for scope categorization
   - Modify file: /workspace/.claude/commands/check.md
 
-- [ ] [Implementation] Modify task-inference.md to run specialist agents in parallel
+- [x] [Implementation] Modify /task to run specialist agents in parallel
   - Update validation methodology to use single message with multiple Task tool calls
   - Replace sequential specialist agent calls with parallel execution pattern
   - Follow Claude Code best practice: "make all independent tool calls in parallel"
