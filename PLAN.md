@@ -141,6 +141,13 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Only evaluate tests added during current task execution, not existing tests
   - Modify file: /workspace/.claude/commands/task.md
 
+- [ ] [Implementation] Add task selection output to /task command workflow
+  - Update Step 1 to output selected task information to user before proceeding
+  - Display task description and source (PLAN.md line number or ad-hoc specification)
+  - Include task type classification (Feature/Move-only/Refactor) in output
+  - Format output clearly to inform user what will be implemented
+  - Ensure transparency about which task was selected for implementation
+
 - [ ] [Implementation] Make checkpoint skill create.sh non-destructive
   - Modify create.sh script to automatically call restore.sh before returning to caller
   - Ensure working tree and staging area remain unchanged after checkpoint creation
@@ -155,6 +162,12 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Update planning process to include GTD-style outcome generation
   - Enhance validation checklist and output format to include outcomes
   - Update success criteria to include outcome-to-task mapping
+
+- [ ] [Implementation] Add commit message disk write validation to /message workflow
+  - Add validation check in /message workflow after markdownlint-cli2 execution
+  - Verify that markdownlint output shows "Linting: 1 file(s)" not "Linting: 0 file(s)"
+  - If "Linting: 0 file(s)" detected, write commit message to disk and retry validation
+  - Context: Recovers from file write failures automatically instead of failing
 
 - [ ] [Implementation] Add /plan command for PLAN.md management workflow
   - Prerequisites: Enhanced plan-architect agent and updated format specification

@@ -312,3 +312,11 @@ Added second high-priority task "Add test evaluation and cleanup to /task comman
 ## 2025-11-06 - Add checkpoint skill non-destructive operation task
 
 Added task "Make checkpoint skill create.sh non-destructive" to address user surprise when create.sh modified git state by stashing changes. The task will modify create.sh to automatically call restore.sh before returning, ensuring the working tree and staging area remain unchanged after checkpoint creation. This aligns with user expectations that create.sh should be a read-only operation that only creates checkpoints without altering workspace state.
+
+## 2025-11-06 - Add commit message disk write validation task
+
+Added task "Add commit message disk write validation to /message workflow" to improve workflow reliability. The task validates that commit messages are written to disk by checking markdownlint-cli2 output. If output shows "Linting: 0 file(s)" (indicating the file wasn't written), the workflow writes the commit message to disk and retries validation. This recovers automatically from agent file write failures.
+
+## 2025-11-06 - Add task selection output to /task command
+
+Added task to enhance /task command with transparent task selection output. After selecting the next task to implement, the command should clearly inform the user which task was selected, its source (PLAN.md line number or ad-hoc specification), and its type classification before proceeding with implementation. This addresses user request for improved transparency in the task selection process.
