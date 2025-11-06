@@ -982,6 +982,20 @@ Wrap commit message lines at 72 characters to ensure proper display in git tools
 
 When wrapping is not possible, prefer readability over strict adherence to the character limit. The goal is clear communication, not rigid formatting compliance.
 
+**Manual verification commands:**
+
+To verify line lengths in your commit message:
+
+```bash
+# Find all lines exceeding 72 characters
+awk 'length($0) > 72 {print NR": "length($0)" chars - "$0}' .git/COMMIT_EDITMSG
+
+# Display maximum line length
+awk '{len=length($0); if(len>max) max=len} END {print "Maximum line length: "max" chars"}' .git/COMMIT_EDITMSG
+```
+
+If the first command produces no output, all lines are within the limit.
+
 ## Enforcement Checklist
 
 Before submitting a commit message, verify:
