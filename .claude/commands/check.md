@@ -199,13 +199,13 @@ Call general-purpose with:
 
 **Purpose**: Obtain independent expert evaluation of each identified issue.
 
-**CRITICAL: Call ALL specialist agents in a SINGLE message with multiple tool calls for parallel execution.**
+**CRITICAL: Call ALL specialists in a SINGLE message with multiple tool calls for parallel execution.**
 
 For EVERY issue identified by quality agents, call appropriate specialist(s) for independent evaluation:
 
 - Use best judgment to select relevant specialists based on issue type
 - Provide specialists with the scope description (natural language) for context
-- This list is not exhaustive - choose from all available specialist agents
+- This list is not exhaustive - choose from all available specialists
 - For issues with multiple dimensions, call up to 3 relevant specialists
 - Examples of specialist selection:
   - Security vulnerability: `security-specialist`
