@@ -69,6 +69,16 @@ An atomic task in PLAN.md is an [atomic change](atomic-changes.md#atomic-change)
 
 An outcome is a desired result that requires either multiple tasks to achieve OR explicit validation of critical requirements. Outcomes represent "what" needs to be accomplished (the end state) while tasks represent "how" to get there (the specific actions). In GTD (Getting Things Done) terminology, outcomes correspond to "projects" - meaningful capabilities that cannot be completed in a single action.
 
+**GTD Natural Planning Model characteristics:**
+
+- **Purpose-driven**: Outcomes define WHY we're doing the work and WHAT success looks like
+- **Vision-focused**: Describe the desired end state, not the implementation path
+- **Multi-step by nature**: Require multiple tasks to complete
+- **Measurable completion**: Clear criteria for when the outcome is achieved
+- **Observable end states**: Results that can be objectively verified
+- **User-facing value**: Meaningful capabilities or deliverables
+- **Success criteria orientation**: Define "done" before starting implementation
+
 **Key characteristics:**
 
 - Multi-step results requiring multiple tasks, OR single critical requirements needing explicit validation
@@ -194,27 +204,42 @@ Each outcome will typically have multiple tasks associated with it. Tasks are th
 
 #### Validating Outcomes
 
-Apply these questions to verify outcome quality:
+Apply these questions to verify outcome quality according to GTD Natural Planning Model principles:
 
 1. **Outcome test**: Does this require 2+ tasks OR explicit validation of a critical requirement?
-   - If no: This is a task, not an outcome
+   - If no: This is a single task, not an outcome
    - If single-task: Is this a critical requirement (performance, security, compliance) that warrants explicit tracking?
 
 2. **End-state test**: Does this describe WHAT (result), not HOW (implementation)?
-   - If describing implementation: Refocus on the user-facing result
+   - If describing implementation: Refocus on the desired end state and user value
+   - Should answer: "What would success look like?"
 
 3. **Measurability test**: Can completion be objectively determined?
-   - If no: Add or clarify success criteria
+   - If no: Add or clarify specific, objective success criteria
+   - Can someone else verify completion based on the criteria?
 
-4. **Value test**: Does this represent meaningful capability?
+4. **Value test**: Does this represent meaningful capability or deliverable?
    - If purely internal/technical: Consider whether it needs to be an explicit outcome
+   - Focus on user-facing value and business capability
+
+5. **Scope test**: Is this focused enough to guide planning?
+   - Too broad: "Build the entire authentication system" or "Implement all user features" - spans multiple distinct capabilities
+   - Right scope: "Users can reset forgotten passwords" - requires multiple tasks but focuses on one specific capability
+
+**GTD validation criteria:**
+
+- **Clear outcome statement**: Describes the desired end state, not the path to get there
+- **Specific success criteria**: Objective, measurable indicators of completion
+- **Appropriate scope**: Meaningful outcome requiring multiple tasks, not single task
+- **Value-focused**: Emphasizes capability delivered, not technical implementation details
 
 **Common mistakes:**
 
 - Outcome is too granular (completable as single task without critical validation needs)
-- Outcome describes approach rather than result
-- Success criteria are subjective or vague
-- Outcome scope spans entire plan (needs splitting)
+- Outcome describes approach/implementation rather than desired result
+- Success criteria are subjective, vague, or unmeasurable
+- Outcome scope spans entire plan (needs splitting into focused outcomes)
+- Missing WHY context - unclear purpose or value proposition
 
 ### Optional Elements
 
@@ -239,9 +264,9 @@ Tasks use markdown checkbox syntax:
 
 #### Documenting Task Dependencies
 
-##### Example: Task with explicit dependency
+When tasks have explicit dependencies, document them as sub-requirements (see "Sub-requirement" in Key Terminology). Use explicit "Depends on:" notation when the dependency is not immediately obvious from task content or ordering, or when the dependency provides important implementation context:
 
-When tasks have explicit dependencies, document them as sub-requirements (see "Sub-requirement" in Key Terminology):
+##### Example: Task with explicit dependency
 
 ```markdown
 - [ ] Implement user profile caching
@@ -899,14 +924,21 @@ When all tasks are completed and committed:
 
 ## Summary
 
-PLAN.md documents follow a structured format:
+PLAN.md documents follow a structured format implementing GTD (Getting Things Done) Natural Planning Model:
 
-- Metadata section with title, overview, outcomes, and tasks headings
-- Outcomes section listing desired results/projects (GTD-style)
-- Task list using markdown checkboxes (`[ ]` pending, `[x]` completed)
-- Three task categories: feature (default), move-only, and refactor
-- Task descriptions with action verb, what, and optional where/how
-- Sub-requirements specifying test criteria, implementation details, and validation
-- Separate ChangeLog.md file documenting all plan modifications
-- Update protocol for marking complete, adding, reordering, and removing tasks
-- Archive completed plans to `.attic/plans/` with concatenated changelog, committed to version control
+- **Header with metadata**: Title, overview, and section structure
+- **Outcomes section**: Required section listing desired results/projects following GTD principles
+  - Multi-step results that require multiple tasks to achieve
+  - Observable end states with measurable completion criteria
+  - Success criteria, principles, and constraints for each outcome
+  - Clear outcome-to-task relationship mapping
+- **Tasks section**: Ordered list of atomic tasks using markdown checkboxes
+  - `[ ]` for pending tasks, `[x]` for completed tasks
+  - Three task categories: feature (default), move-only, and refactor
+  - Task descriptions with action verb, what, and optional where/how
+  - Sub-requirements specifying test criteria, implementation details, and validation
+- **Change management**: Separate ChangeLog.md file documenting all plan modifications
+- **Update protocol**: Procedures for marking complete, adding, reordering, and removing tasks
+- **Archival process**: Archive completed plans to `.attic/plans/` with concatenated changelog, committed to version control
+
+The outcomes-first approach ensures that all atomic tasks contribute toward meaningful, measurable results while maintaining the strict 1:1 task-commit relationship for incremental development.

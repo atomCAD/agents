@@ -105,7 +105,7 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Include examples: `/next`, `/next focus on database tasks`, `/next skip investigation tasks`
   - Save to /workspace/.claude/commands/next.md
 
-- [ ] [Documentation] Add outcomes section support to PLAN.md format specification
+- [x] [Documentation] Add outcomes section support to PLAN.md format specification
   - Prerequisites: Review existing .claude/guidelines/plan-file.md structure
   - Document Outcomes section format with GTD characteristics and validation criteria
   - Include outcome format examples with success criteria and constraints
