@@ -122,6 +122,33 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Update required document structure to mandate Outcomes section
   - Revise summary section to reflect outcomes integration
 
+- [ ] [Implementation] Fix list indentation in commit messages
+  - Enhance commit-message-author agent instructions:
+    - Add explicit markdown list formatting examples showing 3-space indentation
+    - Include post-generation self-check for proper list indentation
+  - Expand commit-message-format-checker validation:
+    - Add list indentation verification to format checker's responsibilities
+    - Check that continuation lines align with first character of list item text
+  - Modify files: /workspace/.claude/agents/commit-message-author.md, /workspace/.claude/agents/commit-message-format-checker.md
+
+- [ ] [Implementation] Add test evaluation and cleanup to /task command workflow
+  - Add final step to /task workflow for evaluating newly-added tests
+  - Implement test categorization: keep vs remove based on long-term value
+  - Identify fragile tests that test current content expected to change freely
+  - Detect tests created solely for TDD red-green-refactor validation
+  - Add criteria for test retention: stability, maintainability, business value
+  - Generate test cleanup recommendations with rationale for each decision
+  - Only evaluate tests added during current task execution, not existing tests
+  - Modify file: /workspace/.claude/commands/task.md
+
+- [ ] [Implementation] Make checkpoint skill create.sh non-destructive
+  - Modify create.sh script to automatically call restore.sh before returning to caller
+  - Ensure working tree and staging area remain unchanged after checkpoint creation
+  - Remove unexpected stashing behavior that surprised users expecting non-destructive operation
+  - Preserve current git state: only create checkpoint, don't modify workspace
+  - Update skill to separate checkpoint creation from workspace stashing operations
+  - Context: Users expect create.sh to be read-only operation that doesn't alter git state
+
 - [ ] [Implementation] Enhance plan-architect agent with outcomes identification
   - Prerequisites: Updated PLAN.md format specification must exist
   - Add outcomes identification and decomposition to core responsibilities

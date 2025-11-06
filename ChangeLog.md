@@ -300,3 +300,15 @@ Executed comprehensive plan revision focusing on task dependencies, context requ
 Added new task to modify task-inference.md to run specialist agents in parallel rather than sequentially. This follows Claude Code best practices for tool execution efficiency and will improve token economy and execution speed when validating agent implementations.
 
 Task added: "Modify task-inference.md to run specialist agents in parallel" with detailed requirements for implementing single-message multiple Task tool calls pattern.
+
+## 2025-11-06 - Add high-priority task to fix commit message list indentation
+
+Added task "Fix list indentation in commit messages" as high-priority (top of pending tasks list). This single atomic task addresses list indentation issues by enhancing both commit-message-author agent instructions (adding explicit markdown list formatting examples with 3-space indentation and post-generation self-check) and commit-message-format-checker validation (adding list indentation verification and continuation line alignment checks). Both changes are interdependent parts of the same fix and will be completed in one commit.
+
+## 2025-11-06 - Add high-priority test evaluation and cleanup task
+
+Added second high-priority task "Add test evaluation and cleanup to /task command workflow" positioned after the list indentation fix task. This task enhances the /task command with a final evaluation step that determines which newly-added tests should be kept vs removed based on long-term value, stability, and maintainability criteria. Addresses the issue where TDD red-green-refactor cycle creates tests that are useful for validation but may be fragile or test content expected to change freely. Only evaluates tests added during current task execution to avoid disrupting existing test suite.
+
+## 2025-11-06 - Add checkpoint skill non-destructive operation task
+
+Added task "Make checkpoint skill create.sh non-destructive" to address user surprise when create.sh modified git state by stashing changes. The task will modify create.sh to automatically call restore.sh before returning, ensuring the working tree and staging area remain unchanged after checkpoint creation. This aligns with user expectations that create.sh should be a read-only operation that only creates checkpoints without altering workspace state.
