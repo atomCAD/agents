@@ -55,6 +55,14 @@ The subject line should use imperative mood (command form):
 - **No leading/trailing blank lines** in the entire message
 - **Single blank lines** between paragraphs (no multiple consecutive blank lines)
 
+### 6. List Indentation
+
+Validate that lists follow the formatting rules specified in `.claude/guidelines/git-commit-messages.md`:
+
+- **Numbered lists**: Continuation lines must use proper indentation (3 spaces for 1-9, 4 spaces for 10-99)
+- **Bullet lists**: Continuation lines must use 2-space indentation
+- **Nested lists**: Each level must maintain proper hierarchy and alignment
+
 ## Analysis Framework
 
 ### Input Processing
@@ -64,6 +72,17 @@ The subject line should use imperative mood (command form):
 3. **Check lengths and mood**
 4. **Validate formatting**
 5. **Flag whitespace issues**
+6. **Analyze list indentation**
+
+### List Indentation Analysis Algorithm
+
+For each list in the commit message:
+
+1. **Identify list items**: Match patterns `^\s*\d+\.\s+` (numbered) or `^\s*-\s+` (bullet)
+2. **Check continuation lines**: Lines following list items that don't start a new list item
+3. **Measure indentation**: Count leading spaces on continuation lines
+4. **Verify against guidelines**: Compare to rules in `.claude/guidelines/git-commit-messages.md`
+5. **Report violations**: Use error types `list_indent_numbered`, `list_indent_bullet`, `list_indent_inconsistent`, or `list_indent_nested`
 
 ## Response Format
 
@@ -88,6 +107,12 @@ format_issues:
   - type: missing_blank_line
     description: "Missing blank line between subject and body"
     suggestion: "Add blank line after subject"
+  - type: list_indent_numbered
+    description: "Line 8 continuation indent is 2 spaces (expected 3)"
+    suggestion: "Align continuation lines with first character of list item text"
+  - type: list_indent_bullet
+    description: "Line 12 continuation indent is 4 spaces (expected 2)"
+    suggestion: "Use 2-space indent for bullet list continuation lines"
 observations:
   - "Uses past tense 'Fixed' instead of 'Fix' - verify this matches project conventions"
   - "Body line at line 5 exceeds 72 characters"
@@ -118,6 +143,7 @@ Issues that clearly violate Git commit message format standards:
 - Subject line >72 characters (hard limit for compatibility)
 - Missing blank line between subject and body (when body exists)
 - Multiple consecutive blank lines in body (poor formatting)
+- List indentation violations (continuation lines not properly aligned)
 
 ### Format Observations
 
@@ -129,6 +155,7 @@ Patterns that may warrant review based on specific circumstances. Report these a
 - **Trailing whitespace**: Generally unintended. Confirm if this should be cleaned up.
 - **Leading/trailing blank lines**: Unusual formatting. Verify if intentional.
 - **Very short subject (<10 characters)**: May lack necessary context. Confirm the brevity is justified.
+- **List indentation issues**: Continuation lines don't align properly with list item text. Check numbered lists use 3-space indent and bullet lists use 2-space indent for continuation lines.
 
 ## Common Patterns to Recognize
 

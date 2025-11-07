@@ -996,6 +996,62 @@ awk '{len=length($0); if(len>max) max=len} END {print "Maximum line length: "max
 
 If the first command produces no output, all lines are within the limit.
 
+## List Formatting
+
+When including lists in commit messages, follow consistent indentation rules to ensure readability in all git tools:
+
+### Numbered Lists
+
+Continuation lines must align with the first character of list item text using 3-space indentation for numbers 1-9:
+
+```text
+Changes appear in three locations:
+
+1. file1.rs: Added new function for user authentication with support
+   for both OAuth and traditional login methods, including proper
+   error handling and token validation.
+
+2. file2.rs: Updated existing user session management to integrate
+   with the new authentication system, maintaining backward
+   compatibility with existing session tokens.
+```
+
+For numbers 10-99, use 4-space indentation.
+
+### Bullet Point Lists
+
+Continuation lines must align with the first character after the dash using 2-space indentation:
+
+```text
+Key improvements include:
+
+- Enhanced security: JWT tokens provide stateless authentication
+  without server-side session storage, reducing attack surface
+  and improving scalability for distributed deployments.
+
+- Better error handling: Comprehensive error types distinguish
+  between network failures, credential validation, and token
+  expiration to enable appropriate user experience responses.
+```
+
+### Nested Lists
+
+For nested lists, maintain proper alignment at each level:
+
+```text
+Authentication changes:
+
+1. Token generation:
+   - Create signed JWT with user claims
+   - Include expiration timestamp (15 minutes)
+   - Use RS256 algorithm with server private key
+
+2. Validation process:
+   - Verify signature using server public key
+   - Check expiration timestamp against current time
+   - Extract user ID and permissions from claims
+```
+
 ## Enforcement Checklist
 
 Before submitting a commit message, verify:

@@ -116,7 +116,7 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Update required document structure to mandate Outcomes section
   - Revise summary section to reflect outcomes integration
 
-- [ ] [Implementation] Fix list indentation in commit messages
+- [x] [Implementation] Fix list indentation in commit messages
   - Enhance commit-message-author agent instructions:
     - Add explicit markdown list formatting examples showing 3-space indentation
     - Include post-generation self-check for proper list indentation
