@@ -7,9 +7,8 @@
 # validates the implementation, and commits the changes.
 #
 # Prerequisites:
-# - Claude CLI must be installed and configured
-# - PLAN.md file must exist in the project root
-# - Project must have /fix, /stage, /check, /message, and /commit workflows
+# - Claude Code must be installed and configured
+# - User must be logged in with Claude Max subscription or have provided an API key
 #
 # Exit codes:
 # - 0: Success (all tasks completed or single task implemented)
@@ -20,9 +19,8 @@
 set -euo pipefail
 trap 'echo "Script interrupted by user"; exit 130' INT TERM
 
-# ===== PHASE 1: TASK IDENTIFICATION =====
-# Analyze PLAN.md to find the next unfinished task by validating actual implementation
-# status against the codebase and git history, not just checkboxes in the plan.
+# ===== PHASE 1: TASK SELECTION =====
+# Use /next to select the optimal next task from PLAN.md
 
 echo "Determining next task..."
 attempt=0
@@ -30,65 +28,13 @@ max_attempts=5
 while true; do
     attempt=$((attempt + 1))
     if [[ $attempt -gt $max_attempts ]]; then
-        echo "Error: Maximum attempts ($max_attempts) reached while trying to validate current project status" >&2
+        echo "Error: Maximum attempts ($max_attempts) reached while trying to select task" >&2
         exit 1
     fi
 
-    # Query Claude to identify the next unfinished task from PLAN.md
-    # This validates actual implementation status, not just plan checkboxes
+    # Use /next slash command to select the optimal next task
     task=$(
-        claude -p "$(cat <<'EOF'
-## Goal
-Validate PLAN.md implementation status and identify next task.
-
-## Validation Process
-1. Do NOT trust progress statements or checkboxes in PLAN.md
-2. Actually verify against:
-   - Codebase implementation
-   - Git commit log
-
-## Task Classification
-- Unimplemented: No code exists
-- Partially implemented: Code exists but incomplete
-- Implemented but uncommitted: Code complete but not committed
-- Fully implemented: Code complete and already committed
-
-## Output Requirements
-- Print ONLY a single line identifying the first unfinished task (unimplemented/partially implemented/implemented but uncommitted)
-- No other output or explanations
-- If ALL tasks are complete: output exactly 'All tasks completed'
-
-## Examples
-
-### Task Status Scenarios
-1. **Unimplemented**:
-   - PLAN.md shows "[ ] Add user authentication"
-   - No auth code exists in codebase
-   - Output: "Add user authentication"
-
-2. **Partially Implemented**:
-   - PLAN.md shows "[x] Implement database layer"
-   - Some DB code exists but missing key functions
-   - Output: "Implement database layer"
-
-3. **Implemented but Uncommitted**
-   - PLAN.md shows "[x] Fix login validation bug"
-   - Code is complete and working
-   - BUT `git diff` shows the fix is in uncommitted changes
-   - Status: UNFINISHED - needs commit
-   - Output: "Fix login validation bug"
-
-4. **Fully Complete**:
-   - All tasks implemented AND committed
-   - No uncommitted changes related to PLAN.md tasks
-   - Output: "All tasks completed"
-
-## Important Notes
-- Tasks completed but not committed = UNFINISHED
-- Return the FIRST task that needs work
-- Check `git diff` to catch uncommitted implementations
-EOF
-)" | tail -n 1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
+        claude --dangerously-skip-permissions -p "/next" | tail -n 1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
     )
 
     # Validate that the returned task string is either a valid task name or "All tasks completed"
@@ -121,11 +67,30 @@ EOF
 done
 
 # ===== PHASE 2: TASK IMPLEMENTATION =====
-# Implement the identified task using Claude
+# Route to appropriate workflow based on task type
 
 echo "Implementing task: ${task}"
-# Instruct Claude to implement the task if not already complete
-claude --dangerously-skip-permissions -p "Validate the implementation status of this task as specified in the project's PLAN.md document. If finished and all validation criteria met, do nothing. If not finished, complete it now. Task: ${task}"
+
+# Determine if this is a planning task or implementation task
+task_type=$(
+    claude --dangerously-skip-permissions -p "Analyze the following task and determine if it is a planning task or an implementation task. Planning tasks involve updating PLAN.md, adding new tasks, or revising the plan structure. Implementation tasks involve writing code, tests, or documentation, or anything else not related to project planning or solely confined to maintenance of the PLAN.md document. Print exactly 'PLAN' for planning tasks or 'TASK' for implementation tasks. Do not output anything else. Task: \"$task\"" | tail -n 1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
+)
+
+# Route to appropriate slash command based on task type
+case $task_type in
+    "PLAN")
+        echo "Routing to /plan workflow..."
+        claude --dangerously-skip-permissions -p "/plan perform planning action: ${task}"
+        ;;
+    "TASK")
+        echo "Routing to /task workflow..."
+        claude --dangerously-skip-permissions -p "/task ${task}"
+        ;;
+    *)
+        echo "Error: Could not determine task type: ${task_type}" >&2
+        exit 1
+        ;;
+esac
 
 # ===== PHASE 3: VALIDATION LOOP =====
 # Validate implementation, fix issues, stage changes
@@ -152,7 +117,7 @@ while true; do
     # Step 3: Run comprehensive validation using the project's /check workflow
     # Validates code quality, style, security, and functionality
     echo "Validating change set..."
-    report=$(claude --dangerously-skip-permissions -p "/check ${task}")
+    report=$(claude --dangerously-skip-permissions -p "/check staged")
     echo "$report"
 
     # Analyze validation report to determine if task is complete and ready for commit
