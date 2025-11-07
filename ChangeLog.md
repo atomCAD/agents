@@ -324,3 +324,13 @@ Added task to enhance /task command with transparent task selection output. Afte
 ## 2025-11-06 - Removed obsolete message word-wrap task
 
 Removed the task "Configure /message workflow to NOT word-wrap git commit messages" as it no longer applies to the current implementation.
+
+## 2025-11-07 - Add agent architectural separation tasks
+
+Added 3 atomic tasks to establish and enforce architectural separation between agent capabilities and workflow orchestration:
+
+1. Create prompts.md guideline documenting agent architectural separation
+2. Update prompt-engineer to prevent workflow integration recommendations
+3. Update prompt-nit-checker to detect workflow integration sections in agents
+
+Addresses architectural violation where prompt-engineer recommended adding "Integration with Quality Check Workflow" section to complexity-auditor.md. Agent files should contain only capabilities; workflows define orchestration.

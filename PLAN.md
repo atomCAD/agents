@@ -596,3 +596,22 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Write Testing and Validation section with checklists for type safety verification
   - Write Reporting Guidelines section explaining how to categorize and report type safety issues
   - Verify file follows structure pattern from existing agent files (accessibility-auditor.md, rust-engineer.md)
+
+- [ ] Create prompts.md guideline documenting agent architectural separation
+  - Write YAML-less guideline file at .claude/guidelines/prompts.md
+  - Document core principle: agents define capabilities, workflows define orchestration
+  - Document anti-pattern: agent files should not contain workflow integration sections
+  - Include examples of proper separation (capabilities in agents, integration in workflows)
+  - Save to /workspace/.claude/guidelines/prompts.md
+
+- [ ] Update prompt-engineer to prevent workflow integration recommendations
+  - Add anti-pattern detection: flag recommendations to add workflow integration sections to agent files
+  - Document that agents define capabilities only, not how workflows use them
+  - Reference .claude/guidelines/prompts.md for architectural principles
+  - Modify file: /workspace/.claude/agents/prompt-engineer.md
+
+- [ ] Update prompt-nit-checker to detect workflow integration sections in agents
+  - Add validation check: detect workflow integration sections in agent files
+  - Flag sections like "Integration with Quality Check Workflow" as architectural violations
+  - Reference .claude/guidelines/prompts.md for separation principle
+  - Modify file: /workspace/.claude/agents/prompt-nit-checker.md
