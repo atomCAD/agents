@@ -227,7 +227,7 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Verify file follows structure of existing agent files
   - Save to /workspace/.claude/agents/caching-strategist.md
 
-- [ ] [Implementation] Create complexity-auditor agent definition file
+- [x] [Implementation] Create complexity-auditor agent definition file
   - Context: Required for always-required core agents completion
   - Write YAML frontmatter with complexity auditor role and metrics focus
   - Define core responsibilities covering cyclomatic complexity and function length analysis
