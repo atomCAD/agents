@@ -119,7 +119,7 @@ test_clear_removes_staged() {
 
 }
 
-### NEW TESTS - EDGE CASES AND SAFETY ###
+### EDGE CASES AND SAFETY ###
 
 # Test: Working tree preserved when verification fails (modified files)
 test_clear_preserves_tree_when_verification_fails() {

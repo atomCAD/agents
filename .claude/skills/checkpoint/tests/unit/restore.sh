@@ -9,6 +9,8 @@ source "$(dirname "$0")/../common.sh"
 CREATE_SCRIPT="$SCRIPT_DIR/scripts/create.sh"
 RESTORE_SCRIPT="$SCRIPT_DIR/scripts/restore.sh"
 
+### RESTORE TESTS ###
+
 # Restore refuses to run with dirty working tree
 test_restore_refuses_dirty_tree() {
     setup_test_env
@@ -264,7 +266,8 @@ test_restore_exact_staging_state() {
 
 }
 
-# Run all tests
+### RUN ALL TESTS ###
+
 run_test test_restore_refuses_dirty_tree
 run_test test_restore_succeeds_clean_tree
 run_test test_restore_refuses_head_changed
