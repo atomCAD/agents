@@ -334,3 +334,13 @@ Added 3 atomic tasks to establish and enforce architectural separation between a
 3. Update prompt-nit-checker to detect workflow integration sections in agents
 
 Addresses architectural violation where prompt-engineer recommended adding "Integration with Quality Check Workflow" section to complexity-auditor.md. Agent files should contain only capabilities; workflows define orchestration.
+
+## 2025-11-08 - Add checkpoint skill bug fixes and improvements
+
+Added three new tasks for fixing critical bugs and improving the checkpoint skill system:
+
+1. Fix untracked file verification bug in clear.sh - Critical safety bug where verification only compared main tree, ignoring untracked files in git stashes with --include-untracked
+2. Implement non-destructive checkpoint creation - Replace destructive git stash push approach with git stash create + store to preserve workspace state
+3. Add comprehensive error handling to checkpoint scripts - Improve error handling in both create.sh and clear.sh with clear error messages and post-operation verification
+
+Tasks ordered by dependency: verification bug fix is independent, non-destructive creation depends on proper verification, error handling bundles with non-destructive implementation.

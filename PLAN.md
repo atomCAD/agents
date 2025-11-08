@@ -142,13 +142,28 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Format output clearly to inform user what will be implemented
   - Ensure transparency about which task was selected for implementation
 
-- [ ] [Implementation] Make checkpoint skill create.sh non-destructive
-  - Modify create.sh script to automatically call restore.sh before returning to caller
-  - Ensure working tree and staging area remain unchanged after checkpoint creation
-  - Remove unexpected stashing behavior that surprised users expecting non-destructive operation
-  - Preserve current git state: only create checkpoint, don't modify workspace
-  - Update skill to separate checkpoint creation from workspace stashing operations
-  - Context: Users expect create.sh to be read-only operation that doesn't alter git state
+- [ ] Fix untracked file verification bug in checkpoint clear.sh
+  - Problem: Verification only compares main tree (^{tree}), ignoring untracked files
+  - Context: Git stashes with --include-untracked have 3 parents: HEAD (^1), index (^2), untracked (^3)
+  - Fix: Compare all three parent trees: main tree, index tree (^2^{tree}), and untracked tree (^3^{tree})
+  - Critical safety bug: Currently passes verification even when untracked files completely different
+  - Add verification for all stash parents to prevent data loss
+  - Independent fix that should be committed separately
+
+- [ ] Implement non-destructive checkpoint creation
+  - Replace git stash push + restore.sh with git stash create + git stash store approach
+  - Use git stash create (doesn't modify workspace) followed by git stash store to save stash object
+  - Preserve workspace state completely: working tree and staging area unchanged
+  - Eliminate circular dependency between create.sh and restore.sh
+  - Ensure checkpoint creation is transparent to user (no side effects)
+  - Requires untracked file verification bug fix to work correctly
+
+- [ ] Add comprehensive error handling to checkpoint scripts
+  - create.sh: Add error handling for patch file creation, stash operations, restoration failures
+  - clear.sh: Add error handling for git reset --hard, git clean -fd, post-operation verification
+  - Include clear error messages with actionable guidance for users and agents
+  - Add verification that destructive operations actually succeeded
+  - Bundle with non-destructive implementation for atomic improvement
 
 - [ ] [Implementation] Enhance plan-architect agent with outcomes identification
   - Prerequisites: Updated PLAN.md format specification must exist
