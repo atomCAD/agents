@@ -55,10 +55,23 @@ EOF
 fi
 
 # Compare the two stashes by comparing their tree contents
-# We compare the actual stashed contents (the stash commit's tree)
+# Git stashes with --include-untracked have three parents:
+# - Main tree (^{tree}): The merged state of working tree and index
+# - Index tree (^2^{tree}): The state of the staging area
+# - Untracked tree (^3^{tree}): The untracked files (may not exist if no untracked files)
 CURRENT_TREE=$(git rev-parse "$TEMP_HASH^{tree}")
 
-if [ "$VERIFY_TREE" != "$CURRENT_TREE" ]; then
+# Compare index trees (staging area state)
+VERIFY_INDEX=$(git rev-parse "$VERIFY_HASH^2^{tree}" 2>/dev/null || echo "")
+CURRENT_INDEX=$(git rev-parse "$TEMP_HASH^2^{tree}" 2>/dev/null || echo "")
+
+# Compare untracked trees (may not exist if no untracked files)
+VERIFY_UNTRACKED=$(git rev-parse "$VERIFY_HASH^3^{tree}" 2>/dev/null || echo "")
+CURRENT_UNTRACKED=$(git rev-parse "$TEMP_HASH^3^{tree}" 2>/dev/null || echo "")
+
+if [ "$VERIFY_TREE" != "$CURRENT_TREE" ] || \
+   [ "$VERIFY_INDEX" != "$CURRENT_INDEX" ] || \
+   [ "$VERIFY_UNTRACKED" != "$CURRENT_UNTRACKED" ]; then
     # Trees don't match - restore working tree from temp checkpoint and clean up
     "$SCRIPT_DIR/restore.sh" "$TEMP_HASH" >/dev/null 2>&1
     "$SCRIPT_DIR/drop.sh" "$TEMP_HASH" >/dev/null 2>&1

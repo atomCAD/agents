@@ -305,6 +305,40 @@ test_clear_fails_with_clean_tree() {
 
 }
 
+# Test: Clear succeeds when ALL trees match (main, index, untracked)
+# Verifies comprehensive tree comparison for complex states with all three tree types
+test_clear_succeeds_all_trees_match() {
+    setup_test_env
+
+    # Create a complex state with tracked, staged, and untracked files
+    echo "tracked modified" > file.txt
+    echo "staged content" > staged.txt
+    git add staged.txt >/dev/null 2>&1
+    echo "untracked content" > untracked.txt
+
+    # Create checkpoint of this complex state
+    local hash
+    hash=$("$CREATE_SCRIPT" "test" 2>/dev/null)
+
+    # Recreate the EXACT same state (after create.sh cleared the tree)
+    echo "tracked modified" > file.txt
+    echo "staged content" > staged.txt
+    git add staged.txt >/dev/null 2>&1
+    echo "untracked content" > untracked.txt
+
+    # Clear should succeed because ALL trees match
+    "$CLEAR_SCRIPT" "$hash" >/dev/null 2>&1
+    local exit_code=$?
+
+    assert_equals "$EXIT_SUCCESS" "$exit_code" "Clear succeeds when all trees match"
+
+    # Verify working tree is clean after successful clear
+    assert_success "git diff --quiet HEAD" "Working tree clean"
+    assert_success "git diff --staged --quiet" "Staging area clean"
+    assert_failure "[ -f untracked.txt ]" "Untracked files removed"
+
+}
+
 ### RUN ALL TESTS ###
 
 run_test test_clear_matching_state
@@ -322,5 +356,6 @@ run_test test_clear_no_orphaned_temp_checkpoint
 run_test test_clear_no_orphaned_temp_checkpoint_after_success
 run_test test_clear_handles_corrupted_checkpoint
 run_test test_clear_fails_with_clean_tree
+run_test test_clear_succeeds_all_trees_match
 
 return_test_status

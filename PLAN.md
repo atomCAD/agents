@@ -142,7 +142,7 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Format output clearly to inform user what will be implemented
   - Ensure transparency about which task was selected for implementation
 
-- [ ] Fix untracked file verification bug in checkpoint clear.sh
+- [x] Fix untracked file verification bug in checkpoint clear.sh
   - Problem: Verification only compares main tree (^{tree}), ignoring untracked files
   - Context: Git stashes with --include-untracked have 3 parents: HEAD (^1), index (^2), untracked (^3)
   - Fix: Compare all three parent trees: main tree, index tree (^2^{tree}), and untracked tree (^3^{tree})
