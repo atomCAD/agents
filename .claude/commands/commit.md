@@ -272,6 +272,8 @@ Use /message to regenerate an appropriate commit message that accurately describ
        git checkout --theirs .
        # Mark all conflicts as resolved
        git reset
+       # Drop the stash since git stash pop kept it due to conflicts
+       git stash drop stash@{0}
        ```
 
      - Report that conflicts were automatically resolved
