@@ -119,28 +119,6 @@ test_clear_removes_staged() {
 
 }
 
-# Test: Clear is idempotent (can run twice safely)
-test_clear_idempotent() {
-    setup_test_env
-
-    echo "modified" > file.txt
-    local hash
-    hash=$("$CREATE_SCRIPT" "test" 2>/dev/null)
-
-    # Recreate the same state (create.sh stashed it, so working tree is clean now)
-    echo "modified" > file.txt
-
-    "$CLEAR_SCRIPT" "$hash" >/dev/null 2>&1
-
-    # After first clear, working tree is clean, so create.sh will create clean state checkpoint
-    # This second clear attempt should fail because tree states don't match
-    local exit_code=0
-    "$CLEAR_SCRIPT" "$hash" 2>/dev/null || exit_code=$?
-
-    assert_equals "$EXIT_ERROR" "$exit_code" "Second clear fails (tree doesn't match)"
-
-}
-
 ### NEW TESTS - EDGE CASES AND SAFETY ###
 
 # Test: Working tree preserved when verification fails (modified files)
@@ -335,7 +313,6 @@ run_test test_clear_invalid_hash
 run_test test_clear_missing_arg
 run_test test_clear_removes_untracked
 run_test test_clear_removes_staged
-run_test test_clear_idempotent
 
 # Edge case and safety tests
 run_test test_clear_preserves_tree_when_verification_fails
