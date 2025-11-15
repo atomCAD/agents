@@ -6,11 +6,14 @@ SCRIPTS_SRC="$SCRIPT_DIR/scripts"
 TESTS_DIR="$SCRIPT_DIR/tests"
 CACHE_FILE="$SCRIPT_DIR/.test-cache"
 
-# Compute hash of all scripts
+# Compute hash of all scripts and tests
 compute_scripts_hash() {
-    # Find all files in scripts directory, compute their content hash
+    # Find all files in scripts and tests directories, compute their content hash
     # Use shasum (perl-based, available on Linux, macOS, and Windows Git Bash)
-    find "$SCRIPTS_SRC" -type f -exec shasum -a 256 {} \; | sort | shasum -a 256 | cut -d' ' -f1
+    {
+        find "$SCRIPTS_SRC" -type f -exec shasum -a 256 {} \;
+        find "$TESTS_DIR" -type f -exec shasum -a 256 {} \;
+    } | sort | shasum -a 256 | cut -d' ' -f1
 }
 
 # Check if cached results are valid
