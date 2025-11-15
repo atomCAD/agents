@@ -143,4 +143,4 @@ done
 done
 done
 
-print_results
+return_test_status

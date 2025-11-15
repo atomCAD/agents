@@ -68,4 +68,4 @@ run_test test_drop_invalid_hash
 run_test test_drop_missing_arg
 run_test test_drop_preserves_working_tree
 
-print_results
+return_test_status

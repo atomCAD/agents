@@ -346,4 +346,4 @@ run_test test_clear_no_orphaned_temp_checkpoint_after_success
 run_test test_clear_handles_corrupted_checkpoint
 run_test test_clear_fails_with_clean_tree
 
-print_results
+return_test_status

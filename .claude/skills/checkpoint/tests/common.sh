@@ -183,8 +183,8 @@ run_test() {
     fi
 }
 
-# Print test results
-print_results() {
+# Return test status based on failure count
+return_test_status() {
     if [ $TESTS_FAILED -gt 0 ]; then
         return 1
     fi
@@ -255,5 +255,5 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
     test_get_caller_location_lineno
     test_get_caller_location_through_function
 
-    print_results
+    return_test_status
 fi

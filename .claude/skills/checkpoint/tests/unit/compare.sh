@@ -71,4 +71,4 @@ run_test test_compare_no_changes
 run_test test_compare_invalid_hash
 run_test test_compare_missing_arg
 
-print_results
+return_test_status

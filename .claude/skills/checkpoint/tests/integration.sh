@@ -232,4 +232,4 @@ run_test test_workflow_create_restore_mixed_staging
 # Untracked files handling
 run_test test_workflow_untracked_files_restoration
 
-print_results
+return_test_status

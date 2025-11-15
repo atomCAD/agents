@@ -158,4 +158,4 @@ run_test test_create_message_format
 run_test test_create_clean_tree
 run_test test_create_no_patch_unstaged_only
 
-print_results
+return_test_status

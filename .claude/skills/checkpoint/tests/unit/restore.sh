@@ -278,4 +278,4 @@ run_test test_restore_cleans_patch_file
 run_test test_restore_untracked_not_staged
 run_test test_restore_exact_staging_state
 
-print_results
+return_test_status
