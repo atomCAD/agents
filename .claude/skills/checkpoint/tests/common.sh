@@ -168,16 +168,18 @@ run_test() {
 
     # Run test in subshell with set -e so any command failure fails the test
     # CRITICAL: Subshell must be standalone command (not part of if/||/&&) to preserve set -e
-    # Capture and suppress all output
+    # Capture output to show on failure
     set +e  # Temporarily disable errexit so subshell failure doesn't kill parent
-    (set -e; "$test_name" "$@") >/dev/null 2>&1
+    local test_output
+    test_output=$( (set -e; "$test_name" "$@") 2>&1 )
     local exit_code=$?
     set -e  # Re-enable errexit (though parent script may not have it enabled)
 
     if [ $exit_code -eq 0 ]; then
         TESTS_PASSED=$((TESTS_PASSED + 1))
     else
-        echo "$display_name: FAIL - Test function exited with non-zero status"
+        echo "$display_name: FAIL"
+        [ -n "$test_output" ] && echo "$test_output"
         TESTS_FAILED=$((TESTS_FAILED + 1))
     fi
 }
