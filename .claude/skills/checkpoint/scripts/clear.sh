@@ -85,7 +85,7 @@ Provided checkpoint: $VERIFY_HASH
 Current tree:        $CURRENT_TREE (differs)
 
 CALLING AGENT: The checkpoint verification failed. The user must:
-1. Create a NEW checkpoint of current state: create.sh "temp-before-clear"
+1. Create a NEW checkpoint of current state: create.sh "stash-namespace"
 2. Use that checkpoint hash with clear.sh
 
 This safety check prevents accidentally clearing the wrong working tree state.
