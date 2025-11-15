@@ -86,8 +86,8 @@ test_create_missing_arg() {
 
     echo "modified" > file.txt
 
-    "$CREATE_SCRIPT" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$CREATE_SCRIPT" 2>/dev/null || exit_code=$?
 
     assert_equals "$EXIT_USAGE_ERROR" "$exit_code" "Exits with usage error when missing argument"
 }
@@ -118,8 +118,8 @@ test_create_clean_tree() {
     assert_success "[ -z \"\$(git ls-files --others --exclude-standard)\" ]" "No untracked files"
 
     # Try to create checkpoint with clean tree
-    "$CREATE_SCRIPT" "clean-tree-test" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$CREATE_SCRIPT" "clean-tree-test" 2>/dev/null || exit_code=$?
 
     # Git stash refuses to stash when there are no changes
     # This should fail (exit non-zero)
@@ -146,16 +146,16 @@ test_create_no_patch_unstaged_only() {
 
 ### RUN ALL TESTS ###
 
-test_create_unstaged; finalize_test
-test_create_staged; finalize_test
-test_create_mixed; finalize_test
-test_create_untracked; finalize_test
-test_create_index_patch; finalize_test
-test_create_missing_arg; finalize_test
-test_create_message_format; finalize_test
+run_test test_create_unstaged
+run_test test_create_staged
+run_test test_create_mixed
+run_test test_create_untracked
+run_test test_create_index_patch
+run_test test_create_missing_arg
+run_test test_create_message_format
 
 # Edge case tests
-test_create_clean_tree; finalize_test
-test_create_no_patch_unstaged_only; finalize_test
+run_test test_create_clean_tree
+run_test test_create_no_patch_unstaged_only
 
 print_results

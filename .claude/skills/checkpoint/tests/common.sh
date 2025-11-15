@@ -69,6 +69,9 @@ setup_test_env() {
     # Store repo path for cleanup
     export TEST_REPO="$repo"
     TEST_REPO_STACK+=("$repo")
+
+    # Set up trap to cleanup on exit (for run_test subshell)
+    trap 'finalize_test' EXIT
 }
 
 # Finalize current test - clean up the test repository
@@ -88,14 +91,10 @@ assert_success() {
     local cmd="$1"
     local desc="$2"
 
-    TESTS_RUN=$((TESTS_RUN + 1))
-
     if eval "$cmd" >/dev/null 2>&1; then
-        TESTS_PASSED=$((TESTS_PASSED + 1))
         return 0
     else
         echo "$(_get_caller_location): FAIL: $desc - Command failed: $cmd"
-        TESTS_FAILED=$((TESTS_FAILED + 1))
         return 1
     fi
 }
@@ -105,14 +104,10 @@ assert_failure() {
     local cmd="$1"
     local desc="$2"
 
-    TESTS_RUN=$((TESTS_RUN + 1))
-
     if ! eval "$cmd" >/dev/null 2>&1; then
-        TESTS_PASSED=$((TESTS_PASSED + 1))
         return 0
     else
         echo "$(_get_caller_location): FAIL: $desc - Command should have failed: $cmd"
-        TESTS_FAILED=$((TESTS_FAILED + 1))
         return 1
     fi
 }
@@ -123,14 +118,10 @@ assert_equals() {
     local actual="$2"
     local desc="$3"
 
-    TESTS_RUN=$((TESTS_RUN + 1))
-
     if [ "$expected" = "$actual" ]; then
-        TESTS_PASSED=$((TESTS_PASSED + 1))
         return 0
     else
         echo "$(_get_caller_location): FAIL: $desc - Expected: $expected, Actual: $actual"
-        TESTS_FAILED=$((TESTS_FAILED + 1))
         return 1
     fi
 }
@@ -140,14 +131,10 @@ assert_file_exists() {
     local file="$1"
     local desc="$2"
 
-    TESTS_RUN=$((TESTS_RUN + 1))
-
     if [ -f "$file" ]; then
-        TESTS_PASSED=$((TESTS_PASSED + 1))
         return 0
     else
         echo "$(_get_caller_location): FAIL: $desc - File does not exist: $file"
-        TESTS_FAILED=$((TESTS_FAILED + 1))
         return 1
     fi
 }
@@ -157,15 +144,42 @@ assert_file_not_exists() {
     local file="$1"
     local desc="$2"
 
-    TESTS_RUN=$((TESTS_RUN + 1))
-
     if [ ! -f "$file" ]; then
-        TESTS_PASSED=$((TESTS_PASSED + 1))
         return 0
     else
         echo "$(_get_caller_location): FAIL: $desc - File should not exist: $file"
-        TESTS_FAILED=$((TESTS_FAILED + 1))
         return 1
+    fi
+}
+
+# Run a test function in a subshell with errexit enabled
+# This ensures command failures cause the test to fail without killing the test runner
+# Usage: run_test test_name [arg1 arg2 ...]
+run_test() {
+    local test_name=$1
+    shift  # Remove test_name from arguments, leaving optional parameters
+
+    # Build display name with args if present
+    local display_name="$test_name"
+    if [ $# -gt 0 ]; then
+        display_name+="($*)"
+    fi
+
+    TESTS_RUN=$((TESTS_RUN + 1))
+
+    # Run test in subshell with set -e so any command failure fails the test
+    # CRITICAL: Subshell must be standalone command (not part of if/||/&&) to preserve set -e
+    # Capture and suppress all output
+    set +e  # Temporarily disable errexit so subshell failure doesn't kill parent
+    (set -e; "$test_name" "$@") >/dev/null 2>&1
+    local exit_code=$?
+    set -e  # Re-enable errexit (though parent script may not have it enabled)
+
+    if [ $exit_code -eq 0 ]; then
+        TESTS_PASSED=$((TESTS_PASSED + 1))
+    else
+        echo "$display_name: FAIL - Test function exited with non-zero status"
+        TESTS_FAILED=$((TESTS_FAILED + 1))
     fi
 }
 

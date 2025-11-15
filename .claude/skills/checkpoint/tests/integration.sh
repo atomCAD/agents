@@ -9,7 +9,6 @@ source "$(dirname "$0")/common.sh"
 CREATE_SCRIPT="$SCRIPT_DIR/scripts/create.sh"
 COMPARE_SCRIPT="$SCRIPT_DIR/scripts/compare.sh"
 DROP_SCRIPT="$SCRIPT_DIR/scripts/drop.sh"
-CLEAR_SCRIPT="$SCRIPT_DIR/scripts/clear.sh"
 RESTORE_SCRIPT="$SCRIPT_DIR/scripts/restore.sh"
 
 ### WORKFLOW 1: Experiment with Automatic Cleanup ###
@@ -58,9 +57,6 @@ test_workflow_restore_dirty_tree() {
     local temp
     temp=$("$CREATE_SCRIPT" "temp-before-restore" 2>/dev/null)
 
-    # Clear working tree (only works because temp matches current state)
-    "$CLEAR_SCRIPT" "$temp" >/dev/null 2>&1
-
     # Restore original checkpoint
     "$RESTORE_SCRIPT" "$original" >/dev/null 2>&1
 
@@ -93,9 +89,6 @@ test_workflow_abandon_experiment() {
     # Create checkpoint of bad state for reference
     local bad_state
     bad_state=$("$CREATE_SCRIPT" "failed-experiment" 2>/dev/null)
-
-    # Clear the bad state
-    "$CLEAR_SCRIPT" "$bad_state" >/dev/null 2>&1
 
     # Restore original checkpoint
     "$RESTORE_SCRIPT" "$original" >/dev/null 2>&1
@@ -222,21 +215,21 @@ test_workflow_untracked_files_restoration() {
 ### RUN ALL TESTS ###
 
 # Workflow 1: Experiment success
-test_workflow_experiment_success
+run_test test_workflow_experiment_success
 
 # Workflow 2: Restore with dirty tree
-test_workflow_restore_dirty_tree
+run_test test_workflow_restore_dirty_tree
 
 # Workflow 3: Abandon experiment
-test_workflow_abandon_experiment
+run_test test_workflow_abandon_experiment
 
 # Multiple checkpoint management
-test_workflow_multiple_checkpoints
+run_test test_workflow_multiple_checkpoints
 
 # Complex restore scenarios
-test_workflow_create_restore_mixed_staging
+run_test test_workflow_create_restore_mixed_staging
 
 # Untracked files handling
-test_workflow_untracked_files_restoration
+run_test test_workflow_untracked_files_restoration
 
 print_results

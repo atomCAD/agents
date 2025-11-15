@@ -48,8 +48,8 @@ test_compare_no_changes() {
 test_compare_invalid_hash() {
     setup_test_env
 
-    "$COMPARE_SCRIPT" "abc123fake" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$COMPARE_SCRIPT" "abc123fake" 2>/dev/null || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Fails with invalid hash"
 }
@@ -58,17 +58,17 @@ test_compare_invalid_hash() {
 test_compare_missing_arg() {
     setup_test_env
 
-    "$COMPARE_SCRIPT" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$COMPARE_SCRIPT" 2>/dev/null || exit_code=$?
 
     assert_equals "$EXIT_USAGE_ERROR" "$exit_code" "Exits with usage error when missing argument"
 }
 
 ### RUN ALL TESTS ###
 
-test_compare_with_changes; finalize_test
-test_compare_no_changes; finalize_test
-test_compare_invalid_hash; finalize_test
-test_compare_missing_arg; finalize_test
+run_test test_compare_with_changes
+run_test test_compare_no_changes
+run_test test_compare_invalid_hash
+run_test test_compare_missing_arg
 
 print_results

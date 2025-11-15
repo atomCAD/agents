@@ -8,7 +8,6 @@ source "$(dirname "$0")/../common.sh"
 
 CREATE_SCRIPT="$SCRIPT_DIR/scripts/create.sh"
 RESTORE_SCRIPT="$SCRIPT_DIR/scripts/restore.sh"
-CLEAR_SCRIPT="$SCRIPT_DIR/scripts/clear.sh"
 
 # Restore refuses to run with dirty working tree
 test_restore_refuses_dirty_tree() {
@@ -20,8 +19,8 @@ test_restore_refuses_dirty_tree() {
 
     echo "new changes" > file.txt
 
-    "$RESTORE_SCRIPT" "$hash" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$RESTORE_SCRIPT" "$hash" 2>/dev/null || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Refuses to restore with dirty working tree"
 
@@ -35,9 +34,8 @@ test_restore_succeeds_clean_tree() {
     local hash
     hash=$("$CREATE_SCRIPT" "test" 2>/dev/null)
 
-    "$CLEAR_SCRIPT" "$hash" >/dev/null 2>&1
-    "$RESTORE_SCRIPT" "$hash" >/dev/null 2>&1
-    local exit_code=$?
+    local exit_code=0
+    "$RESTORE_SCRIPT" "$hash" >/dev/null 2>&1 || exit_code=$?
 
     assert_equals "0" "$exit_code" "Restores successfully with clean tree"
 
@@ -55,14 +53,12 @@ test_restore_refuses_head_changed() {
     local hash
     hash=$("$CREATE_SCRIPT" "test" 2>/dev/null)
 
-    "$CLEAR_SCRIPT" "$hash" >/dev/null 2>&1
-
     echo "new commit" > another.txt
     git add another.txt >/dev/null 2>&1
     git commit -m "new commit" >/dev/null 2>&1
 
-    "$RESTORE_SCRIPT" "$hash" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$RESTORE_SCRIPT" "$hash" 2>/dev/null || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Refuses to restore when HEAD changed"
 
@@ -95,8 +91,8 @@ test_restore_preserves_staging() {
 test_restore_invalid_hash() {
     setup_test_env
 
-    "$RESTORE_SCRIPT" "abc123fake" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$RESTORE_SCRIPT" "abc123fake" 2>/dev/null || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Fails with invalid hash"
 
@@ -110,7 +106,6 @@ test_restore_preserves_checkpoint() {
     local hash
     hash=$("$CREATE_SCRIPT" "test" 2>/dev/null)
 
-    "$CLEAR_SCRIPT" "$hash" >/dev/null 2>&1
     "$RESTORE_SCRIPT" "$hash" >/dev/null 2>&1
 
     assert_success "git stash list --format='%H' | grep -qF \"$hash\"" "Checkpoint preserved in stash after restore"
@@ -128,8 +123,8 @@ test_restore_refuses_untracked_only() {
     # After create, tree is clean. Add only untracked files (no modifications to tracked files)
     echo "untracked content" > newfile.txt
 
-    "$RESTORE_SCRIPT" "$hash" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$RESTORE_SCRIPT" "$hash" 2>/dev/null || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Refuses to restore with untracked files in working tree"
 
@@ -139,8 +134,8 @@ test_restore_refuses_untracked_only() {
 test_restore_missing_arg() {
     setup_test_env
 
-    "$RESTORE_SCRIPT" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$RESTORE_SCRIPT" 2>/dev/null || exit_code=$?
 
     assert_equals "$EXIT_USAGE_ERROR" "$exit_code" "Exits with usage error when missing argument"
 
@@ -185,8 +180,8 @@ test_restore_cleans_patch_file() {
     assert_success "git ls-tree -r \"$hash^3\" --name-only 2>/dev/null | grep -qF '.checkpoint-index.patch'" "Patch file in checkpoint"
 
     # Restore (working tree is clean after create)
-    "$RESTORE_SCRIPT" "$hash" >/dev/null 2>&1
-    local exit_code=$?
+    local exit_code=0
+    "$RESTORE_SCRIPT" "$hash" >/dev/null 2>&1 || exit_code=$?
 
     # Restore should succeed
     assert_success "[ \$exit_code -eq 0 ]" "Restore succeeds"
@@ -270,17 +265,17 @@ test_restore_exact_staging_state() {
 }
 
 # Run all tests
-test_restore_refuses_dirty_tree; finalize_test
-test_restore_succeeds_clean_tree; finalize_test
-test_restore_refuses_head_changed; finalize_test
-test_restore_preserves_staging; finalize_test
-test_restore_invalid_hash; finalize_test
-test_restore_preserves_checkpoint; finalize_test
-test_restore_refuses_untracked_only; finalize_test
-test_restore_missing_arg; finalize_test
-test_restore_unstaged_only_checkpoint; finalize_test
-test_restore_cleans_patch_file; finalize_test
-test_restore_untracked_not_staged; finalize_test
-test_restore_exact_staging_state; finalize_test
+run_test test_restore_refuses_dirty_tree
+run_test test_restore_succeeds_clean_tree
+run_test test_restore_refuses_head_changed
+run_test test_restore_preserves_staging
+run_test test_restore_invalid_hash
+run_test test_restore_preserves_checkpoint
+run_test test_restore_refuses_untracked_only
+run_test test_restore_missing_arg
+run_test test_restore_unstaged_only_checkpoint
+run_test test_restore_cleans_patch_file
+run_test test_restore_untracked_not_staged
+run_test test_restore_exact_staging_state
 
 print_results

@@ -85,6 +85,16 @@ test_state_combination() {
     local staged_before
     staged_before=$(git diff --staged)
 
+    # If working tree is completely clean, just verify create fails
+    if [ -z "$status_before" ] && [ -z "$staged_before" ]; then
+        # Create should fail when there's nothing to checkpoint
+        if "$CREATE_SCRIPT" "combo-test" >/dev/null 2>&1; then
+            echo "FAIL: create.sh should fail on clean working tree"
+            return 1
+        fi
+        return 0
+    fi
+
     # Create checkpoint
     local hash
     hash=$("$CREATE_SCRIPT" "combo-test" 2>/dev/null)
@@ -124,7 +134,7 @@ for unstaged_del in 0 1; do
     fi
 
     COMBINATIONS_TESTED=$((COMBINATIONS_TESTED + 1))
-    test_state_combination "$staged_new" "$untracked" "$unstaged_mod" "$staged_mod" "$both_mod" "$staged_del" "$unstaged_del"
+    run_test test_state_combination "$staged_new" "$untracked" "$unstaged_mod" "$staged_mod" "$both_mod" "$staged_del" "$unstaged_del"
 done
 done
 done

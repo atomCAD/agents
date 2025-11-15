@@ -28,8 +28,8 @@ test_drop_success() {
 test_drop_invalid_hash() {
     setup_test_env
 
-    "$DROP_SCRIPT" "abc123fake" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$DROP_SCRIPT" "abc123fake" 2>/dev/null || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Fails with invalid hash"
 }
@@ -38,8 +38,8 @@ test_drop_invalid_hash() {
 test_drop_missing_arg() {
     setup_test_env
 
-    "$DROP_SCRIPT" 2>/dev/null
-    local exit_code=$?
+    local exit_code=0
+    "$DROP_SCRIPT" 2>/dev/null || exit_code=$?
 
     assert_equals "$EXIT_USAGE_ERROR" "$exit_code" "Exits with usage error when missing argument"
 }
@@ -63,9 +63,9 @@ test_drop_preserves_working_tree() {
 
 ### RUN ALL TESTS ###
 
-test_drop_success; finalize_test
-test_drop_invalid_hash; finalize_test
-test_drop_missing_arg; finalize_test
-test_drop_preserves_working_tree; finalize_test
+run_test test_drop_success
+run_test test_drop_invalid_hash
+run_test test_drop_missing_arg
+run_test test_drop_preserves_working_tree
 
 print_results
