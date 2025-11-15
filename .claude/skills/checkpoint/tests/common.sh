@@ -24,8 +24,7 @@ _get_caller_location() {
 # Setup a fresh git repository for testing
 setup_test_repo() {
     local repo_dir
-    repo_dir="/tmp/checkpoint-test-$$-$(date +%s)"
-    mkdir -p "$repo_dir"
+    repo_dir=$(mktemp -d "/tmp/checkpoint-test-$$-XXXXXX")
     cd "$repo_dir" || exit 1
 
     git init >/dev/null 2>&1
