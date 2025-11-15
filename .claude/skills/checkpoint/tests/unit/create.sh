@@ -27,8 +27,7 @@ test_create_staged() {
     setup_test_env
 
     echo "staged" > staged.txt
-    git add staged.txt >/dev/null 2>&1
-
+    git add staged.txt
     local hash
     hash=$("$CREATE_SCRIPT" "test-staged" 2>/dev/null)
 
@@ -41,7 +40,7 @@ test_create_mixed() {
     setup_test_env
 
     echo "staged" > staged.txt
-    git add staged.txt >/dev/null 2>&1
+    git add staged.txt
     echo "unstaged" > file.txt
 
     local hash
@@ -62,22 +61,48 @@ test_create_untracked() {
 
     assert_success "[ -n \"$hash\" ]" "Checkpoint with untracked files created"
 
-    # Verify untracked file was captured by checking if it's in the stash's untracked commit
-    assert_success "git ls-tree -r \"$hash^3\" --name-only | grep -qF 'newfile.txt'" "Untracked file captured"
+    # Verify untracked file was captured in third parent (^3)
+    assert_success "git rev-parse \"$hash^3^{tree}\" >/dev/null 2>&1" "Untracked tree exists in third parent"
+    assert_success "git ls-tree -r \"$hash^3^{tree}\" --name-only | grep -qF 'newfile.txt'" "Untracked file captured"
 }
 
-# Test: Create checkpoint captures .checkpoint-index.patch for staged changes
-test_create_index_patch() {
+# Test: Create checkpoint with untracked directories
+test_create_untracked_directory() {
+    setup_test_env
+
+    mkdir -p untracked_dir/nested
+    echo "content1" > untracked_dir/file1.txt
+    echo "content2" > untracked_dir/nested/file2.txt
+    echo "root_untracked" > root_file.txt
+
+    local hash
+    hash=$("$CREATE_SCRIPT" "test-untracked-dir" 2>/dev/null)
+
+    assert_success "[ -n \"$hash\" ]" "Checkpoint with untracked directories created"
+
+    # Verify untracked tree exists
+    assert_success "git rev-parse \"$hash^3^{tree}\" >/dev/null 2>&1" "Untracked tree exists in third parent"
+
+    # Verify all untracked files were captured
+    assert_success "git ls-tree -r \"$hash^3^{tree}\" --name-only | grep -qF 'untracked_dir/file1.txt'" "Untracked dir file captured"
+    assert_success "git ls-tree -r \"$hash^3^{tree}\" --name-only | grep -qF 'untracked_dir/nested/file2.txt'" "Nested untracked file captured"
+    assert_success "git ls-tree -r \"$hash^3^{tree}\" --name-only | grep -qF 'root_file.txt'" "Root untracked file captured"
+}
+
+# Test: Create checkpoint captures index tree in second parent
+test_create_index_structure() {
     setup_test_env
 
     echo "staged" > staged.txt
-    git add staged.txt >/dev/null 2>&1
-
+    git add staged.txt
     local hash
-    hash=$("$CREATE_SCRIPT" "test-patch" 2>/dev/null)
+    hash=$("$CREATE_SCRIPT" "test-structure" 2>/dev/null)
 
-    # Verify .checkpoint-index.patch is in the stash's untracked files commit
-    assert_success "git ls-tree -r \"$hash^3\" --name-only | grep -qF '.checkpoint-index.patch'" "Index patch file captured"
+    # Verify checkpoint has second parent with index tree
+    assert_success "git rev-parse \"$hash^2^{tree}\" >/dev/null 2>&1" "Index tree exists in second parent"
+
+    # Verify staged.txt is in the index tree
+    assert_success "git ls-tree -r \"$hash^2^{tree}\" --name-only | grep -qF 'staged.txt'" "Staged file in index tree"
 }
 
 # Test: Create fails with missing namespace argument
@@ -87,7 +112,7 @@ test_create_missing_arg() {
     echo "modified" > file.txt
 
     local exit_code=0
-    "$CREATE_SCRIPT" 2>/dev/null || exit_code=$?
+    "$CREATE_SCRIPT" || exit_code=$?
 
     assert_equals "$EXIT_USAGE_ERROR" "$exit_code" "Exits with usage error when missing argument"
 }
@@ -119,15 +144,15 @@ test_create_clean_tree() {
 
     # Try to create checkpoint with clean tree
     local exit_code=0
-    "$CREATE_SCRIPT" "clean-tree-test" 2>/dev/null || exit_code=$?
+    "$CREATE_SCRIPT" "clean-tree-test" || exit_code=$?
 
     # Git stash refuses to stash when there are no changes
     # This should fail (exit non-zero)
-    assert_failure "[ \$exit_code -eq 0 ]" "Create fails with clean working tree"
+    assert_equals "$EXIT_ERROR" "$exit_code" "Create fails with clean working tree"
 }
 
-# Test: Verify NO patch file created when only unstaged changes exist
-test_create_no_patch_unstaged_only() {
+# Test: Verify index tree is empty when only unstaged changes exist
+test_create_empty_index_unstaged_only() {
     setup_test_env
 
     # Make only unstaged changes (no git add)
@@ -139,9 +164,11 @@ test_create_no_patch_unstaged_only() {
     # Verify checkpoint was created
     assert_success "[ -n \"$hash\" ]" "Checkpoint created"
 
-    # Verify .checkpoint-index.patch is NOT in the stash's untracked files
-    # The untracked commit is the ^3 parent of the stash
-    assert_failure "git ls-tree -r \"$hash^3\" --name-only 2>/dev/null | grep -qF '.checkpoint-index.patch'" "No patch file for unstaged-only changes"
+    # Verify index tree matches HEAD (no staged changes)
+    local index_tree head_tree
+    index_tree=$(git rev-parse "$hash^2^{tree}")
+    head_tree=$(git rev-parse "HEAD^{tree}")
+    assert_equals "$head_tree" "$index_tree" "Index tree matches HEAD for unstaged-only changes"
 }
 
 ### RUN ALL TESTS ###
@@ -150,12 +177,13 @@ run_test test_create_unstaged
 run_test test_create_staged
 run_test test_create_mixed
 run_test test_create_untracked
-run_test test_create_index_patch
+run_test test_create_untracked_directory
+run_test test_create_index_structure
 run_test test_create_missing_arg
 run_test test_create_message_format
 
 # Edge case tests
 run_test test_create_clean_tree
-run_test test_create_no_patch_unstaged_only
+run_test test_create_empty_index_unstaged_only
 
 return_test_status

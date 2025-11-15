@@ -19,8 +19,7 @@ test_drop_success() {
     local hash
     hash=$("$CREATE_SCRIPT" "test" 2>/dev/null)
 
-    "$DROP_SCRIPT" "$hash" >/dev/null 2>&1
-
+    "$DROP_SCRIPT" "$hash"
     assert_failure "git stash list --format='%H' | grep -qF \"$hash\"" "Checkpoint removed from stash"
 }
 
@@ -29,7 +28,7 @@ test_drop_invalid_hash() {
     setup_test_env
 
     local exit_code=0
-    "$DROP_SCRIPT" "abc123fake" 2>/dev/null || exit_code=$?
+    "$DROP_SCRIPT" "abc123fake" || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Fails with invalid hash"
 }
@@ -39,7 +38,7 @@ test_drop_missing_arg() {
     setup_test_env
 
     local exit_code=0
-    "$DROP_SCRIPT" 2>/dev/null || exit_code=$?
+    "$DROP_SCRIPT" || exit_code=$?
 
     assert_equals "$EXIT_USAGE_ERROR" "$exit_code" "Exits with usage error when missing argument"
 }
@@ -54,8 +53,7 @@ test_drop_preserves_working_tree() {
 
     echo "current work" > file.txt
 
-    "$DROP_SCRIPT" "$hash" >/dev/null 2>&1
-
+    "$DROP_SCRIPT" "$hash"
     local content
     content=$(cat file.txt)
     assert_equals "current work" "$content" "Working tree unchanged after drop"

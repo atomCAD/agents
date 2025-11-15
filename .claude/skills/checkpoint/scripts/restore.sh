@@ -62,7 +62,7 @@ if [ "$CHECKPOINT_BASE" != "$CURRENT_HEAD" ]; then
 Error: HEAD has changed since checkpoint was created.
 
 Checkpoint was created at commit: $CHECKPOINT_BASE
-Current HEAD is at commit:       $CURRENT_HEAD
+Current HEAD is at commit:        $CURRENT_HEAD (differs)
 
 This checkpoint cannot be restored because the base commit has changed.
 This may have happened due to:
@@ -85,28 +85,8 @@ fi
 # Count how many times this hash appears
 COUNT_BEFORE=$(echo "$MATCHING_ENTRIES" | wc -l)
 
-# Get the first (most recent) stash@{N} identifier for this hash
-STASH_ID=$(echo "$MATCHING_ENTRIES" | head -n1 | awk '{print $1}')
-
-PATCH_FILE=".checkpoint-index.patch"
-
-# Discard all current changes (working tree and staging area)
-git reset --hard HEAD
-
-# Restore the checkpoint (working tree and untracked files)
-# Note: git stash apply puts NEW files into the staging area automatically
-git stash apply "$STASH_ID"
-
-# Unstage everything (git stash apply stages new files but not edits to tracked files)
-git reset HEAD >/dev/null 2>&1
-
-# If staging area patch exists, restore it and clean up
-if [ -f "$PATCH_FILE" ]; then
-    # Apply the patch to restore the correct staging area state
-    git apply --cached "$PATCH_FILE"
-    # Clean up the patch file
-    rm "$PATCH_FILE"
-fi
+# Apply the checkpoint using git stash apply
+git stash apply --index "$STASH_HASH"
 
 # Verify the apply succeeded by checking the count stayed the same
 STASH_LIST_AFTER=$(git stash list --format="%H")

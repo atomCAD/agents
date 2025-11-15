@@ -18,17 +18,10 @@ test_clear_matching_state() {
     # Make changes and checkpoint them
     echo "modified" > file.txt
     local hash
-    hash=$("$CREATE_SCRIPT" "test" 2>/dev/null)
+    hash=$("$CREATE_SCRIPT" "test")
 
-    # Recreate the same state (create.sh stashed it, so working tree is clean now)
-    echo "modified" > file.txt
+    "$CLEAR_SCRIPT" "$hash"
 
-    local exit_code=0
-    "$CLEAR_SCRIPT" "$hash" >/dev/null 2>&1 || exit_code=$?
-
-    assert_equals "$EXIT_SUCCESS" "$exit_code" "Clear succeeds with matching state"
-
-    # CRITICAL: Working tree must be clean after clear to prevent accidental commits
     assert_success "git diff --quiet" "Working tree cleared"
 
 }
@@ -46,7 +39,7 @@ test_clear_non_matching_state() {
     echo "different changes" > file.txt
 
     local exit_code=0
-    "$CLEAR_SCRIPT" "$hash" 2>/dev/null || exit_code=$?
+    "$CLEAR_SCRIPT" "$hash" || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Clear fails with non-matching state"
 
@@ -62,7 +55,7 @@ test_clear_invalid_hash() {
     echo "modified" > file.txt
 
     local exit_code=0
-    "$CLEAR_SCRIPT" "abc123fake" 2>/dev/null || exit_code=$?
+    "$CLEAR_SCRIPT" "abc123fake" || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Fails with invalid hash"
 
@@ -75,7 +68,7 @@ test_clear_missing_arg() {
     echo "modified" > file.txt
 
     local exit_code=0
-    "$CLEAR_SCRIPT" 2>/dev/null || exit_code=$?
+    "$CLEAR_SCRIPT" || exit_code=$?
 
     assert_equals "$EXIT_USAGE_ERROR" "$exit_code" "Exits with usage error when missing argument"
 
@@ -89,11 +82,7 @@ test_clear_removes_untracked() {
     local hash
     hash=$("$CREATE_SCRIPT" "test" 2>/dev/null)
 
-    # Recreate the same state (create.sh stashed it, so working tree is clean now)
-    echo "untracked" > newfile.txt
-
-    "$CLEAR_SCRIPT" "$hash" >/dev/null 2>&1
-
+    "$CLEAR_SCRIPT" "$hash"
     assert_failure "[ -f newfile.txt ]" "Untracked files removed"
 
 }
@@ -104,17 +93,11 @@ test_clear_removes_staged() {
 
     # Create staged changes and checkpoint
     echo "staged" > staged.txt
-    git add staged.txt >/dev/null 2>&1
+    git add staged.txt
     local hash
     hash=$("$CREATE_SCRIPT" "test" 2>/dev/null)
 
-    # Recreate same staged state (after stash, tree is clean)
-    echo "staged" > staged.txt
-    git add staged.txt >/dev/null 2>&1
-
-    "$CLEAR_SCRIPT" "$hash" >/dev/null 2>&1
-
-    # CRITICAL: Staging area must be cleared to prevent accidental commits of wrong changes
+    "$CLEAR_SCRIPT" "$hash"
     assert_success "git diff --staged --quiet" "Staging area cleared"
 
 }
@@ -135,7 +118,7 @@ test_clear_preserves_tree_when_verification_fails() {
 
     # Try to clear with mismatched checkpoint - should fail
     local exit_code=0
-    "$CLEAR_SCRIPT" "$hash" 2>/dev/null || exit_code=$?
+    "$CLEAR_SCRIPT" "$hash" || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Clear fails with non-matching state"
 
@@ -161,7 +144,7 @@ test_clear_preserves_untracked_when_verification_fails() {
 
     # Try to clear - should fail (trees don't match)
     local exit_code=0
-    "$CLEAR_SCRIPT" "$hash" 2>/dev/null || exit_code=$?
+    "$CLEAR_SCRIPT" "$hash" || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Clear fails with different state"
 
@@ -184,11 +167,10 @@ test_clear_preserves_staged_when_verification_fails() {
 
     # Create and stage different changes
     echo "staged content" > staged.txt
-    git add staged.txt >/dev/null 2>&1
-
+    git add staged.txt
     # Try to clear - should fail (trees don't match)
     local exit_code=0
-    "$CLEAR_SCRIPT" "$hash" 2>/dev/null || exit_code=$?
+    "$CLEAR_SCRIPT" "$hash" || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Clear fails with different state"
 
@@ -213,7 +195,9 @@ test_clear_no_orphaned_temp_checkpoint() {
 
     # Create different state and try to clear
     echo "different" > file.txt
-    "$CLEAR_SCRIPT" "$hash" 2>/dev/null || true
+    local exit_code=0
+    "$CLEAR_SCRIPT" "$hash" || exit_code=$?
+    assert_equals "$EXIT_ERROR" "$exit_code" "Clear fails with non-matching state"
 
     # Count stashes after failed clear
     local final_count
@@ -242,8 +226,7 @@ test_clear_no_orphaned_temp_checkpoint_after_success() {
     echo "modified" > file.txt
 
     # Clear should succeed
-    "$CLEAR_SCRIPT" "$hash" >/dev/null 2>&1
-
+    "$CLEAR_SCRIPT" "$hash"
     # Count stashes - should only have original checkpoint
     local final_count
     final_count=$(git stash list | wc -l | xargs)
@@ -268,11 +251,10 @@ test_clear_handles_corrupted_checkpoint() {
     echo "modified" > file.txt
 
     # Manually corrupt the stash by dropping it, then try to use it
-    git stash drop "stash@{0}" >/dev/null 2>&1
-
+    git stash drop "stash@{0}"
     # Try to clear with now-invalid hash
     local exit_code=0
-    "$CLEAR_SCRIPT" "$hash" 2>/dev/null || exit_code=$?
+    "$CLEAR_SCRIPT" "$hash" || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Clear fails with corrupted checkpoint"
 
@@ -293,13 +275,15 @@ test_clear_fails_with_clean_tree() {
     local hash
     hash=$("$CREATE_SCRIPT" "test" 2>/dev/null)
 
-    # Now working tree is clean (create.sh stashed the changes)
+    # With non-destructive create.sh, working tree still has changes
+    # Clear the workspace manually to test clean tree scenario
+    git reset --hard HEAD
     # Verify tree is clean
     assert_success "git diff --quiet HEAD" "Working tree is clean"
 
     # Try to clear - should fail because temp checkpoint can't be created on clean tree
     local exit_code=0
-    "$CLEAR_SCRIPT" "$hash" 2>/dev/null || exit_code=$?
+    "$CLEAR_SCRIPT" "$hash" || exit_code=$?
 
     assert_equals "$EXIT_ERROR" "$exit_code" "Clear fails with clean working tree"
 
@@ -313,7 +297,7 @@ test_clear_succeeds_all_trees_match() {
     # Create a complex state with tracked, staged, and untracked files
     echo "tracked modified" > file.txt
     echo "staged content" > staged.txt
-    git add staged.txt >/dev/null 2>&1
+    git add staged.txt
     echo "untracked content" > untracked.txt
 
     # Create checkpoint of this complex state
@@ -323,14 +307,11 @@ test_clear_succeeds_all_trees_match() {
     # Recreate the EXACT same state (after create.sh cleared the tree)
     echo "tracked modified" > file.txt
     echo "staged content" > staged.txt
-    git add staged.txt >/dev/null 2>&1
+    git add staged.txt
     echo "untracked content" > untracked.txt
 
     # Clear should succeed because ALL trees match
-    "$CLEAR_SCRIPT" "$hash" >/dev/null 2>&1
-    local exit_code=$?
-
-    assert_equals "$EXIT_SUCCESS" "$exit_code" "Clear succeeds when all trees match"
+    "$CLEAR_SCRIPT" "$hash"
 
     # Verify working tree is clean after successful clear
     assert_success "git diff --quiet HEAD" "Working tree clean"

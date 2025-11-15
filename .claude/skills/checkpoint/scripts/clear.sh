@@ -27,16 +27,21 @@ EOF
     exit 1
 fi
 
-# Verify we can parse the tree hash BEFORE creating temp checkpoint
-# This prevents clearing the working tree if the checkpoint is corrupted
-if ! VERIFY_TREE=$(git rev-parse "$VERIFY_HASH^{tree}" 2>/dev/null); then
+# Verify the checkpoint has the expected structure with exactly three parents:
+# - Main tree (^{tree}): Working tree (staged + unstaged, excluding untracked)
+# - Index tree (^2^{tree}): The state of the staging area
+# - Untracked tree (^3^{tree}): Untracked files
+if ! VERIFY_TREE=$(git rev-parse "$VERIFY_HASH^{tree}") || \
+   ! VERIFY_INDEX=$(git rev-parse "$VERIFY_HASH^2^{tree}") || \
+   ! VERIFY_UNTRACKED=$(git rev-parse "$VERIFY_HASH^3^{tree}"); then
     cat >&2 <<EOF
-Error: Cannot parse tree from checkpoint '$VERIFY_HASH'
+Error: The provided hash does not appear to be a checkpoint created by create.sh
 
-This may indicate a corrupted git object database.
+Checkpoints have a specific structure with index state tracking.
+The hash you provided may be a regular git stash or commit.
 
-CALLING AGENT: The checkpoint exists but its tree cannot be accessed.
-Try running 'git fsck' to check for corruption.
+CALLING AGENT: Verify this is a checkpoint hash from create.sh, not a regular stash.
+Use 'git stash list' to see checkpoint hashes with their namespaces.
 EOF
     exit 1
 fi
@@ -54,28 +59,18 @@ EOF
     exit 1
 fi
 
-# Compare the two stashes by comparing their tree contents
-# Git stashes with --include-untracked have three parents:
-# - Main tree (^{tree}): The merged state of working tree and index
-# - Index tree (^2^{tree}): The state of the staging area
-# - Untracked tree (^3^{tree}): The untracked files (may not exist if no untracked files)
+# Get tree & index & untracked hashes from temporary checkpoint
 CURRENT_TREE=$(git rev-parse "$TEMP_HASH^{tree}")
+CURRENT_INDEX=$(git rev-parse "$TEMP_HASH^2^{tree}")
+CURRENT_UNTRACKED=$(git rev-parse "$TEMP_HASH^3^{tree}")
 
-# Compare index trees (staging area state)
-VERIFY_INDEX=$(git rev-parse "$VERIFY_HASH^2^{tree}" 2>/dev/null || echo "")
-CURRENT_INDEX=$(git rev-parse "$TEMP_HASH^2^{tree}" 2>/dev/null || echo "")
+# No further need for temp checkpoint
+"$SCRIPT_DIR/drop.sh" "$TEMP_HASH" >/dev/null 2>&1
 
-# Compare untracked trees (may not exist if no untracked files)
-VERIFY_UNTRACKED=$(git rev-parse "$VERIFY_HASH^3^{tree}" 2>/dev/null || echo "")
-CURRENT_UNTRACKED=$(git rev-parse "$TEMP_HASH^3^{tree}" 2>/dev/null || echo "")
-
+# Verify all three components match (main tree, index, and untracked)
 if [ "$VERIFY_TREE" != "$CURRENT_TREE" ] || \
    [ "$VERIFY_INDEX" != "$CURRENT_INDEX" ] || \
    [ "$VERIFY_UNTRACKED" != "$CURRENT_UNTRACKED" ]; then
-    # Trees don't match - restore working tree from temp checkpoint and clean up
-    "$SCRIPT_DIR/restore.sh" "$TEMP_HASH" >/dev/null 2>&1
-    "$SCRIPT_DIR/drop.sh" "$TEMP_HASH" >/dev/null 2>&1
-
     cat >&2 <<EOF
 Error: Checkpoint does not match current working tree state.
 
@@ -91,9 +86,8 @@ CALLING AGENT: The checkpoint verification failed. The user must:
 This safety check prevents accidentally clearing the wrong working tree state.
 EOF
     exit 1
-else
-    # Verification passed - drop the temp checkpoint
-    "$SCRIPT_DIR/drop.sh" "$TEMP_HASH" >/dev/null 2>&1
 fi
 
-# Working tree is now clean (temp checkpoint creation stashed all changes)
+# Actually clear the workspace now that verification passed
+git reset --hard HEAD  # Clear staged and unstaged changes
+git clean -fd          # Remove untracked files & directories

@@ -150,20 +150,12 @@ This plan covers enhancements to the PLAN.md planning system, adding GTD-style o
   - Add verification for all stash parents to prevent data loss
   - Independent fix that should be committed separately
 
-- [ ] Implement non-destructive checkpoint creation
+- [x] Implement non-destructive checkpoint creation
   - Replace git stash push + restore.sh with git stash create + git stash store approach
   - Use git stash create (doesn't modify workspace) followed by git stash store to save stash object
   - Preserve workspace state completely: working tree and staging area unchanged
-  - Eliminate circular dependency between create.sh and restore.sh
   - Ensure checkpoint creation is transparent to user (no side effects)
   - Requires untracked file verification bug fix to work correctly
-
-- [ ] Add comprehensive error handling to checkpoint scripts
-  - create.sh: Add error handling for patch file creation, stash operations, restoration failures
-  - clear.sh: Add error handling for git reset --hard, git clean -fd, post-operation verification
-  - Include clear error messages with actionable guidance for users and agents
-  - Add verification that destructive operations actually succeeded
-  - Bundle with non-destructive implementation for atomic improvement
 
 - [ ] [Implementation] Enhance plan-architect agent with outcomes identification
   - Prerequisites: Updated PLAN.md format specification must exist
