@@ -38,8 +38,6 @@ The subject line should use imperative mood (command form):
 ### 3. Whitespace Issues
 
 - **No trailing whitespace** on any lines
-- **No leading/trailing blank lines** in the entire message
-- **Single blank lines** between paragraphs (no multiple consecutive blank lines)
 
 ### 4. List Indentation
 
@@ -125,11 +123,9 @@ All format issues are violations that must be fixed. Report any detected issue a
 
 - **Subject line must be single line**: Subject wrapped across multiple lines
 - **Missing blank line**: Missing blank line between subject and body (when body exists)
-- **Multiple consecutive blank lines**: Multiple consecutive blank lines in body
 - **List indentation**: Continuation lines not properly aligned (3 spaces for numbered 1-9, 4 spaces for 10-99, 2 spaces for bullets)
 - **Non-imperative mood**: Past tense (Added, Fixed) or present continuous (Adding, Fixing) instead of imperative (Add, Fix)
 - **Trailing whitespace**: Any trailing whitespace on lines
-- **Leading/trailing blank lines**: Blank lines at start or end of message
 - **Excessive verbosity**: Message duplicates diff content or enumerates changes unnecessarily (review against conciseness guidelines)
 - **Very short subject**: Subject under 10 characters that likely lacks necessary context
 
@@ -216,4 +212,3 @@ Fixes issue with users being unexpectedly logged out.
 
 - Past tense "Fixed" instead of imperative "Fix"
 - Missing blank line after subject
-- Extra blank line at end
