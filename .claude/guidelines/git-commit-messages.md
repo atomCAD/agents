@@ -34,7 +34,27 @@ A commit message based on incomplete analysis is worse than no message at all. I
 
 ## Core Philosophy
 
-Write commit messages in the style of Linux kernel commits or technical blog posts. Each message should serve as a valuable technical document for future developers who encounter it during debugging, code archaeology, or git bisect.
+Write commit messages as brief introductions to the diff that provide context and rationale. Messages should facilitate code review by answering "why" and providing necessary background, not by replicating what the diff already shows. Each message should serve as a valuable navigation aid for future developers during debugging, code archaeology, or git bisect.
+
+### Conciseness Over Comprehensiveness
+
+**Default to brevity**: A commit message should be as short as possible while still providing necessary context. The diff shows WHAT changed in complete detail - the message should focus on WHY and only describe WHAT at a high level.
+
+**Common anti-patterns to avoid**:
+
+- **Diff duplication**: Don't list every function, file, or change that's already visible in the diff
+- **Exhaustive enumeration**: Don't itemize every small modification when a summary would suffice
+- **Technical minutiae**: Don't explain implementation details that are clear from reading the code
+- **Speculative futures**: Don't describe potential follow-up work or future possibilities
+
+**When to elaborate**: Only provide extensive detail when the change involves:
+
+- **Non-obvious rationale**: Design decisions that aren't apparent from the code
+- **Complex trade-offs**: Choices between multiple valid approaches that require justification
+- **Significant architectural impact**: Changes that fundamentally alter system design
+- **Subtle gotchas**: Edge cases or behaviors that reviewers might miss
+
+**Target length**: Most commit messages should be concise - subject line plus enough context to understand the change. Longer messages should be the exception, reserved for genuinely complex changes that require detailed explanation.
 
 ## Message Structure
 
@@ -91,6 +111,18 @@ We do NOT use type-based prefixes like `feat:`, `fix:`, `docs:`, `style:`, `refa
 
 ### Message Body Structure
 
+**Concise template** (use for most commits):
+
+```text
+component: concise description of the change and its purpose
+
+Brief explanation of why this change was needed and what problem it solves. Include key context that isn't obvious from the diff.
+
+Note any important design decisions or gotchas if non-obvious from the code.
+```
+
+**Extended template** (use only when significant complexity or non-obvious rationale requires it):
+
 ```text
 component: concise description of the change and its purpose
 
@@ -98,24 +130,15 @@ Opening paragraph explaining the problem this solves or the capability it adds. 
 
 Technical description of the solution, explaining the key design decisions and trade-offs. This should help future developers understand not just what was done, but why this approach was chosen.
 
-Key design decisions:
+Key design decisions (only if multiple significant choices were made):
 
-1. First major design decision: Explanation of the choice and its benefits. Include specific technical reasons.
+1. First major design decision: Explanation of the choice and its benefits
+2. Second major design decision: Similar explanation with rationale
 
-2. Second major design decision: Similar explanation with rationale.
-
-3. Additional decisions as needed, each with clear justification.
-
-Code examples showing usage (when relevant):
-
-    // Example of how the new feature/API is used
-    let example = NewType::create();
-    example.process(data);
-
-Performance/memory implications if relevant. Explain any benchmarks or measurements that influenced the design.
-
-Future implications or follow-up work that will build on this change. This helps readers understand how this fits into the larger picture.
+Performance/memory implications if relevant to understanding the change.
 ```
+
+**Default to the concise template.** Use the extended template only when the change genuinely requires detailed explanation.
 
 ## Detailed Analysis Requirements
 

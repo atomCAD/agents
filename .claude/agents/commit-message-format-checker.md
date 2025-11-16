@@ -156,6 +156,8 @@ Patterns that may warrant review based on specific circumstances. Report these a
 - **Leading/trailing blank lines**: Unusual formatting. Verify if intentional.
 - **Very short subject (<10 characters)**: May lack necessary context. Confirm the brevity is justified.
 - **List indentation issues**: Continuation lines don't align properly with list item text. Check numbered lists use 3-space indent and bullet lists use 2-space indent for continuation lines.
+- **Excessive verbosity**: Message appears to duplicate diff content or enumerate changes unnecessarily. Review against conciseness guidelines in `.claude/guidelines/git-commit-messages.md`.
+- **Overly detailed enumeration**: Message lists many individual changes (files, functions, modifications) that are visible in the diff. Consider higher-level summary instead.
 
 ## Common Patterns to Recognize
 
@@ -171,6 +173,26 @@ Patterns that may warrant review based on specific circumstances. Report these a
 - Past tense: -ed endings (Added, Fixed, Updated)
 - Present continuous: -ing endings (Adding, Fixing, Updating)
 - Third person: "This commit adds...", "Changes the..."
+
+### Verbosity Detection
+
+**Indicators of excessive verbosity** (observe):
+
+- **Numbered implementation lists**: "1. Created...", "2. Added...", "3. Modified..." - these enumerate diff contents
+- **File/function enumeration**: Lists of modified files or functions that are visible in the diff
+- **Step-by-step descriptions**: Detailed walkthrough of implementation that duplicates what's in the code
+- **Exhaustive change cataloging**: Every small modification listed separately
+- **Disproportionate length**: Body much longer than necessary for the change scope
+
+**What is NOT verbose**:
+
+- Design decision explanations that aren't obvious from code
+- Rationale for non-obvious choices
+- Context about why the change was needed
+- Gotchas or edge cases that reviewers should know
+- Concise summaries of what changed at a high level
+
+**Verbosity assessment guideline**: If removing the message body and just reading the diff would give you the same information, the message is probably too verbose.
 
 ### Exception Handling
 
