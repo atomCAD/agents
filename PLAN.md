@@ -1,36 +1,69 @@
-# Plan: Enhance Planning System with Task Implementation Workflow
+# Plan: Complete Automated Development Workflow System
 
-This plan covers enhancements to the PLAN.md planning system, adding GTD-style outcomes support, improving agent capabilities for decomposing feature requests into desired results (outcomes) and concrete actions (tasks), and implementing a /task command that automates the red-green-refactor TDD workflow for executing tasks from PLAN.md.
+This plan implements a complete automated development workflow using Claude Code within a secure containerized environment. The system provides nine specialized slash commands that handle the entire development lifecycle - from planning and task decomposition through TDD implementation, quality assurance, and atomic commit management. All operations enforce software engineering best practices while maintaining safety through isolation and structured automation.
 
 ## Outcomes
 
-- Planning workflows distinguish between desired outcomes and implementation tasks
-  - Success criteria: Outcomes section exists in PLAN.md format specification
-  - Success criteria: Plan-architect agent can identify and generate outcomes
-  - Success criteria: /plan command can manage outcomes alongside tasks
-  - Principle: GTD Natural Planning Model guides the planning process
+- Complete automated development workflow operates safely within containerized environment
+  - Success criteria: Devcontainer provides isolated, sandboxed execution environment
+  - Success criteria: Resource limits prevent system exhaustion (8GB RAM, 2 CPU cores)
+  - Success criteria: Security hardening with capability drops and privilege restrictions
+  - Success criteria: Docker-in-Docker support enables analysis tools
+  - Principle: Safety through isolation allows fully automated operations
+  - Constraint: Must work with --dangerously-skip-permissions for unattended execution
 
-- Agent instructions provide clearer communication protocols
-  - Success criteria: Transactional communication protocol defined
-  - Success criteria: Natural intelligence leverage guidance documented
-  - Principle: Reduce unnecessary social protocols, trust contextual reasoning
+- Development lifecycle is fully automated through specialized slash commands
+  - Success criteria: Nine specialized workflows handle complete development process
+  - Success criteria: Each command enforces software engineering best practices
+  - Success criteria: All operations are atomic (complete success or clean failure)
+  - Success criteria: Working tree state is preserved across all operations
+  - Success criteria: Git operations are restricted to validated workflows only
+  - Principle: Structured automation prevents human error and ensures consistency
 
-- All agent definitions are implemented and available in .claude/agents
+- Planning system transforms feature requests into executable atomic tasks
+  - Success criteria: /plan command creates and manages PLAN.md with GTD Natural Planning Model
+  - Success criteria: Feature requests decompose into atomic tasks with clear outcomes and dependencies
+  - Success criteria: Tasks map 1:1 to commits for incremental development
+  - Success criteria: /next command selects optimal tasks based on completion status and dependencies
+  - Principle: Systematic decomposition enables predictable, testable progress
+
+- Task implementation follows strict TDD practices automatically
+  - Success criteria: /task command implements red-green-refactor cycle (tests first, minimal implementation, refactoring)
+  - Success criteria: Validation pipeline runs before and after implementation
+  - Success criteria: Task completion updates PLAN.md automatically
+  - Success criteria: Repository stays in working state throughout implementation
+  - Principle: Test-driven development ensures code quality and regression prevention
+
+- Code quality is maintained through comprehensive automated review
+  - Success criteria: /check command runs parallel analysis by specialized critic agents
+  - Success criteria: /fix command iteratively resolves trivial issues until only serious problems remain
+  - Success criteria: Findings are validated and actionable reports generated
+  - Success criteria: Code meets project standards before commits
+  - Principle: Automated quality gates prevent technical debt accumulation
+
+- Complete specialized agent ecosystem enables comprehensive code review coverage
   - Success criteria: All 49 agents referenced in analyst-roster.md have definition files
   - Success criteria: All 4 always-required core agents are implemented (complexity-auditor, security-auditor, style-conformist, temporal-reference-critic)
   - Success criteria: All 5 conditionally-required core agents are implemented (architecture-critic, dependency-auditor, documentation-reviewer, commit-message-author, test-inspector)
   - Success criteria: All language-specific nit-checkers are implemented (rust, python, go, java, javascript)
   - Success criteria: All specialized domain experts are implemented (database-optimizer, auth-specialist, crypto-specialist, performance-analyst, etc.)
-  - Principle: Complete agent ecosystem enables comprehensive code review coverage
+  - Principle: Domain-specific expertise provides deeper, more accurate analysis than general-purpose review
+  - Constraint: Commands fall back to general-purpose agents when specialists unavailable
 
-- Task implementation workflow automates TDD-driven feature development
-  - Success criteria: /task command can parse task specifiers from PLAN.md
-  - Success criteria: /task identifies "next task" when no directive provided
-  - Success criteria: Red-green-refactor cycle is automated (tests first, implementation, refactor)
-  - Success criteria: Validation passes before and after implementation
-  - Success criteria: Task completion updates PLAN.md automatically
-  - Principle: Follow test-driven development practices strictly
-  - Principle: Ensure repository stays in working state throughout
+- Change management enables precise atomic commits
+  - Success criteria: /split command decomposes unstaged changes into semantic atomic groupings
+  - Success criteria: /stage command selectively stages changes matching natural language descriptions
+  - Success criteria: /message command generates commit messages following project conventions
+  - Success criteria: /commit command validates code and creates safe commits
+  - Principle: Atomic commits enable clean git history and reliable rollbacks
+
+- Agent instructions establish effective communication protocols
+  - Success criteria: Transactional communication protocol defined (verification-first approach)
+  - Success criteria: Natural intelligence leverage guidance documented (trust contextual reasoning over rigid rules)
+  - Success criteria: Pre-response verification protocol documented
+  - Success criteria: Evidence-based agreement requirements specified
+  - Principle: Reduce unnecessary social protocols to maximize token efficiency
+  - Principle: Trust agent contextual reasoning for subjective decision-making
 
 ## Tasks
 
