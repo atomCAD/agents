@@ -627,6 +627,114 @@ EOF
 - Use `cat >>` to append without reading the entire file
 - Spacing: When appending entries, include a blank line at the start of the heredoc (after `<<'EOF'`) to separate from the previous entry. Do not include a blank line before the closing `EOF`.
 
+#### ChangeLog.md Modification Workflow
+
+**CRITICAL**: Always check ChangeLog.md status before adding new entries to determine if the change is related to an existing uncommitted ChangeLog entry.
+
+**Decision Rule**: Use `cat >>` to append new entries when adding unrelated changes. Use the Edit tool when you need to combine related changes into a single uncommitted ChangeLog entry.
+
+**Safe Workflow**:
+
+1. **Check ChangeLog.md status first**:
+
+   ```bash
+   git diff ChangeLog.md
+   ```
+
+2. **If NO OUTPUT (clean file)**:
+   - File is unmodified since last commit
+   - **SAFE** to use `cat >> ChangeLog.md <<'EOF'` to append new entry
+
+3. **If DIFF OUTPUT PRESENT (modified file)**:
+   - File has uncommitted changes in working directory
+   - If the existing entries are unrelated to the change being added: **Still safe to use `cat >>`**
+   - If there is an existing related changelog entry: **REQUIRED: Use Edit tool** to modify/enhance an existing uncommitted entry
+
+**Examples**:
+
+**Scenario 1: Clean ChangeLog.md (safe for cat)**:
+
+```bash
+$ git diff ChangeLog.md
+$ # No output - file is clean
+$ cat >> "ChangeLog.md" <<'EOF'
+
+## 2025-11-16 - Add email validation task
+
+Added task for implementing email validation in user registration form. Includes sub-requirements for test coverage and error handling.
+EOF
+```
+
+**Scenario 2: Modified ChangeLog.md with unrelated new entry (still safe for cat)**:
+
+```bash
+$ git diff ChangeLog.md
+diff --git a/ChangeLog.md b/ChangeLog.md
+index 1234567..abcdefg 100644
+--- a/ChangeLog.md
++++ b/ChangeLog.md
+@@ -15,3 +15,7 @@
+
+ ## 2025-11-15 - Initial plan created
+ ...existing content...
++
++## 2025-11-16 - Update authentication approach
++
++Changed from JWT to session-based authentication for better security.
+$ # File has uncommitted changes, but we're adding an UNRELATED entry
+$ cat >> "ChangeLog.md" <<'EOF'
+
+## 2025-11-17 - Add email validation task
+
+Added task for implementing email validation in user registration form. Includes sub-requirements for test coverage and error handling.
+EOF
+```
+
+**Scenario 3: Modifying an uncommitted entry (requires Edit tool)**:
+
+```bash
+$ git diff ChangeLog.md
+diff --git a/ChangeLog.md b/ChangeLog.md
+index 1234567..abcdefg 100644
+--- a/ChangeLog.md
++++ b/ChangeLog.md
+@@ -15,3 +15,7 @@
+
+ ## 2025-11-15 - Initial plan created
+ ...existing content...
++
++## 2025-11-16 - Add user authentication task
++
++Added task for implementing user authentication with basic password storage.
+$ claude -p "Modify user authentication task to use secure hashing instead of basic authentication"
+```
+
+In this case, use Edit tool to enhance the existing uncommitted entry:
+
+- **old_string**: The uncommitted entry as it appears in working directory:
+
+  ```markdown
+  ## 2025-11-16 - Add user authentication task
+
+  Added task for implementing user authentication with basic password storage.
+  ```
+
+- **new_string**: Enhanced entry reflecting the task modification:
+
+  ```markdown
+  ## 2025-11-16 - Add user authentication task
+
+  Added task for implementing user authentication with bcrypt hashing for secure password storage and salt generation requirements.
+  ```
+
+**Why This Matters**:
+
+- **Scenario 1 & 2 (cat >>)**: When appending unrelated new entries, `cat >>` works correctly because it simply adds content to the end of the file
+- **Scenario 3 (Edit tool)**: When changes are related to an existing uncommitted entry, you must use Edit tool to combine them into a single batched changelog entry
+- **CRITICAL: Merged entries must read as a single cohesive entry**, not as a narrative of changes
+- Using `cat >>` in Scenario 3 would create duplicate entries instead of combining related changes together
+- Combining related changes into batched entries keeps the changelog organized and meaningful
+
 ### Initial Plan Creation
 
 When creating a new PLAN.md for the first time, create an initial ChangeLog.md entry documenting the plan's creation. This establishes context for the plan's evolution and helps track the overall development approach.

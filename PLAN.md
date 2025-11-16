@@ -211,7 +211,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Keep 72-character hard maximum but eliminate soft limit warnings and recommendations
   - Update rationale to focus on 72-character hard limit for tool compatibility
 
-- [ ] [Documentation] Clarify ChangeLog.md modification workflow in plan-file.md specification
+- [x] [Documentation] Clarify ChangeLog.md modification workflow in plan-file.md specification
   - Add section explaining when to use `cat >> ChangeLog.md <<HEREDOC` vs Edit tool
   - Document rule: Use `cat >>` ONLY when ChangeLog.md is unmodified (clean working directory)
   - Document procedure for modified ChangeLog.md: Check `git diff ChangeLog.md` first
