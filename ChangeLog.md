@@ -411,3 +411,7 @@ Rationale: Leverages LLM's core strength in understanding meaning and context ra
 ## 2025-11-16 - Add task to remove <=50 character commit message recommendation
 
 Added new high-priority task to remove the <=50 character soft limit recommendation for commit message titles from commit-message-format-checker.md. This change will eliminate unnecessary restrictions on commit message titles while maintaining the 72-character hard limit for tool compatibility. The user specifically prioritized removing this constraint.
+
+## 2025-01-16 - Add /next workflow output format modification task
+
+Added high-priority task to modify /next workflow output format from descriptive text ("Next task: ...") to executable command format ("/task ..."). This improvement enables direct execution of /next output as slash command input, enhancing workflow automation efficiency.

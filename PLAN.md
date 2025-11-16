@@ -195,6 +195,14 @@ This plan implements a complete automated development workflow using Claude Code
     - Confirm suggestions focus on removing obvious redundancy
   - Modify file: /workspace/.claude/agents/commit-message-nit-checker.md
 
+- [ ] [Implementation] Modify /next workflow to output executable task commands
+  - Update /next workflow output format from descriptive text to executable command format
+  - Change from "Next task: Clarify ChangeLog.md modification workflow ..." format
+  - Change to "/task Clarify ChangeLog.md modification workflow ..." format
+  - Enable direct execution of /next output as slash command input
+  - Improve workflow automation by making output directly executable
+  - Modify file: /workspace/.claude/commands/next.md
+
 - [ ] [Implementation] Remove <=50 character recommendation for commit message title/first line
   - Update commit-message-format-checker.md to remove 50-character soft limit recommendation
   - Change "Subject line length (<=50 recommended, <=72 maximum)" to "Subject line length (<=72 maximum)"
