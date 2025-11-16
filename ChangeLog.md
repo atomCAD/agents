@@ -415,3 +415,13 @@ Added new high-priority task to remove the <=50 character soft limit recommendat
 ## 2025-01-16 - Add /next workflow output format modification task
 
 Added high-priority task to modify /next workflow output format from descriptive text ("Next task: ...") to executable command format ("/task ..."). This improvement enables direct execution of /next output as slash command input, enhancing workflow automation efficiency.
+
+## 2025-11-16 - Add task to remove all LLM-based 72-character validation
+
+Added single atomic task to remove all LLM-based 72-character line length validation from commit message workflow, delegating this responsibility entirely to markdownlint tooling. This task modifies three files in one commit:
+
+1. commit-message-format-checker.md - remove all line length validation
+2. commit-message-author.md - remove all line length validation
+3. git-commit-messages.md - remove all 72-character references and document markdownlint as source of truth
+
+This is distinct from and follows the existing task (line 206) which removes only the 50-character soft limit while keeping the 72-character hard limit. The new task removes ALL agent-based line length checking, making markdownlint the single authority for line length validation.

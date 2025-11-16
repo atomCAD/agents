@@ -211,6 +211,13 @@ This plan implements a complete automated development workflow using Claude Code
   - Keep 72-character hard maximum but eliminate soft limit warnings and recommendations
   - Update rationale to focus on 72-character hard limit for tool compatibility
 
+- [ ] [Implementation] Remove all LLM-based 72-character line length validation
+  - Remove all line length validation from commit-message-format-checker.md
+  - Remove all line length validation from commit-message-author.md
+  - Remove all 72-character references from git-commit-messages.md guideline
+  - Document that markdownlint handles line length validation as single source of truth
+  - Context: Delegate line length validation entirely to markdownlint tooling
+
 - [x] [Documentation] Clarify ChangeLog.md modification workflow in plan-file.md specification
   - Add section explaining when to use `cat >> ChangeLog.md <<HEREDOC` vs Edit tool
   - Document rule: Use `cat >>` ONLY when ChangeLog.md is unmodified (clean working directory)
