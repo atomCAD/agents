@@ -190,12 +190,19 @@ Instructions: Keep technical accuracy but make more concise and highlight practi
    )
    ```
 
-3. Verify agent output:
+3. Verify agent output and proceed to validation:
    - Check if agent reported any errors or issues
    - Verify `.git/COMMIT_EDITMSG` exists and contains a relevant commit message describing the changeset
    - If agent notes any problems, handle them before proceeding to validation
 
+   **CRITICAL**: The commit-message-author agent returning "success" only means message generation completed - it does NOT mean the workflow is finished. The primary agent MUST:
+   - Check that `.git/COMMIT_EDITMSG` was actually written to disk
+   - Proceed DIRECTLY to Step 5 (Format Validation Loop)
+   - The message author agent will NEVER perform validation itself
+
 ### Step 5: Format Validation Loop
+
+**MANDATORY CONTINUATION**: This step MUST execute after Step 4 completes. Do NOT stop after receiving agent success confirmations.
 
 **MARKDOWN FORMAT VALIDATION (complete before proceeding to LLM validation):**
 
