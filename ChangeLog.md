@@ -366,3 +366,16 @@ Retained two outcomes from original plan that represent distinct, valuable capab
 
 - Agent ecosystem outcome captures purpose behind 40+ agent creation tasks and addresses README's noted limitation about missing agent definitions
 - Communication protocols outcome is a cross-cutting concern affecting all agent interaction quality, separate from workflow automation
+
+## 2025-11-15 - Add task to clarify ChangeLog.md modification workflow
+
+Added high-priority documentation task to clarify when to use `cat >> ChangeLog.md <<HEREDOC` vs Edit tool in plan-file.md specification.
+
+Task specifies:
+
+- Use `cat >>` ONLY when ChangeLog.md is unmodified (clean working directory)
+- Always check `git diff ChangeLog.md` first before appending
+- If changes exist: edit new information into existing uncommitted entries if relevant, or create new entry using Edit tool if unrelated
+- Include examples showing both workflows
+
+This prevents corruption of existing uncommitted ChangeLog entries and ensures proper change tracking. Based on recent experience where outcomes revision and task addition both modified the same ChangeLog entry.

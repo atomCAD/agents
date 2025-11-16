@@ -158,6 +158,15 @@ This plan implements a complete automated development workflow using Claude Code
     - Check that continuation lines align with first character of list item text
   - Modify files: /workspace/.claude/agents/commit-message-author.md, /workspace/.claude/agents/commit-message-format-checker.md
 
+- [ ] [Documentation] Clarify ChangeLog.md modification workflow in plan-file.md specification
+  - Add section explaining when to use `cat >> ChangeLog.md <<HEREDOC` vs Edit tool
+  - Document rule: Use `cat >>` ONLY when ChangeLog.md is unmodified (clean working directory)
+  - Document procedure for modified ChangeLog.md: Check `git diff ChangeLog.md` first
+  - If changes exist: Edit new information into existing uncommitted entries if relevant
+  - If changes unrelated: Create new entry using Edit tool with precise old_string/new_string
+  - Add examples showing both workflows (clean vs modified ChangeLog.md scenarios)
+  - Context: Recent experience showed importance of checking git status before appending
+
 - [ ] [Implementation] Add test evaluation and cleanup to /task command workflow
   - Add final step to /task workflow for evaluating newly-added tests
   - Implement test categorization: keep vs remove based on long-term value
