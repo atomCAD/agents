@@ -223,7 +223,7 @@ Check test results align with expectations:
 - If tests indicate behavior is already correct:
   - Verify the implementation actually exists in the codebase
   - Review the code to confirm it appears correct
-  - Only proceed to Step 7 (mark complete) if both tests pass AND implementation is verified
+  - Only proceed to Step 8 (mark complete) if both tests pass AND implementation is verified
 
 ### Step 4: GREEN Phase - Implement Functionality
 
@@ -290,7 +290,28 @@ Debug and retry until passing. If repeatedly failing:
    - Note what refactorings were applied
    - Note what improvements were made
 
-### Step 6: Final Validation
+### Step 6: Test Evaluation and Cleanup
+
+**Evaluate test changes for long-term value:**
+
+This step only applies if tests were changed during the current task execution. Skip if no test changes were made.
+
+**Evaluate tests changed in Step 3 for long-term retention value:**
+
+Apply retention criteria to each test change:
+
+- **Stability**: Will this test remain valid as the codebase evolves?
+- **Maintainability**: Is the test easy to understand and update?
+- **Business value**: Does this test protect against real user-impacting failures?
+- **Uniqueness**: Does this test provide coverage not already provided elsewhere?
+
+Keep tests that provide lasting regression protection or validate stable business logic. Remove tests created solely for TDD validation that duplicate coverage or assert against frequently-changing content.
+
+**Remove low-value tests immediately:**
+
+- Delete test files or test cases that don't meet retention criteria
+
+### Step 7: Final Validation
 
 **Run complete validation suite:**
 
@@ -306,7 +327,7 @@ If validation fails at this stage:
 - Fix identified issues and re-validate
 - If issues persist, use same escalation strategies as Step 4 (specialists, Opus, alternative approaches)
 
-### Step 7: Update PLAN.md
+### Step 8: Update PLAN.md
 
 **Mark task as complete (if task came from PLAN.md):**
 
@@ -319,7 +340,7 @@ If validation fails at this stage:
 2. **If task was ad-hoc (not in PLAN.md):**
    - Skip this step
 
-### Step 8: Generate Summary Report
+### Step 9: Generate Summary Report
 
 **Compile implementation summary:**
 
@@ -417,7 +438,8 @@ Maintain working state at all times:
    - After RED phase (Step 3)
    - After GREEN phase (Step 4)
    - After REFACTOR phase (Step 5)
-   - Final validation (Step 6)
+   - After test cleanup (Step 6)
+   - Final validation (Step 7)
 
 2. **Failure handling:**
    - Exit immediately on validation failure

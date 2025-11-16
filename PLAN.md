@@ -254,7 +254,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Add examples showing both workflows (clean vs modified ChangeLog.md scenarios)
   - Context: Recent experience showed importance of checking git status before appending
 
-- [ ] [Implementation] Add test evaluation and cleanup to /task command workflow
+- [x] [Implementation] Add test evaluation and cleanup to /task command workflow
   - Add final step to /task workflow for evaluating newly-added tests
   - Implement test categorization: keep vs remove based on long-term value
   - Identify fragile tests that test current content expected to change freely
@@ -262,7 +262,6 @@ This plan implements a complete automated development workflow using Claude Code
   - Add criteria for test retention: stability, maintainability, business value
   - Generate test cleanup recommendations with rationale for each decision
   - Only evaluate tests added during current task execution, not existing tests
-  - Modify file: /workspace/.claude/commands/task.md
 
 - [ ] [Implementation] Summarize analyst recommendations before acting in /task workflow
   - Insert new step between current Step 5 (REFACTOR) and Step 6 (Test Evaluation)
