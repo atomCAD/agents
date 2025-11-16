@@ -268,19 +268,31 @@ Debug and retry until passing. If repeatedly failing:
 
    For each improvement to attempt:
 
-   a. **Create checkpoint** before attempting the change using the checkpoint skill
+   a. **Output decision before applying:**
+   - State which analyst recommended the improvement
+   - Describe the specific refactoring being attempted
+   - Explain why this improvement is valuable
 
-   b. **Apply the refactoring:**
+   Example output:
+
+   ```text
+   Applying recommendation from complexity-auditor: Extract validation logic into separate function
+   Rationale: Reduces cognitive load by isolating validation concerns, improves testability
+   ```
+
+   b. **Create checkpoint** before attempting the change using the checkpoint skill
+
+   c. **Apply the refactoring:**
    - Invoke appropriate specialist agent to make the change
    - Follow project style guidelines
 
-   c. **Validate the change:**
+   d. **Validate the change:**
 
    ```bash
    ./check.sh
    ```
 
-   d. **Evaluate the result:**
+   e. **Evaluate the result:**
    - If tests fail: use checkpoint skill to restore, then try alternative approach
    - If tests pass: use checkpoint skill to compare changes
      - If better: use checkpoint skill to drop the checkpoint
