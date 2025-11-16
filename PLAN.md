@@ -272,6 +272,15 @@ This plan implements a complete automated development workflow using Claude Code
   - Renumber all subsequent steps (current Steps 6-9 become 7-10)
   - Context: Provides transparency and user control over refactoring decisions
 
+- [ ] Remove trailing blank line validation from commit-message-format-checker
+  - Remove "trailing blank lines" from line 41's "No leading/trailing blank lines" requirement
+  - Update to "No leading blank lines" in the entire message
+  - Remove "Leading/trailing blank lines" from line 132's violation list
+  - Update to "Leading blank lines" only
+  - Remove "Extra blank line at end" example from line 219
+  - Add note that markdownlint handles trailing blank line validation
+  - Verify leading blank line validation is preserved
+
 - [ ] [Implementation] Add task selection output to /task command workflow
   - Update Step 1 to output selected task information to user before proceeding
   - Display task description and source (PLAN.md line number or ad-hoc specification)

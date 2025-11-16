@@ -439,3 +439,7 @@ This improves user visibility and control over refactoring decisions while maint
 ## 2025-11-16 - Add enhanced validation workflow task for /message command
 
 Added task for implementing iterative validation workflow in /message command with specialist verification. The enhancement introduces multi-agent validation where each flagged issue is verified by a specialist, followed by an independent decision agent analysis, and finally fact-checked by the primary agent. The workflow iterates until convergence (two successive specialists agree on dismissal or reformulation). This improves commit message quality through rigorous validation with specialist confirmation at each decision point.
+
+## 2025-11-16 - Add task to remove trailing blank line validation
+
+Added task to remove redundant trailing blank line validation from commit-message-format-checker agent. This validation duplicates functionality already provided by markdownlint tool, which serves as the single source of truth for markdown formatting rules including trailing blank lines.
