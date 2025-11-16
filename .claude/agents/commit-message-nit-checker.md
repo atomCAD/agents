@@ -351,9 +351,137 @@ Complex, arcane, or long implementations where details serve as comprehension ai
 - **Obviousness**: Are the implementation details stating something that's already apparent from the changes?
 - **Value as codex**: Do the details serve as a useful jumping-off point for understanding complex changes?
 
-**Examples:**
+### MANDATORY: Evidence First Protocol
 
-*Unnecessary (clear, straightforward diff):*
+Before evaluating ANY claim about complexity or necessity, you MUST:
+
+1. **Read the actual diff** - Not the commit message, not the file names. Read the actual changed lines.
+2. **Quote specific diff lines** - Copy actual diff content that you're evaluating
+3. **Describe what you see** - In plain language, what did the developer actually change?
+
+Example of required evidence gathering:
+
+```text
+Diff evidence:
++## MANDATORY 4-STEP EVALUATION PROCESS
++
++For EVERY potential issue, you MUST complete ALL steps IN ORDER:
++
++### Step 1: DIFF ISOLATION
+
+What changed: Added markdown heading and text to .md file
+Is this confusing? NO - it's readable English text
+```
+
+If you cannot quote specific diff lines that are confusing, you MUST NOT claim the change is complex.
+
+**Reasoning Process:**
+
+When evaluating whether implementation details are necessary, systematically ask:
+
+1. **Obviousness from diff**: Is this information already obvious to a human reviewer from the diff?
+   - **FIRST: Quote the actual diff lines you're evaluating**
+   - Check: Can a reviewer immediately see this from the diff without significant effort?
+   - Example: "Changes to PLAN.md add new task" - single-file diff clearly shows task addition -> Redundant
+   - Example: "Added reasoning framework to nit-checker.md" - diff shows readable markdown text being added -> Redundant
+   - Counter-example: "Refactor authentication across 15 files to use new session model" - valuable summary of complex multi-file change where pattern isn't immediately obvious -> Keep
+   - Verdict: Redundant when diff makes it obvious; valuable when it summarizes scattered or complex changes
+
+2. **WHY vs WHAT**: Does this explain WHY (motivation/purpose) or restate WHAT (mechanics/operations)?
+   - WHY: Explains the problem being solved, rationale for the approach, or purpose of the change
+   - WHAT: Restates implementation mechanics already visible in the diff
+   - Example: "Currently, the workflow applies suggestions without user visibility" = WHY (explains problem)
+   - Example: "Modified workflow.js to add logging statements" = WHAT (restates mechanics)
+   - Verdict: Keep WHY, flag WHAT
+
+3. **New information**: Does this add new information beyond what's in the subject/first paragraph?
+   - Check if the sentence provides context not already captured in earlier parts of the message
+   - If the subject or first paragraph already explains the key context, additional sentences describing file operations are redundant
+   - Example: Subject says "add transparent analyst recommendations", first paragraph explains the problem, second paragraph says "Changes to PLAN.md add task for this feature"
+   - The second paragraph adds no new semantic information - the task addition is mechanical
+   - Verdict: Redundant if no new semantic content
+
+4. **Architecture vs edits**: Does this explain architecture/approach (valuable) or describe edits (redundant)?
+   - Architecture/approach: Describes design decisions, technical strategies, or implementation patterns
+   - Edit descriptions: Lists which files were modified or what functions were added
+   - Example: "Uses probabilistic LRU tracking to avoid overhead" = architecture (explains design approach)
+   - Example: "Updated cache.js and added lru.js" = edit description (lists file changes)
+   - Verdict: Keep architecture, flag edit descriptions
+
+**Key Distinction:**
+
+Information is "obvious from diff" when a human reviewer can immediately understand it without mentally reconstructing the change. If the commit body saves the reviewer effort by summarizing a pattern that's scattered across the diff, it's valuable even though the information is technically "in the diff."
+
+Example:
+
+- Redundant: "Changes to PLAN.md add new task" (single-file diff makes this obvious)
+- Valuable: "Consolidate duplicate validation logic across auth, signup, and profile modules" (summarizes pattern not immediately obvious from multi-file diff)
+
+**Common Reasoning Errors to Avoid:**
+
+- **"The diff only shows X was added, not the rationale"** - Check if rationale is already in the message body. If the first paragraph explains WHY, don't justify keeping file operation descriptions by claiming the rationale is missing.
+
+- **"This provides helpful context about the change"** - Distinguish between context about PURPOSE vs context about MECHANICS. File operation descriptions are mechanical context, not helpful context.
+
+- **"This explains the architectural decision"** - Verify it actually explains architecture (design approach, technical strategy) vs just describing which files were edited.
+
+- **"The task description in PLAN.md is separate from the commit message"** - The diff shows the task description. Commit message shouldn't duplicate what's in the task description visible in the diff.
+
+**Applying the Framework - Examples:**
+
+#### Example 1: Simple single-file change
+
+**Sentence**: "Added sessionTimeout field to User model"
+
+1. **Obvious from diff?** YES - single-file diff clearly shows field addition
+2. **WHY vs WHAT?** WHAT - describes what was added, not why it matters
+3. **New information?** NO - just restates the mechanical change
+4. **Architecture vs edit?** Edit description
+
+**Verdict**: Unnecessary implementation detail
+
+#### Example 2: Multi-file refactoring
+
+**Sentence**: "Consolidate authentication logic from login, signup, and password-reset into shared auth module"
+
+1. **Obvious from diff?** NO - pattern across 4 files not immediately obvious
+2. **WHY vs WHAT?** WHY - explains the consolidation purpose
+3. **New information?** YES - summarizes architectural change
+4. **Architecture vs edit?** Architecture
+
+**Verdict**: Keep (valuable summary of complex change)
+
+#### Example 3: Complete message analysis
+
+Original commit:
+
+```text
+auth: improve session management
+
+Added sessionTimeout field to User model.
+Created new validateSession() method.
+Updated login handler to call validateSession.
+Fixed bug where sessions never expired.
+```
+
+Line-by-line analysis:
+
+- "Added sessionTimeout field to User model" -> Obvious from diff, WHAT, edit description -> **Remove**
+- "Created new validateSession() method" -> Obvious from diff, WHAT, edit description -> **Remove**
+- "Updated login handler to call validateSession" -> Obvious from diff, WHAT, edit description -> **Remove**
+- "Fixed bug where sessions never expired" -> Not just obvious, explains WHY/impact, valuable context -> **Keep**
+
+Improved version:
+
+```text
+auth: prevent indefinite session persistence
+
+Sessions were never expiring, allowing authenticated access indefinitely.
+```
+
+#### Example 4: Unnecessary vs helpful overviews
+
+**Unnecessary (clear, straightforward diff):**
 
 ```text
 auth: add password validation
