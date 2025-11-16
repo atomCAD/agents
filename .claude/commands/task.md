@@ -770,4 +770,18 @@ Consider archiving this plan or adding new tasks.
 - **Validation throughout**: `./check.sh` run after every phase
 - **Incremental refactoring**: Small changes with continuous validation
 
+## MANDATORY PRE-FLIGHT CHECKLIST
+
+**READ THIS BEFORE DOING ANYTHING ELSE:**
+
+Before you create any TodoWrite lists, read any files, or start any implementation work, you MUST complete this checklist:
+
+- [ ] **I am currently on Step 1: Identify Target Task**
+- [ ] **My FIRST action will be to call the next-task-selector agent**
+- [ ] **I will NOT create TodoWrite lists until AFTER the task is identified**
+- [ ] **I will NOT read implementation files until AFTER the task is identified**
+- [ ] **I will NOT start planning or designing until AFTER the task is identified**
+
+**If you find yourself doing anything other than calling next-task-selector as your first action, STOP WHAT YOU ARE DOING AND RETURN TO STEP 1.**
+
 **These rules are non-negotiable and apply to all AI agent interactions using this workflow.**
