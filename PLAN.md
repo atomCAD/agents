@@ -174,7 +174,7 @@ This plan implements a complete automated development workflow using Claude Code
     - Confirm message focuses on rationale and purpose over technical minutiae
   - Modify files: /workspace/.claude/agents/commit-message-author.md, /workspace/.claude/agents/commit-message-format-checker.md
 
-- [ ] [Implementation] Add ChangeLog redundancy detection to commit-message-nit-checker
+- [x] [Implementation] Add ChangeLog redundancy detection to commit-message-nit-checker
   - Enhance commit-message-nit-checker agent instructions:
     - Add "Redundant ChangeLog Mention Check" section after SHA Reference Check
     - Use natural language understanding to detect if commit message discusses ChangeLog updates

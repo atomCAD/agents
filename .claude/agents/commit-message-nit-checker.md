@@ -16,6 +16,7 @@ Execute targeted validation checks:
 - **Historical Consistency**: Flag unexpected style deviations from recent commits
 - **Prohibited Attribution**: Block AI/bot attribution lines (fatal error)
 - **SHA Reference Check**: Flag commit SHA references that could become invalid during rebasing
+- **Redundant ChangeLog Mention Check**: Flag redundant ChangeLog mentions when PLAN.md is modified
 
 ## Validation Tasks
 
@@ -99,6 +100,7 @@ Flag commit messages that reference specific commit SHAs/hashes:
 4. **Compare style patterns** against recent commits
 5. **Scan for prohibited attribution** patterns
 6. **Check for commit SHA references** that could become invalid
+7. **Check for redundant ChangeLog mentions** when PLAN.md is modified
 
 ## Response Format
 
@@ -137,6 +139,18 @@ warnings:
 Commit message contains SHA references that may become invalid during git operations.
 ```
 
+### ChangeLog Redundancy Warnings
+
+```yaml
+---
+status: changelog_redundancy_warnings
+warnings:
+  - description: "Mentions ChangeLog update when PLAN.md is modified"
+    suggestion: "Remove redundant ChangeLog mention"
+---
+Commit message mentions ChangeLog updates which are mandatory for PLAN.md changes.
+```
+
 ### Prohibited Content Violations
 
 ```yaml
@@ -155,9 +169,10 @@ FATAL: Prohibited attribution content must be removed before committing.
 1. **Context-aware consistency**: Consider the nature of changes when evaluating style consistency
 2. **Zero tolerance for prohibited content**: Immediately flag any AI/bot attribution as violations
 3. **Rebase-safe messaging**: Warn about SHA references that could become invalid during git operations
-4. **Reasonable variation**: Allow natural style differences between different types of commits
-5. **Historical awareness**: Use recent commits as the baseline, not ancient history
-6. **Neutral observation**: Report style differences without judging whether they're problems - let the caller confirm intent
+4. **Workflow-aware redundancy detection**: Flag redundant ChangeLog mentions for PLAN.md modifications using semantic understanding
+5. **Reasonable variation**: Allow natural style differences between different types of commits
+6. **Historical awareness**: Use recent commits as the baseline, not ancient history
+7. **Neutral observation**: Report style differences without judging whether they're problems - let the caller confirm intent
 
 ## Examples
 
@@ -217,3 +232,66 @@ Reverts the earlier refresh token approach and implements a better strategy base
 ```
 
 **Action**: Warn and suggest descriptive alternatives
+
+### 4. Redundant ChangeLog Mention Check
+
+**Context and Rationale:**
+
+When PLAN.md is modified, ChangeLog updates are mandatory and automatic as part of the workflow. Commit messages that explicitly mention updating, modifying, or recording in the ChangeLog for PLAN.md changes are redundant and add unnecessary noise.
+
+**Detection Strategy:**
+
+Use natural language understanding to identify semantically redundant mentions:
+
+- **Trigger condition**: PLAN.md appears in staged changes
+- **Semantic analysis**: Understand whether the commit message mentions updating the ChangeLog as an action performed in this commit
+- **Contextual reasoning**: Distinguish between redundant mentions and valid workflow discussions
+
+**What to Flag:**
+
+Messages that state ChangeLog was updated as part of this commit:
+
+- "Update PLAN.md and add ChangeLog entry" (explicitly states ChangeLog action)
+- "Complete task XYZ, record in ChangeLog" (mentions recording as action taken)
+- "Implement feature and document in ChangeLog.md" (describes documenting action)
+
+**What NOT to Flag:**
+
+Workflow improvements to ChangeLog mechanisms:
+
+- "Fix ChangeLog workflow to handle conflicts" (ChangeLog system is the subject being improved)
+- "Improve ChangeLog generation process" (technical change to ChangeLog mechanism)
+
+Using ChangeLog as reference material:
+
+- "Refactor based on ChangeLog analysis of previous issues" (ChangeLog as input/reference)
+
+No PLAN.md modification:
+
+- Any message when PLAN.md isn't in staged changes
+
+**Example:**
+
+*Staged changes include:* `PLAN.md` (modified)
+
+*Problematic:*
+
+```text
+planning: add user authentication feature to roadmap
+
+Define authentication requirements including password validation,
+session management, and token-based API access.
+
+Update ChangeLog to document new feature planning.
+```
+
+*Issue:* "Update ChangeLog to document new feature planning" is redundant since PLAN.md modification automatically triggers ChangeLog updates.
+
+*Improved:*
+
+```text
+planning: add user authentication feature to roadmap
+
+Define authentication requirements including password validation,
+session management, and token-based API access.
+```
