@@ -60,7 +60,7 @@ Write commit messages as brief introductions to the diff that provide context an
 
 ### First Line
 
-- Format: `component: action-oriented description` (72 chars max)
+- Format: `component: action-oriented description`
 - Use lowercase for component name
 - Be specific about what changed and its purpose
 
@@ -993,31 +993,11 @@ Remember: A commit message that seems too long today will be invaluable context 
 
 ## Line Wrapping
 
-Wrap commit message lines at 72 characters to ensure proper display in git tools and terminal interfaces. This includes both the subject line and body text.
+Line wrapping in commit messages is handled automatically by markdownlint tooling and modern git interfaces. Focus on clarity and readability rather than manual line length management.
 
-**Exceptions to the 72-character limit:**
+**Markdownlint as single source of truth**: Line length validation is delegated entirely to markdownlint tooling, which handles appropriate formatting for different display contexts and ensures consistency across the codebase.
 
-- URLs cannot be broken across lines
-- Code blocks and command examples where breaking would affect readability
-- File paths that are inherently long
-- Technical identifiers like commit SHAs, function signatures, or error messages
-- Configuration keys or structured data that must remain intact
-
-When wrapping is not possible, prefer readability over strict adherence to the character limit. The goal is clear communication, not rigid formatting compliance.
-
-**Manual verification commands:**
-
-To verify line lengths in your commit message:
-
-```bash
-# Find all lines exceeding 72 characters
-awk 'length($0) > 72 {print NR": "length($0)" chars - "$0}' .git/COMMIT_EDITMSG
-
-# Display maximum line length
-awk '{len=length($0); if(len>max) max=len} END {print "Maximum line length: "max" chars"}' .git/COMMIT_EDITMSG
-```
-
-If the first command produces no output, all lines are within the limit.
+Write your commit messages naturally, and let the tooling handle appropriate formatting for different display contexts.
 
 ## List Formatting
 

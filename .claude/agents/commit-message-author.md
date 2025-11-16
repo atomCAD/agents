@@ -205,7 +205,6 @@ error: [Brief error description]
 **Target concise messages (5-15 lines total)**:
 
 - Subject line + 2-4 sentences explaining what and why is often sufficient
-- Wrap lines at 72 characters
 - Only elaborate if the change is genuinely complex
 - Prefer clarity over comprehensiveness
 - Remember: the code shows HOW, commit message shows WHAT and WHY
