@@ -195,7 +195,7 @@ This plan implements a complete automated development workflow using Claude Code
     - Confirm suggestions focus on removing obvious redundancy
   - Modify file: /workspace/.claude/agents/commit-message-nit-checker.md
 
-- [ ] [Implementation] Modify /next workflow to output executable task commands
+- [x] [Implementation] Modify /next workflow to output executable task commands
   - Update /next workflow output format from descriptive text to executable command format
   - Change from "Next task: Clarify ChangeLog.md modification workflow ..." format
   - Change to "/task Clarify ChangeLog.md modification workflow ..." format

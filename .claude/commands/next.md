@@ -7,7 +7,7 @@ model: claude-sonnet-4-0
 
 # Next Task Selection Workflow
 
-You are a task selection workflow responsible for analyzing PLAN.md and identifying which task should be worked on next. You operate autonomously to select the optimal task based on completion status, dependencies, priority, and optional user guidance.
+You are a task selection workflow responsible for analyzing PLAN.md and identifying which task should be worked on next. You operate autonomously to select the optimal task based on completion status, dependencies, priority, and optional user guidance. Your output format provides directly executable `/task` commands for seamless workflow automation.
 
 ## Procedure
 
@@ -60,7 +60,7 @@ Format and output the result based on agent selection:
 #### For status: selected
 
 ```text
-Next task: [Task identifier text from agent]
+/task [Task identifier text from agent]
 
 Reason: [Reason from agent response]
 ```
@@ -92,24 +92,24 @@ Error: Unable to select task
 
 [Error details from agent reason field]
 
-Please check PLAN.md format and try again.
+[Suggested remediation steps, if any]
 ```
 
 ## Output Format
 
 ### Successful Selection Format
 
-When a task is selected (status: selected), provide the task identifier and selection reasoning:
+When a task is selected (status: selected), provide the executable task command and selection reasoning:
 
 **Good output (correct)**:
 
 ```text
-Next task: Create /next slash command workflow
+/task Create /next slash command workflow
 
 Reason: First uncompleted task with no blocking dependencies
 ```
 
-**Bad output (incorrect)**:
+**Bad output (incorrect - verbose, not executable)**:
 
 ```text
 The next task to work on is:
@@ -178,10 +178,11 @@ Task completion is handled by other workflows (like `/task` or `/commit`).
 
 Output is informative and actionable:
 
-- Task identifier and reasoning for successful selection
+- Executable task command and reasoning for successful selection
 - Clear error messages for failures
 - Transparent decision-making process
 - Helps users understand task prioritization
+- Output can be directly executed by copying and pasting
 
 ## Error Handling
 
@@ -235,27 +236,27 @@ For selection errors:
 
 ### Example 1: Basic Next Task Selection
 
-```text
-User: /next
-Assistant: Next task: Create /next slash command workflow
+```bash
+$ claude -p "/next"
+/task Create /next slash command workflow
 
 Reason: First uncompleted task with no blocking dependencies
 ```
 
 ### Example 2: Filtered Selection
 
-```text
-User: /next focus on agent definitions
-Assistant: Next task: Create task-matcher agent definition
+```bash
+$ claude -p "/next focus on agent definitions"
+/task Create task-matcher agent definition
 
 Reason: Highest priority agent definition task matching directive
 ```
 
 ### Example 3: All Tasks Blocked
 
-```text
-User: /next
-Assistant: No tasks available
+```bash
+$ claude -p "/next"
+No tasks available
 
 Reason: Task A requires external API; Task B depends on Task A
 
@@ -265,9 +266,9 @@ Review PLAN.md to identify blocking tasks.
 
 ### Example 4: All Tasks Complete
 
-```text
-User: /next
-Assistant: All tasks completed
+```bash
+$ claude -p "/next"
+All tasks completed
 
 Congratulations! All tasks in PLAN.md have been completed.
 Consider archiving this plan or adding new tasks.
@@ -275,22 +276,23 @@ Consider archiving this plan or adding new tasks.
 
 ### Example 5: No PLAN.md
 
-```text
-User: /next
-Assistant: Error: No PLAN.md file found
+```bash
+$ claude -p "/next"
+Error: No PLAN.md file found
 
-PLAN.md is required for task selection. Create a plan file first using:
+PLAN.md is required for task selection.
+Create a plan file first using:
 `/plan [feature description]`
 ```
 
 ## Important Notes
 
-- **Informative output**: Successful task selection includes both task and reasoning
-- **Autonomous**: No user interaction during execution
+- **Executable output**: Provides `/task` command format for direct execution
+- **Transparent reasoning**: Explains selection decision to help users understand prioritization
+- **Autonomous operation**: No user interaction required during execution
 - **Read-only**: Never modifies PLAN.md
 - **Delegate to specialist**: Uses next-task-selector agent for analysis
 - **Respects dependencies**: Never suggests blocked tasks
-- **Clear on failure**: Provides actionable error messages
-- **Transparent**: Explains selection decision to help users understand prioritization
+- **Clear error handling**: Provides actionable error messages and recovery guidance
 
 **These rules are non-negotiable and apply to all AI agent interactions using this workflow.**
