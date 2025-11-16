@@ -195,6 +195,33 @@ This plan implements a complete automated development workflow using Claude Code
     - Confirm suggestions focus on removing obvious redundancy
   - Modify file: /workspace/.claude/agents/commit-message-nit-checker.md
 
+- [ ] [Implementation] Add unnecessary implementation detail detection to commit-message-nit-checker
+  - Enhance commit-message-nit-checker agent instructions:
+    - Add "Unnecessary Implementation Details Check" validation task
+    - Use contextual understanding to assess when implementation details serve no purpose
+    - Understand purpose: details serve as codex for comprehension of long/complex/arcane implementations
+    - Flag when: diff is clear and straightforward, making details redundant rather than helpful
+  - Leverage LLM natural language awareness:
+    - Assess whether diff is comprehensible on its own or needs introductory context
+    - Distinguish helpful details (codex for comprehension) from redundant ones (restating obvious)
+    - Consider: clear, straightforward diffs don't need implementation details
+    - Consider: long/complex/arcane implementations benefit from quick overview as jumping-off point
+    - Example unnecessary: "Added validate() function, modified user.rs to call it, updated tests" for clear change
+    - Example helpful: brief algorithm overview for complex optimization that would be hard to grasp from diff alone
+  - Do not introduce quantitative metrics:
+    - No line count thresholds, no file count limits, no rigid complexity scores
+    - Use holistic contextual judgment based on diff comprehensibility
+    - Trust LLM's ability to assess whether diff would be comprehensible to human reviewer without explanation
+  - Update response format:
+    - Add implementation_detail_warnings when details are unnecessary given diff clarity
+    - Explain why the diff is clear enough to understand directly without introductory details
+    - Suggest removing unnecessary details to let reviewers jump straight into the code
+  - Test criteria:
+    - Verify agent flags unnecessary details when diff is clear and straightforward
+    - Verify agent allows details for long/complex/arcane implementations needing codex for comprehension
+    - Confirm warnings use contextual reasoning about diff comprehensibility, not metrics
+  - Modify file: /workspace/.claude/agents/commit-message-nit-checker.md
+
 - [x] [Implementation] Modify /next workflow to output executable task commands
   - Update /next workflow output format from descriptive text to executable command format
   - Change from "Next task: Clarify ChangeLog.md modification workflow ..." format

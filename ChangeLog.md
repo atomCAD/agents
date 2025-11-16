@@ -425,3 +425,7 @@ Added single atomic task to remove all LLM-based 72-character line length valida
 3. git-commit-messages.md - remove all 72-character references and document markdownlint as source of truth
 
 This is distinct from and follows the existing task (line 206) which removes only the 50-character soft limit while keeping the 72-character hard limit. The new task removes ALL agent-based line length checking, making markdownlint the single authority for line length validation.
+
+## 2025-11-16 - Add task for unnecessary implementation detail detection
+
+Added task for improving commit-message-nit-checker to detect when implementation details serve no purpose. Implementation details exist to serve as codex for comprehension of long, complex, or arcane implementations that would be hard to grasp from the diff alone. However, when the diff is clear and straightforward, these details become redundant - reviewers can jump straight into the code. The agent should use contextual understanding to assess diff comprehensibility and flag unnecessary details that restate the obvious rather than providing helpful codex for comprehension.
