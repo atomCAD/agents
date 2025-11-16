@@ -391,3 +391,19 @@ Task modifies both commit-message-author and commit-message-format-checker agent
 - Emphasize "why" over comprehensive "what" documentation
 
 Positioned after completed list indentation fix to maintain logical grouping of commit message quality improvements.
+
+## 2025-11-16 - Add ChangeLog redundancy detection task using natural language understanding
+
+Added high priority task "Add ChangeLog redundancy detection to commit-message-nit-checker" at line 177. Task addresses user feedback that commit messages for PLAN.md changes redundantly mention ChangeLog.md updates, which is obvious since ChangeLog updates are mandatory for any PLAN.md modification.
+
+Task enhances commit-message-nit-checker to leverage LLM's natural language understanding:
+
+- Use semantic understanding and contextual reasoning to detect redundant ChangeLog mentions
+- Detect redundancy regardless of phrasing or terminology (not word-level pattern matching)
+- Distinguish between redundant mentions vs discussing ChangeLog workflow itself
+- Examples guide semantic understanding: "Update PLAN.md and add ChangeLog entry" (redundant, flag) vs "Fix ChangeLog append workflow to handle conflicts" (workflow discussion, don't flag)
+- Provide contextual explanations for why mentions are redundant given PLAN.md modification
+
+Positioned after existing commit message improvement tasks to maintain logical grouping of commit message quality enhancements.
+
+Rationale: Leverages LLM's core strength in understanding meaning and context rather than fragile pattern matching.

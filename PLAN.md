@@ -174,6 +174,27 @@ This plan implements a complete automated development workflow using Claude Code
     - Confirm message focuses on rationale and purpose over technical minutiae
   - Modify files: /workspace/.claude/agents/commit-message-author.md, /workspace/.claude/agents/commit-message-format-checker.md
 
+- [ ] [Implementation] Add ChangeLog redundancy detection to commit-message-nit-checker
+  - Enhance commit-message-nit-checker agent instructions:
+    - Add "Redundant ChangeLog Mention Check" section after SHA Reference Check
+    - Use natural language understanding to detect if commit message discusses ChangeLog updates
+    - When PLAN.md is modified: flag messages that mention updating/modifying/recording in ChangeLog
+    - Document rationale: ChangeLog updates are mandatory for PLAN.md changes, making mentions redundant
+  - Leverage LLM contextual reasoning:
+    - Understand semantic meaning, not word-level pattern matching
+    - Detect redundant ChangeLog mentions regardless of phrasing or terminology
+    - Distinguish between redundant mentions vs discussing ChangeLog workflow itself (rare, but valid)
+    - Example redundant: "Update PLAN.md and add ChangeLog entry" (obvious, should flag)
+    - Example valid: "Fix ChangeLog append workflow to handle conflicts" (discussing workflow, don't flag)
+  - Update response format:
+    - Add changelog_redundancy_warnings with contextual explanation
+    - Explain why the mention is redundant given PLAN.md modification
+  - Test criteria:
+    - Verify agent detects semantic redundancy in various phrasings
+    - Verify agent doesn't flag workflow-related ChangeLog discussions
+    - Confirm suggestions focus on removing obvious redundancy
+  - Modify file: /workspace/.claude/agents/commit-message-nit-checker.md
+
 - [ ] [Documentation] Clarify ChangeLog.md modification workflow in plan-file.md specification
   - Add section explaining when to use `cat >> ChangeLog.md <<HEREDOC` vs Edit tool
   - Document rule: Use `cat >>` ONLY when ChangeLog.md is unmodified (clean working directory)
