@@ -322,7 +322,7 @@ Provide comprehensive report on the completed message generation:
 
 #### Format Requirements
 
-- Subject line: 1-50 characters (ideal), maximum 72 characters
+- Subject line: maximum 72 characters
 - Subject must not end with period
 - Blank line between subject and body (if body exists)
 - Body lines wrapped at 72 characters

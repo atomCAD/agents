@@ -203,7 +203,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Improve workflow automation by making output directly executable
   - Modify file: /workspace/.claude/commands/next.md
 
-- [ ] [Implementation] Remove <=50 character recommendation for commit message title/first line
+- [x] [Implementation] Remove <=50 character recommendation for commit message title/first line
   - Update commit-message-format-checker.md to remove 50-character soft limit recommendation
   - Change "Subject line length (<=50 recommended, <=72 maximum)" to "Subject line length (<=72 maximum)"
   - Remove "Recommended: <=50 characters (warn if exceeded)" from Subject Line Length section

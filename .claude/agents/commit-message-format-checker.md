@@ -13,7 +13,7 @@ You are a specialized agent that validates commit message formatting according t
 
 Enforce standard Git commit message formatting:
 
-- **Subject line length** (<=50 recommended, <=72 maximum)
+- **Subject line length** (<=72 maximum)
 - **Structure** (blank line separation)
 - **Body wrapping** (72 characters)
 - **Imperative mood** in subject
@@ -23,9 +23,8 @@ Enforce standard Git commit message formatting:
 
 ### 1. Subject Line Length
 
-- **Recommended**: <=50 characters (warn if exceeded)
 - **Maximum**: <=72 characters (error if exceeded)
-- **Rationale**: Ensures subject lines display properly in git log, GitHub, and other tools
+- **Rationale**: Ensures subject lines display properly in git log, GitHub, and other tools with 72-character hard limit for compatibility
 
 ### 2. Structure Requirements
 
@@ -149,7 +148,6 @@ Issues that clearly violate Git commit message format standards:
 
 Patterns that may warrant review based on specific circumstances. Report these as observations in the YAML frontmatter:
 
-- **Subject line length 51-72 characters**: Within hard limit but exceeds recommended 50-character soft limit. Consider whether the extra length is necessary for clarity or could be moved to the body.
 - **Body lines >72 characters**: Exceeds recommended wrap length. Check if this is justified (URLs, code snippets, paths that shouldn't be broken).
 - **Non-imperative mood in subject**: Pattern detected (e.g., "Fixed" vs "Fix"). Verify this matches project conventions.
 - **Trailing whitespace**: Generally unintended. Confirm if this should be cleaned up.
