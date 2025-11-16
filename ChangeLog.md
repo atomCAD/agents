@@ -429,3 +429,9 @@ This is distinct from and follows the existing task (line 206) which removes onl
 ## 2025-11-16 - Add task for unnecessary implementation detail detection
 
 Added task for improving commit-message-nit-checker to detect when implementation details serve no purpose. Implementation details exist to serve as codex for comprehension of long, complex, or arcane implementations that would be hard to grasp from the diff alone. However, when the diff is clear and straightforward, these details become redundant - reviewers can jump straight into the code. The agent should use contextual understanding to assess diff comprehensibility and flag unnecessary details that restate the obvious rather than providing helpful codex for comprehension.
+
+## 2025-11-16 - Add task for summarizing analyst recommendations in /task workflow
+
+Added task to enhance /task workflow transparency by summarizing analyst recommendations before acting on them. Currently, the workflow consults critic agents in Step 5 (REFACTOR phase) and applies their suggestions without showing users what changes will be made. The new task inserts a new step between Step 5 and Step 6 to output a summary of recommended improvements to visible output, giving users an opportunity to review recommendations and providing a record of what changes were suggested before implementation proceeds. All subsequent steps (current Steps 6-9) will be renumbered to 7-10.
+
+This improves user visibility and control over refactoring decisions while maintaining the autonomous nature of the workflow.

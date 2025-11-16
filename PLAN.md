@@ -264,6 +264,15 @@ This plan implements a complete automated development workflow using Claude Code
   - Only evaluate tests added during current task execution, not existing tests
   - Modify file: /workspace/.claude/commands/task.md
 
+- [ ] [Implementation] Summarize analyst recommendations before acting in /task workflow
+  - Insert new step between current Step 5 (REFACTOR) and Step 6 (Test Evaluation)
+  - New step outputs summary of recommended improvements to user/visible output
+  - Include specific recommendations from each critic agent consulted
+  - Categorize recommendations by improvement type (refactoring, optimization, etc.)
+  - Provide user opportunity to review recommendations before implementation
+  - Renumber all subsequent steps (current Steps 6-9 become 7-10)
+  - Context: Provides transparency and user control over refactoring decisions
+
 - [ ] [Implementation] Add task selection output to /task command workflow
   - Update Step 1 to output selected task information to user before proceeding
   - Display task description and source (PLAN.md line number or ad-hoc specification)
