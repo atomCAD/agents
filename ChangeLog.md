@@ -435,3 +435,7 @@ Added task for improving commit-message-nit-checker to detect when implementatio
 Added task to enhance /task workflow transparency by summarizing analyst recommendations before acting on them. Currently, the workflow consults critic agents in Step 5 (REFACTOR phase) and applies their suggestions without showing users what changes will be made. The new task inserts a new step between Step 5 and Step 6 to output a summary of recommended improvements to visible output, giving users an opportunity to review recommendations and providing a record of what changes were suggested before implementation proceeds. All subsequent steps (current Steps 6-9) will be renumbered to 7-10.
 
 This improves user visibility and control over refactoring decisions while maintaining the autonomous nature of the workflow.
+
+## 2025-11-16 - Add enhanced validation workflow task for /message command
+
+Added task for implementing iterative validation workflow in /message command with specialist verification. The enhancement introduces multi-agent validation where each flagged issue is verified by a specialist, followed by an independent decision agent analysis, and finally fact-checked by the primary agent. The workflow iterates until convergence (two successive specialists agree on dismissal or reformulation). This improves commit message quality through rigorous validation with specialist confirmation at each decision point.

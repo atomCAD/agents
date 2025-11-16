@@ -279,6 +279,18 @@ This plan implements a complete automated development workflow using Claude Code
   - Format output clearly to inform user what will be implemented
   - Ensure transparency about which task was selected for implementation
 
+- [ ] [Implementation] Implement enhanced iterative validation workflow in /message command
+  - Add specialist verification step for each validation issue flagged by critic agents
+  - Launch specialist agent for each reported issue to confirm reality and provide detailed remediation
+  - After receiving both initial report and specialist verification, launch independent decision agent
+  - Independent decision agent receives both reports and makes autonomous determination
+  - Primary agent fact-checks final decision and either recommends ignoring (false positive) or reformulates issue description
+  - Iterate until convergence: two successive specialists agree issue is non-issue OR agree with reformulated description
+  - Every suggested issue update/reformulation requires confirmation by another specialist
+  - Every suggested issue dismissal requires confirmation by another specialist
+  - Maximum iteration limit to prevent infinite loops
+  - Context: Improves commit message quality through rigorous multi-agent validation with specialist confirmation
+
 - [x] Fix untracked file verification bug in checkpoint clear.sh
   - Problem: Verification only compares main tree (^{tree}), ignoring untracked files
   - Context: Git stashes with --include-untracked have 3 parents: HEAD (^1), index (^2), untracked (^3)
