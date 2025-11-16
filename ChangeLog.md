@@ -379,3 +379,15 @@ Task specifies:
 - Include examples showing both workflows
 
 This prevents corruption of existing uncommitted ChangeLog entries and ensures proper change tracking. Based on recent experience where outcomes revision and task addition both modified the same ChangeLog entry.
+
+## 2025-11-16 - Add high priority commit message improvement task
+
+Added task "Update commit message generation to produce concise review-focused introductions" at line 161. Task addresses user feedback that commit messages should be brief introductions to diffs rather than verbose technical descriptions.
+
+Task modifies both commit-message-author and commit-message-format-checker agents to:
+
+- Focus on review context rather than exhaustive change description
+- Add verbosity detection to prevent overly detailed messages
+- Emphasize "why" over comprehensive "what" documentation
+
+Positioned after completed list indentation fix to maintain logical grouping of commit message quality improvements.

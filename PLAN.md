@@ -158,6 +158,22 @@ This plan implements a complete automated development workflow using Claude Code
     - Check that continuation lines align with first character of list item text
   - Modify files: /workspace/.claude/agents/commit-message-author.md, /workspace/.claude/agents/commit-message-format-checker.md
 
+- [ ] [Implementation] Update commit message generation to produce concise review-focused introductions
+  - Modify commit-message-author agent instructions:
+    - Replace "technical blog post" guidance with "brief introduction to the diff"
+    - Add explicit instruction: messages should facilitate review, not replicate diff content
+    - Specify focus on context and rationale rather than exhaustive change description
+    - Include examples showing concise vs verbose messages for same changes
+  - Update commit-message-format-checker validation:
+    - Add verbosity detection to flag overly detailed messages
+    - Verify messages provide context without duplicating diff information
+    - Check that messages answer "why" not exhaustively describe "what"
+  - Test criteria:
+    - Generate commit message for sample change and verify brevity
+    - Verify message provides review context without replicating diff details
+    - Confirm message focuses on rationale and purpose over technical minutiae
+  - Modify files: /workspace/.claude/agents/commit-message-author.md, /workspace/.claude/agents/commit-message-format-checker.md
+
 - [ ] [Documentation] Clarify ChangeLog.md modification workflow in plan-file.md specification
   - Add section explaining when to use `cat >> ChangeLog.md <<HEREDOC` vs Edit tool
   - Document rule: Use `cat >>` ONLY when ChangeLog.md is unmodified (clean working directory)
