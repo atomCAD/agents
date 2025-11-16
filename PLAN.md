@@ -195,6 +195,14 @@ This plan implements a complete automated development workflow using Claude Code
     - Confirm suggestions focus on removing obvious redundancy
   - Modify file: /workspace/.claude/agents/commit-message-nit-checker.md
 
+- [ ] [Implementation] Remove <=50 character recommendation for commit message title/first line
+  - Update commit-message-format-checker.md to remove 50-character soft limit recommendation
+  - Change "Subject line length (<=50 recommended, <=72 maximum)" to "Subject line length (<=72 maximum)"
+  - Remove "Recommended: <=50 characters (warn if exceeded)" from Subject Line Length section
+  - Update warning patterns to remove "Subject line length 51-72 characters" soft limit warning
+  - Keep 72-character hard maximum but eliminate soft limit warnings and recommendations
+  - Update rationale to focus on 72-character hard limit for tool compatibility
+
 - [ ] [Documentation] Clarify ChangeLog.md modification workflow in plan-file.md specification
   - Add section explaining when to use `cat >> ChangeLog.md <<HEREDOC` vs Edit tool
   - Document rule: Use `cat >>` ONLY when ChangeLog.md is unmodified (clean working directory)

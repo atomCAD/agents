@@ -407,3 +407,7 @@ Task enhances commit-message-nit-checker to leverage LLM's natural language unde
 Positioned after existing commit message improvement tasks to maintain logical grouping of commit message quality enhancements.
 
 Rationale: Leverages LLM's core strength in understanding meaning and context rather than fragile pattern matching.
+
+## 2025-11-16 - Add task to remove <=50 character commit message recommendation
+
+Added new high-priority task to remove the <=50 character soft limit recommendation for commit message titles from commit-message-format-checker.md. This change will eliminate unnecessary restrictions on commit message titles while maintaining the 72-character hard limit for tool compatibility. The user specifically prioritized removing this constraint.
