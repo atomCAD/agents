@@ -11,24 +11,7 @@ You are a task selection workflow responsible for analyzing PLAN.md and identify
 
 ## Procedure
 
-### Step 1: Verify PLAN.md Exists
-
-Check if PLAN.md exists in the repository:
-
-1. Check for PLAN.md file:
-   - Use Bash tool to check file existence: `test -f /workspace/PLAN.md`
-   - If file does not exist: Exit with error message
-
-2. Error handling:
-
-   ```text
-   Error: No PLAN.md file found
-
-   PLAN.md is required for task selection. Create a plan file first using:
-   `/plan [feature description]`
-   ```
-
-### Step 2: Call Next-Task-Selector Agent
+### Step 1: Call Next-Task-Selector Agent
 
 Delegate task selection to the specialized agent:
 
@@ -36,16 +19,16 @@ Delegate task selection to the specialized agent:
    - User directive (if provided via command arguments)
    - Note: Directive comes from anything after `/next` command
 
-2. Call next-task-selector agent:
+2. Invoke next-task-selector agent with this prompt:
 
    ```text
-   Read /workspace/PLAN.md and select the optimal next task to work on.
+   "Read PLAN.md and select the optimal next task to work on.
 
    [If user provided directive]
    User Directive: [directive text]
 
    Analyze the task list and select the next task following your selection criteria.
-   Return your response in the YAML frontmatter format specified in your instructions.
+   Return your response in the YAML frontmatter format specified in your instructions."
    ```
 
 3. Process agent response:
@@ -53,7 +36,7 @@ Delegate task selection to the specialized agent:
    - Extract status, line_number (if present), and reason (if present)
    - Extract task identifier from response body
 
-### Step 3: Output Selected Task
+### Step 2: Output Selected Task
 
 Format and output the result based on agent selection:
 
@@ -65,35 +48,9 @@ Format and output the result based on agent selection:
 Reason: [Reason from agent response]
 ```
 
-#### For status: blocked
+#### For status: blocked, none_available, or error
 
-```text
-No tasks available
-
-Reason: [reason from agent]
-
-All remaining tasks are blocked by incomplete dependencies.
-Review PLAN.md to identify blocking tasks.
-```
-
-#### For status: none_available
-
-```text
-All tasks completed
-
-Congratulations! All tasks in PLAN.md have been completed.
-Consider archiving this plan or adding new tasks.
-```
-
-#### For status: error
-
-```text
-Error: Unable to select task
-
-[Error details from agent reason field]
-
-[Suggested remediation steps, if any]
-```
+Provide clear explanation and actionable guidance appropriate to the situation.
 
 ## Output Format
 
