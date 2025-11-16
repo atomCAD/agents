@@ -2,7 +2,7 @@
 name: message
 description: "Autonomous commit message generation with validation for staged changes"
 color: blue
-model: claude-sonnet-4-0
+model: claude-sonnet-4-5
 ---
 
 # Git Commit Message Generation Autonomous Workflow Action
