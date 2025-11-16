@@ -81,7 +81,7 @@ status: valid
 Commit message formatting is correct.
 ```
 
-### Format Errors with Observations
+### Format Errors
 
 ```yaml
 ---
@@ -96,10 +96,11 @@ format_issues:
   - type: list_indent_bullet
     description: "Line 12 continuation indent is 4 spaces (expected 2)"
     suggestion: "Use 2-space indent for bullet list continuation lines"
-observations:
-  - "Uses past tense 'Fixed' instead of 'Fix' - verify this matches project conventions"
+  - type: non_imperative_mood
+    description: "Uses past tense 'Fixed' instead of imperative 'Fix'"
+    suggestion: "Use imperative mood: 'Fix' instead of 'Fixed'"
 ---
-Formatting issues detected that should be addressed.
+Formatting issues detected that must be addressed.
 ```
 
 ## Validation Results
@@ -120,23 +121,17 @@ format_issues:
 
 ### Format Violations
 
-Issues that clearly violate Git commit message format standards:
+All format issues are violations that must be fixed. Report any detected issue as a format_issue:
 
-- Missing blank line between subject and body (when body exists)
-- Multiple consecutive blank lines in body (poor formatting)
-- List indentation violations (continuation lines not properly aligned)
-
-### Format Observations
-
-Patterns that may warrant review based on specific circumstances. Report these as observations in the YAML frontmatter:
-
-- **Non-imperative mood in subject**: Pattern detected (e.g., "Fixed" vs "Fix"). Verify this matches project conventions.
-- **Trailing whitespace**: Generally unintended. Confirm if this should be cleaned up.
-- **Leading/trailing blank lines**: Unusual formatting. Verify if intentional.
-- **Very short subject (<10 characters)**: May lack necessary context. Confirm the brevity is justified.
-- **List indentation issues**: Continuation lines don't align properly with list item text. Check numbered lists use 3-space indent and bullet lists use 2-space indent for continuation lines.
-- **Excessive verbosity**: Message appears to duplicate diff content or enumerate changes unnecessarily. Review against conciseness guidelines in `.claude/guidelines/git-commit-messages.md`.
-- **Overly detailed enumeration**: Message lists many individual changes (files, functions, modifications) that are visible in the diff. Consider higher-level summary instead.
+- **Subject line must be single line**: Subject wrapped across multiple lines
+- **Missing blank line**: Missing blank line between subject and body (when body exists)
+- **Multiple consecutive blank lines**: Multiple consecutive blank lines in body
+- **List indentation**: Continuation lines not properly aligned (3 spaces for numbered 1-9, 4 spaces for 10-99, 2 spaces for bullets)
+- **Non-imperative mood**: Past tense (Added, Fixed) or present continuous (Adding, Fixing) instead of imperative (Add, Fix)
+- **Trailing whitespace**: Any trailing whitespace on lines
+- **Leading/trailing blank lines**: Blank lines at start or end of message
+- **Excessive verbosity**: Message duplicates diff content or enumerates changes unnecessarily (review against conciseness guidelines)
+- **Very short subject**: Subject under 10 characters that likely lacks necessary context
 
 ## Common Patterns to Recognize
 
