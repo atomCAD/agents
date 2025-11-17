@@ -128,7 +128,7 @@ Identify patterns that constrain LLMs with rigid rules instead of leveraging the
 
 - Breaking analysis into steps that don't build on each other when holistic analysis would work better
 - Flag: Sequential steps for parallel concerns (parsing obvious formats across multiple steps)
-- Keep: Steps with genuine dependencies (dependency chain: identify → check blockers → evaluate)
+- Keep: Steps with genuine dependencies (dependency chain: identify -> check blockers -> evaluate)
 
 **Redundant Parsing Instructions:**
 
@@ -158,7 +158,7 @@ Identify patterns that constrain LLMs with rigid rules instead of leveraging the
 **Context Passthrough Anti-Pattern:**
 
 - Reading files/context only to pass verbatim to a subagent that has Read/Glob/Grep tools
-- Example: "Read PLAN.md contents" → "Pass PLAN.md contents to agent in prompt"
+- Example: "Read PLAN.md contents" -> "Pass PLAN.md contents to agent in prompt"
 - Why problematic: Wastes tokens, agent can read files directly
 - Better: "Call agent with task description" (agent reads files itself)
 - Exception: Agent lacks tools, context is derived/computed state, or transient user input

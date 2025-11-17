@@ -27,10 +27,10 @@ You MUST understand what they want to accomplish and adapt the workflow accordin
    - Or is this the standard "generate message for staged changes" workflow?
 
 2. **Adapt workflow to match intent:**
-   - If working with existing commits → Use `git show` to get the commit content
-   - If improving existing messages → Read and enhance what's already there
-   - If describing unstaged work → Guide them to stage first
-   - If standard workflow → Check for staged changes (only exit here if none found)
+   - If working with existing commits -> Use `git show` to get the commit content
+   - If improving existing messages -> Read and enhance what's already there
+   - If describing unstaged work -> Guide them to stage first
+   - If standard workflow -> Check for staged changes (only exit here if none found)
 
 **The Golden Rule**: Only exit for "no staged changes" when there's NO directive indicating a different intent. If the user provides ANY directive, interpret it fully before deciding to exit.
 

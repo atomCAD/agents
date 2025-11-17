@@ -1,6 +1,6 @@
 ---
 name: syntax-checker
-description: "Validates syntax in code embedded in documentation, strings, and comments where automated tooling doesn't run. Checks bash scripts in markdown, SQL in strings, heredocs, regex patterns, and config examples—not source files covered by compilers/linters."
+description: "Validates syntax in code embedded in documentation, strings, and comments where automated tooling doesn't run. Checks bash scripts in markdown, SQL in strings, heredocs, regex patterns, and config examples--not source files covered by compilers/linters."
 color: red
 model: claude-sonnet-4-0
 ---
