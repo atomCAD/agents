@@ -151,7 +151,16 @@ All issues must be resolved before committing.
      - **EXIT THE WORKFLOW**
    - Read complete message content
 
-2. **Run comprehensive validation (parallel execution):**
+2. **Run format validation:**
+   - Run markdownlint: `cd .git && markdownlint-cli2 COMMIT_EDITMSG --config ../.claude/config/commit-message.markdownlint-cli2.yaml`
+   - Run subject line check: `awk 'NR==1 && length>72 {print "Subject line too long:",length,"chars (max 72)"; exit 1}' .git/COMMIT_EDITMSG`
+   - If either check fails:
+     - Restore stashed changes: `git stash pop`
+     - Report formatting errors (markdown issues or subject line length)
+     - Suggest using `/message` to regenerate with proper formatting
+     - **EXIT THE WORKFLOW**
+
+3. **Run comprehensive validation (parallel execution):**
    - Execute all validation agents in parallel using a single message:
      - **commit-message-accuracy-checker**: Verifies message claims match actual code changes
      - **commit-message-format-checker**: Validates formatting, line lengths, imperative mood, whitespace
@@ -160,8 +169,8 @@ All issues must be resolved before committing.
    - Each agent reads `.git/COMMIT_EDITMSG` independently
    - Agents automatically gather needed context (staged diff, recent history, guidelines)
 
-3. **Decision point on validation:**
-   - **If all validations pass**: Continue to Step 4
+4. **Decision point on validation:**
+   - **If all validations pass**: Continue to Step 5
    - **If any validation fails**:
      - Restore stashed changes: `git stash pop`
      - Report specific validation failures

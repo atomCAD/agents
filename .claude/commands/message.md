@@ -219,6 +219,8 @@ Run markdownlint validation iteratively until format is clean:
    - If still failing after 5 attempts, exit with markdownlint error details
 
 3. **If markdownlint passes:**
+   - Check subject line length: `awk 'NR==1 && length>72 {print "Subject line too long:",length,"chars"; exit 1}' .git/COMMIT_EDITMSG`
+   - If subject line exceeds 72 characters, shorten it and re-run validation
    - Proceed to Step 6 (LLM Validation)
 
 **This format validation loop ensures commit messages follow markdown best practices before expensive LLM validation.**
