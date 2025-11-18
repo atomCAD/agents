@@ -389,8 +389,7 @@ Then execute the workflow:
 - **NEVER use emojis** in code, documentation, or any files
 - **Use ASCII equivalents** for special characters:
   - Arrows: Use `->` instead of Unicode arrows (→, ←, ↑, ↓)
-  - Checkmarks: Use `[x]` instead of ✓ or ✔
-  - Crosses: Use `[ ]` or `[X]` instead of ✗ or ✘
+  - Checkmarks/crosses: Generally avoid using these symbols entirely; when prescribed by specific document formats (e.g., PLAN.md task lists), use `[x]` for checked and `[ ]` for unchecked instead of Unicode (✓, ✔, ✗, ✘)
   - Box drawing: Use ASCII art (`+--`, `|`, etc.) instead of Unicode box characters
   - Math symbols: Use ASCII (`<=`, `>=`, `!=`, `^2`) instead of Unicode (≤, ≥, ≠, ²)
 - **ALLOWED exceptions when context demands**:
