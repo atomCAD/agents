@@ -281,7 +281,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Add note that markdownlint handles trailing blank line validation
   - Verify leading blank line validation is preserved
 
-- [ ] [Implementation] Add task selection output to /task command workflow
+- [x] [Implementation] Add task selection output to /task command workflow
   - Update Step 1 to output selected task information to user before proceeding
   - Display task description and source (PLAN.md line number or ad-hoc specification)
   - Include task type classification (Feature/Move-only/Refactor) in output

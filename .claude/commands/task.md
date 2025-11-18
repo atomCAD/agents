@@ -167,6 +167,51 @@ If a directive lacks sufficient detail:
 - If complete: Use directive as task description directly
 - If incomplete: Request clarification on missing requirements
 
+**Output selected task information to user:**
+
+After task identification, provide transparent output about what will be implemented:
+
+```text
+Task selected: [Task description]
+Task type: [Feature|Refactor|Move-Only] ([classification rationale: what type of change this represents])
+Source: [PLAN.md line X | Ad-hoc specification]
+
+[If from PLAN.md: Display complete task requirements from sub-items]
+[If ad-hoc: Display expanded task specification that will be implemented]
+
+Proceeding with TDD implementation...
+```
+
+**Task type classification:**
+
+The task type determines what you're testing for in the RED phase:
+
+- **Feature**: Write tests for new behavior (tests fail because feature doesn't exist yet)
+- **Refactor**: Write tests for existing behavior if coverage inadequate (tests always pass, proving current behavior)
+- **Move-Only**: Write/update tests for existing behavior (tests may fail initially due to import paths, then pass after move)
+
+All task types follow full TDD cycle (RED -> GREEN -> REFACTOR), but the RED phase focus differs:
+
+**Feature**: Adds new functionality or fixes bugs
+
+- Keywords: Add, Create, Implement, Build, Fix, Resolve, Update, Modify, Enhance
+- RED phase: Write tests that fail because new behavior doesn't exist yet
+- Example rationale: "adds new functionality", "fixes authentication bug", "implements user validation"
+
+**Refactor**: Improves existing code without changing behavior
+
+- Keywords: Refactor, Optimize, Clean up, Simplify, Improve code quality
+- RED phase: Verify existing behavior is adequately tested; write characterization tests if coverage gaps exist (tests should always pass)
+- Example rationale: "improves code organization without behavior changes", "optimizes performance"
+
+**Move-Only**: Reorganizes code location without behavior changes
+
+- Keywords: Move, Rename, Relocate, Reorganize
+- RED phase: Verify existing behavior is adequately tested; write/update tests if coverage gaps exist (tests may fail due to old import paths/API endpoints, requiring updates as part of RED phase)
+- Example rationale: "reorganizes code location without behavior changes"
+
+**Default**: If classification is ambiguous, treat as Feature (ensures new behavior has failing tests)
+
 **Error conditions:**
 
 - No task selected and directive is not a complete task specification
@@ -385,9 +430,9 @@ Implementation summary:
 - Validation: All checks passing
 
 TDD cycle:
-- RED phase: [N tests written, all failing as expected] (or "Skipped for [task type]")
+- RED phase: [For Feature: N tests written, all failing as expected] [For Refactor/Move: Coverage verified/gaps addressed, all tests passing]
 - GREEN phase: [Implementation complete, all tests passing]
-- REFACTOR phase: [Refactorings applied: ...] (or "Skipped for Move-Only task")
+- REFACTOR phase: [Refactorings applied: ...] (or "No refactoring needed")
 
 Next steps:
 - Review changes with `git diff`
@@ -556,17 +601,19 @@ Maintain working state at all times:
 
 **Characteristics:**
 
-- Improve existing code
-- Tests should already exist
-- Skip RED phase
+- Improve existing code without changing behavior
+- Focus on code quality, structure, performance
+- RED phase ensures behavior is adequately tested before refactoring
 
 **Procedure:**
 
-1. Verify tests exist and pass (GREEN)
-2. Apply refactorings (REFACTOR)
-3. Verify tests still pass
-4. Update PLAN.md
-5. Report summary
+1. Assess test coverage for code being refactored (RED)
+2. Write characterization tests if coverage gaps exist (RED)
+3. Apply refactorings (GREEN)
+4. Improve code quality (REFACTOR)
+5. Verify tests still pass
+6. Update PLAN.md
+7. Report summary
 
 **Examples:**
 
@@ -579,17 +626,19 @@ Maintain working state at all times:
 
 **Characteristics:**
 
-- Reorganize code location
-- No behavior changes
-- Skip test phases
+- Reorganize code location without behavior changes
+- Pure structural changes (files, modules, names)
+- RED phase ensures behavior is adequately tested before move
 
 **Procedure:**
 
-1. Perform move/rename
-2. Update references
-3. Verify behavior unchanged (validation)
-4. Update PLAN.md
-5. Report summary
+1. Assess test coverage for code being moved (RED)
+2. Write tests if coverage gaps exist (RED)
+3. Perform move/rename (GREEN)
+4. Update references (GREEN)
+5. Verify behavior unchanged (GREEN)
+6. Update PLAN.md
+7. Report summary
 
 **Examples:**
 
@@ -607,7 +656,14 @@ User: /task
 Assistant: [Calls next-task-selector, identifies "Implement password validation"]
 
 Task selected: Implement password validation
-Task type: Feature (full TDD cycle)
+Task type: Feature (adds new functionality to existing workflow)
+Source: PLAN.md line 156
+
+- Implement validation logic with min 8 chars, special characters, numbers
+- Add password strength meter component
+- Integrate with existing authentication flow
+
+Proceeding with TDD implementation...
 
 RED phase: Writing failing tests...
 - Created tests/password_validator_test.rs
@@ -656,17 +712,33 @@ User: /task refactor authentication
 Assistant: [Searches for task matching "refactor authentication"]
 
 Task selected: Refactor authentication module for clarity
-Task type: Refactor
+Task type: Refactor (improves existing code quality)
+Source: PLAN.md line 203
 
-GREEN phase: Verifying existing tests...
+- Split AuthService into smaller, focused components
+- Extract token handling to separate TokenManager class
+- Improve variable names and add documentation
+- Maintain backward compatibility
+
+Proceeding with TDD implementation...
+
+RED phase: Assessing test coverage...
 - Found tests/auth_test.rs with 12 test cases
-- Running validation... All tests pass [PASS]
+- Coverage assessment: Token handling not adequately tested
+- Writing characterization tests for TokenManager behavior
+- Added 4 tests in tests/token_manager_test.rs
+- Running validation... All tests pass [PASS] (existing behavior documented)
 
-REFACTOR phase: Applying refactorings...
+GREEN phase: Applying refactorings...
 - Split AuthService into smaller components
 - Extracted token handling to TokenManager
 - Renamed ambiguous variables
 - Added documentation comments
+- Running validation... All tests pass [PASS]
+
+REFACTOR phase: Improving code quality...
+- Simplified test setup code
+- Extracted common test fixtures
 - Running validation... All tests pass [PASS]
 
 Updating PLAN.md...
@@ -676,15 +748,16 @@ Task completed: Refactor authentication module for clarity
 
 Implementation summary:
 - Task type: Refactor
-- Files modified: 3
+- Files modified: 4
   - Implementation: src/auth_service.rs, src/token_manager.rs, src/auth/mod.rs
-- Tests added: 0 (existing tests verified)
+  - Tests: tests/token_manager_test.rs
+- Tests added: 4 characterization tests for token handling
 - Validation: All checks passing
 
 TDD cycle:
-- RED phase: Skipped for Refactor task
-- GREEN phase: Existing tests verified passing
-- REFACTOR phase: Refactorings applied: component extraction, variable renaming, documentation
+- RED phase: 4 characterization tests written, all passing (documenting existing behavior)
+- GREEN phase: Refactoring complete, all tests still passing (behavior preserved)
+- REFACTOR phase: Test code improved, all tests passing
 
 Next steps:
 - Review changes with `git diff`
@@ -699,13 +772,29 @@ User: /task move auth to lib
 Assistant: [Searches for task matching "move auth to lib"]
 
 Task selected: Move authentication module to lib/auth
-Task type: Move-Only
+Task type: Move-Only (reorganizes code location without behavior changes)
+Source: PLAN.md line 87
 
-Implementation: Performing code reorganization...
+- Move src/auth.rs to lib/auth/mod.rs
+- Update import statements in dependent files
+- Preserve all existing functionality and API compatibility
+
+Proceeding with TDD implementation...
+
+RED phase: Assessing test coverage and updating imports...
+- Found tests/auth_test.rs with 12 test cases
+- Coverage assessment: Adequate coverage for authentication behavior
+- Running tests... 12 tests fail [FAIL] (all due to import path `use crate::auth` no longer valid)
+- Updating test imports from `use crate::auth` to `use crate::lib::auth`
+- Running tests... All tests pass [PASS] (baseline established with correct paths)
+
+GREEN phase: Performing code reorganization...
 - Moved src/auth.rs to lib/auth/mod.rs
 - Updated 8 import statements in dependent files
 - Preserved all existing functionality
-- Running validation... All tests pass [PASS]
+- Running validation... All tests pass [PASS] (behavior preserved)
+
+REFACTOR phase: No refactoring needed for pure move
 
 Updating PLAN.md...
 Task marked complete
@@ -716,13 +805,13 @@ Implementation summary:
 - Task type: Move-Only
 - Files modified: 9
   - Implementation: lib/auth/mod.rs (moved from src/auth.rs), src/main.rs, src/api.rs, [...]
-- Tests added: 0 (no behavior changes)
+- Tests added: 0 (existing coverage adequate)
 - Validation: All checks passing
 
 TDD cycle:
-- RED phase: Skipped for Move-Only task
-- GREEN phase: Code reorganization complete, no behavior changes
-- REFACTOR phase: Skipped for Move-Only task
+- RED phase: Updated test imports to match new module location, all tests passing (baseline established)
+- GREEN phase: Code reorganization complete, all tests still passing (behavior preserved)
+- REFACTOR phase: No refactoring needed for pure move
 
 Next steps:
 - Review changes with `git diff`
