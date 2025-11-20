@@ -246,11 +246,63 @@ Execute comprehensive validation with specialist-driven corrections:
    - **If ANY validation agents report issues**: Continue to Step 3 (issue resolution)
 
 3. **Issue Analysis and Validation (for ALL identified issues):**
-   - **Launch specialist agent for each reported issue** (in parallel):
-     - Pass the validation agent's report and the current commit message
-     - Specialist determines: Is this issue real? What specific corrective action is needed?
-     - Specialist provides detailed remediation guidance or dismisses false positives
-   - **Consolidate ALL specialist recommendations** into actionable corrections
+
+   **CRITICAL PROCEDURE - Follow exactly:**
+
+   a. **Enumerate all distinct issues:**
+      - List every unique issue reported by validation agents
+      - Each issue = one specific problem that requires independent assessment
+      - Example: "List indentation on line 18" = 1 issue, "Verbosity in section X" = 1 separate issue
+
+   b. **PRE-FLIGHT CHECKLIST (complete before launching specialists):**
+      - [ ] I have enumerated all distinct issues reported by validators
+      - [ ] I counted the number of issues: N = _____
+      - [ ] I will launch EXACTLY N specialist tool calls
+      - [ ] Each specialist will receive ONE and ONLY ONE issue to assess
+      - [ ] I will execute all N tool calls in a SINGLE message
+
+   c. **Iterate with specialists until convergence (NEVER bundle multiple issues):**
+
+      **CRITICAL: Minimum 2 specialist calls per issue required for convergence verification**
+
+      For each issue identified by validators:
+
+      i. First specialist call:
+         - Launch specialist with the issue as reported by validator
+         - Specialist assesses: Is this issue real? What corrective action is needed?
+         - Record specialist's decision (CONFIRM or REJECT) and reasoning
+
+      ii. Convergence verification:
+          - Launch SECOND specialist with the SAME issue wording
+          - Record specialist's decision (CONFIRM or REJECT) and reasoning
+          - Check for convergence:
+            - Both CONFIRM same wording -> Issue is REAL, proceed to correction
+            - Both REJECT same wording -> Issue is FALSE POSITIVE, dismiss
+            - Disagreement OR partial confirmation -> Continue to step iii
+
+      iii. Issue refinement (when needed):
+           - Specialists may converge on issue being PARTLY true or TRUE but BADLY WORDED
+           - Refine the issue definition based on specialist feedback, then re-verify
+           - Examples requiring refinement:
+             - Scope narrowing: "Lines 10-50 are verbose" -> "Lines 35-42 are verbose"
+             - Better precision: "Subject line violates guidelines" -> "Subject uses passive voice"
+             - Separating concerns: "Implementation details excessive" -> "Section 3 restates diff"
+             - Partial validation: "Two violations: X and Y" -> "Only violation Y is real, X is false positive"
+             - Reframing: "Missing required element" -> "Element present but in wrong location"
+           - Launch specialist with REFINED issue wording
+           - Repeat convergence check with refined wording
+           - Continue until two successive specialists agree on the same wording
+
+      **Note on call count:** Each issue requires AT LEAST 3 agent calls total (1 validator
+      identifying + 2 specialists for initial convergence check). Issues requiring refinement
+      will need additional specialist calls until convergence is achieved. Continue iterating
+      until two successive specialists agree--do not stop at an arbitrary call count.
+
+   d. **Consolidate ALL confirmed specialist recommendations** into actionable corrections:
+      - Wait for all specialist iterations to reach convergence
+      - Only proceed with corrections where specialists CONFIRMED (converged on REAL or PARTLY REAL)
+      - Dismiss all issues where specialists REJECTED (converged on FALSE POSITIVE)
+      - Use the REFINED issue definition (final converged wording) for corrections
 
 4. **Issue Correction (for ALL validated issues):**
    - **Apply ALL trivial corrections** (formatting, whitespace, simple text changes) directly
