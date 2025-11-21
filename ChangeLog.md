@@ -443,3 +443,7 @@ Added task for implementing iterative validation workflow in /message command wi
 ## 2025-11-16 - Add task to remove trailing blank line validation
 
 Added task to remove redundant trailing blank line validation from commit-message-format-checker agent. This validation duplicates functionality already provided by markdownlint tool, which serves as the single source of truth for markdown formatting rules including trailing blank lines.
+
+## 2025-11-17 - Add task to strengthen minimal agent interpretation guidance
+
+Added task to enhance the existing "Minimal Interpretation" principle in CLAUDE.md's Critical Delegation Principles section. This task will add emphatic guidance that agents have complete instructions and should receive minimal interpretation of user requests, with anti-pattern examples to prevent over-explanation and verbose context that reduces agent autonomy.

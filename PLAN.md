@@ -344,6 +344,16 @@ This plan implements a complete automated development workflow using Claude Code
   - Include pre-response verification protocol and evidence-based agreement requirements
   - Document subjective term handling guidance
 
+- [ ] [Documentation] Strengthen minimal agent interpretation guidance in CLAUDE.md
+  - Enhance existing "Minimal Interpretation" principle in Critical Delegation Principles section
+  - Add emphatic guidance that agents receive complete instructions and need minimal interpretation
+  - Document that explanations should only clarify ambiguity or reformulate for clarity
+  - Include anti-pattern examples: verbose context, prescriptive solutions, over-explanation
+  - Specify that agents should be trusted to determine approach from their own instructions
+  - Context: Prevent delegation overhead that reduces agent autonomy and wastes tokens
+  - Overly specifying instructions to agents is actually INEFFECTIVE - the instructions will override the agent's built-in protocols and reasoning abilities, which were crafted with much more experience and context than whatever instructions you come up with
+  - Some situations may require special instructions that override default behavior or assumptions, or call attention to a particular issue - but these should be the EXCEPTION, not the rule, should be as concise as possible, and should leave interpretation and procedure to the agent rather than prescribing specific solutions or approaches
+
 - [ ] [Implementation] Create architecture-critic agent definition file
   - Context: Required for conditionally-required core agents completion
   - Write YAML frontmatter with required fields
