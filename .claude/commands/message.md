@@ -298,6 +298,42 @@ Execute comprehensive validation with specialist-driven corrections:
       will need additional specialist calls until convergence is achieved. Continue iterating
       until two successive specialists agree--do not stop at an arbitrary call count.
 
+      **External Verification Layer**
+
+      After specialist convergence process completes, verify factual accuracy against external sources:
+
+      iv. **External verification**:
+          - Launch external-verification agent with convergent specialist assessment
+          - Agent reads commit message and staged diff independently
+          - Agent performs external verification using web searches and documentation lookups
+          - Agent verifies all factual claims in the convergent assessment
+          - Agent returns verification status: VERIFIED, DISPUTED, or UNCERTAIN
+
+      v. **Verification outcome handling**:
+         - **If VERIFIED**: Accept convergent specialist assessment, proceed to correction
+         - **If DISPUTED**: Verification found contradicting evidence (e.g., web search proves claim wrong)
+           - Feed verification evidence back to specialist convergence
+           - Restart specialist analysis loop with: original issue + verification evidence
+           - Continue until new convergence reached with verification-informed context
+         - **If UNCERTAIN**: Verification could not confirm or deny claims
+           - Re-run external verification once more (different search queries, alternative sources)
+           - If still UNCERTAIN on second attempt: Accept specialist convergence as-is
+           - Rationale: No contradicting evidence found, specialist judgment stands
+
+      vi. **Verification iteration**:
+          - After each new specialist convergence, re-run external verification
+          - Continue cycle: convergence -> verification -> (if not VERIFIED) -> new convergence
+          - **Maximum 10 total verification cycles** to prevent infinite loops
+          - Each verification cycle provides new external evidence to inform specialist analysis
+
+      **Iterative validation guarantees:**
+      - Every specialist convergence gets external verification against current sources
+      - Every DISPUTED verification triggers new specialist convergence with contradicting evidence
+      - UNCERTAIN verifications get one retry with alternative search strategies
+      - Knowledge cutoff blind spots caught by web searches and documentation lookups
+      - Factual claims verified against external reality, not just model knowledge
+      - Maximum iteration limit prevents infinite loops
+
    d. **Consolidate ALL confirmed specialist recommendations** into actionable corrections:
       - Wait for all specialist iterations to reach convergence
       - Only proceed with corrections where specialists CONFIRMED (converged on REAL or PARTLY REAL)
