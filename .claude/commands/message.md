@@ -234,12 +234,14 @@ Execute comprehensive validation with specialist-driven corrections:
 **VALIDATION CYCLE (repeat until all agents pass):**
 
 1. **Execute all validation agents in parallel:**
-   - **commit-message-accuracy-checker**: Verifies message claims match actual code changes
-   - **commit-message-format-checker**: Validates formatting, line lengths, imperative mood, whitespace
-   - **commit-message-guidelines-checker**: Applies project-specific guidelines and conventions
-   - **commit-message-nit-checker**: Checks consistency with project history, flags prohibited attribution
+   - commit-message-accuracy-checker
+   - commit-message-format-checker
+   - commit-message-guidelines-checker
+   - commit-message-nit-checker
 
    **CRITICAL**: Generate all tool calls in a single message for parallel execution.
+
+   **CRITICAL**: Call each agent with minimal prompt - they have complete instructions and know what to validate.
 
 2. **Cycle Decision Point:**
    - **If ALL validation agents pass**: Continue to Step 7 (save and report)

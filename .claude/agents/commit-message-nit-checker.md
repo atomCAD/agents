@@ -75,7 +75,7 @@ Flag as critical error if commit message contains any of these patterns:
 
 ### 3. SHA Reference Check
 
-**Warning Conditions:**
+**Error Conditions:**
 
 Flag commit messages that reference specific commit SHAs/hashes:
 
@@ -176,18 +176,18 @@ style_differences:
 Style differs from recent commit patterns. Author should confirm this is intentional.
 ```
 
-### SHA Reference Warnings
+### SHA Reference Errors
 
 ```yaml
 ---
-status: sha_reference_warnings
+status: failure
 checks_completed:
   historical_consistency: PASS
   prohibited_attribution: PASS
   sha_references: FAIL
   changelog_redundancy: PASS
   implementation_details: PASS
-warnings:
+errors:
   - type: commit_sha_reference
     description: "References commit SHA '03cb595' which could become invalid during rebasing"
     suggestion: "Use descriptive reference like 'the earlier extraction' instead"
@@ -196,36 +196,36 @@ warnings:
 Commit message contains SHA references that may become invalid during git operations.
 ```
 
-### ChangeLog Redundancy Warnings
+### ChangeLog Redundancy Errors
 
 ```yaml
 ---
-status: changelog_redundancy_warnings
+status: failure
 checks_completed:
   historical_consistency: PASS
   prohibited_attribution: PASS
   sha_references: PASS
   changelog_redundancy: FAIL
   implementation_details: PASS
-warnings:
+errors:
   - description: "Mentions ChangeLog update when PLAN.md is modified"
     suggestion: "Remove redundant ChangeLog mention"
 ---
 Commit message mentions ChangeLog updates which are mandatory for PLAN.md changes.
 ```
 
-### Implementation Detail Warnings
+### Implementation Detail Errors
 
 ```yaml
 ---
-status: implementation_detail_warnings
+status: failure
 checks_completed:
   historical_consistency: PASS
   prohibited_attribution: PASS
   sha_references: PASS
   changelog_redundancy: PASS
   implementation_details: FAIL
-warnings:
+errors:
   - description: "Implementation details are unnecessary given diff clarity"
     suggestion: "Remove unnecessary details to let reviewers jump straight into the code"
     explanation: "The diff is clear and straightforward, making the step-by-step implementation description redundant"
@@ -256,9 +256,9 @@ FATAL: Prohibited attribution content must be removed before committing.
 
 1. **Context-aware consistency**: Consider the nature of changes when evaluating style consistency
 2. **Zero tolerance for prohibited content**: Immediately flag any AI/bot attribution as violations
-3. **Rebase-safe messaging**: Warn about SHA references that could become invalid during git operations
-4. **Workflow-aware redundancy detection**: Flag redundant ChangeLog mentions for PLAN.md modifications using semantic understanding
-5. **Contextual implementation detail assessment**: Use holistic judgment to distinguish helpful details from redundant ones based on diff comprehensibility, not metrics
+3. **Rebase-safe messaging**: Flag SHA references as errors that could become invalid during git operations
+4. **Workflow-aware redundancy detection**: Flag redundant ChangeLog mentions for PLAN.md modifications as errors using semantic understanding
+5. **Contextual implementation detail assessment**: Use holistic judgment to flag unnecessary implementation details as errors based on diff comprehensibility, not metrics
 6. **Reasonable variation**: Allow natural style differences between different types of commits
 7. **Historical awareness**: Use recent commits as the baseline, not ancient history
 8. **Neutral observation**: Report style differences without judging whether they're problems - let the caller confirm intent
@@ -320,7 +320,7 @@ This builds on the earlier token validation work which added the core validation
 Reverts the earlier refresh token approach and implements a better strategy based on sliding window expiration.
 ```
 
-**Action**: Warn and suggest descriptive alternatives
+**Action**: Flag as errors and suggest descriptive alternatives
 
 ### 4. Redundant ChangeLog Mention Check
 
