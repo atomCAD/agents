@@ -211,14 +211,25 @@ Run markdownlint validation iteratively until format is clean:
 1. **Run markdownlint validation:**
    - Run `bash -c "cd /workspace/.git && markdownlint-cli2 COMMIT_EDITMSG --config ../.claude/config/commit-message.markdownlint-cli2.yaml"`
 
-2. **If markdownlint reports issues:**
+2. **Disk write validation check:**
+   - Verify that markdownlint output contains "Linting: 1 file(s)" not "Linting: 0 file(s)"
+   - If "Linting: 0 file(s)" detected, this indicates the COMMIT_EDITMSG file was not successfully written to disk
+   - Recovery procedure:
+     - Check the commit-message-author agent's report for the generated message content
+     - If message content is in the report: Write it to `.git/COMMIT_EDITMSG`
+     - If message content is NOT in the report: Call commit-message-author agent again to regenerate
+   - Retry markdownlint validation to confirm file is now accessible
+   - Maximum 2 retry attempts to prevent infinite loops
+   - Context: Recovers from file write failures automatically instead of failing
+
+3. **If markdownlint reports issues:**
    - Apply automatic fixes for common markdown formatting issues
    - Update `.git/COMMIT_EDITMSG` with corrected content
    - Re-run markdownlint validation to verify fixes
    - Repeat up to 5 times until no issues remain or maximum attempts reached
    - If still failing after 5 attempts, exit with markdownlint error details
 
-3. **If markdownlint passes:**
+4. **If markdownlint passes:**
    - Check subject line length: `awk 'NR==1 && length>72 {print "Subject line too long:",length,"chars"; exit 1}' .git/COMMIT_EDITMSG`
    - If subject line exceeds 72 characters, shorten it and re-run validation
    - Proceed to Step 6 (LLM Validation)
