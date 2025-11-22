@@ -338,7 +338,7 @@ Use natural language understanding to identify semantically redundant mentions:
 
 **What to Flag:**
 
-Messages that state ChangeLog was updated as part of this commit:
+Messages that mention updating the ChangeLog as an action performed:
 
 - "Update PLAN.md and add ChangeLog entry" (explicitly states ChangeLog action)
 - "Complete task XYZ, record in ChangeLog" (mentions recording as action taken)
@@ -476,7 +476,7 @@ When evaluating whether implementation details are necessary, systematically ask
 
 4. **Architecture vs edits**: Does this explain architecture/approach (valuable) or describe edits (redundant)?
    - Architecture/approach: Describes design decisions, technical strategies, or implementation patterns
-   - Edit descriptions: Lists which files were modified or what functions were added
+   - Edit descriptions: Lists which files changed or what functions appear
    - Example: "Uses probabilistic LRU tracking to avoid overhead" = architecture (explains design approach)
    - Example: "Updated cache.js and added lru.js" = edit description (lists file changes)
    - Verdict: Keep architecture, flag edit descriptions
