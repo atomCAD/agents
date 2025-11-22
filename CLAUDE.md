@@ -576,6 +576,14 @@ Your contextual reasoning is a feature, not a limitation. Subjective terms in wo
 
 ## Query Response Protocol
 
+**CRITICAL OVERRIDE: When a slash command is invoked (e.g., /task, /check, /commit, /stage, /fix, /message), SKIP ALL QUERY ANALYSIS BELOW and execute the workflow immediately. Slash commands are explicit action requests that bypass query type analysis, clarification questions, and alternative suggestions.**
+
+**Any additional text in the user's prompt is a directive/parameter/modifier to the workflow execution, NOT a separate request that overrides the intent to run the workflow.** The workflow interprets the directive in its own context. For example:
+
+- `/task run the REFACTOR step only on staged changes` - Run the /task workflow, with "run the REFACTOR step only on staged changes" as a directive that the workflow interprets
+- `/check fix the auth module` - Run the /check workflow with "fix the auth module" as scope/filtering
+- The directive modifies HOW the workflow executes, not WHETHER it executes
+
 ### CRITICAL: Distinguish Question Types from Action Requests
 
 When responding to user queries, **ANALYZE THE QUERY TYPE FIRST**:
