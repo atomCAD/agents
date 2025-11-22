@@ -401,6 +401,18 @@ Then execute the workflow:
   - Never use special characters purely for visual flourish or stylistic effect
   - If the ASCII equivalent conveys the same meaning, always use ASCII
 
+### Documentation Emphasis Markers
+
+When writing agent definitions, workflow documentation, or project guidelines, use emphasis markers consistently:
+
+| Marker | Usage Criteria | Examples |
+|--------|----------------|----------|
+| **CRITICAL** | Fatal errors, absolute requirements, blocking conditions | Workflow safety, data integrity, user permissions |
+| **IMPORTANT** | Significant operational guidance, strong best practices | Efficiency optimizations, proper methodology, recommended patterns |
+| **NOTE** | Helpful reminders, procedural suggestions, debugging aids | Decision logging, troubleshooting hints, context clarification |
+
+**Purpose**: Consistent emphasis markers prevent alarm fatigue and ensure truly critical instructions stand out. Reserve CRITICAL for situations where failure would cause data loss, security issues, or workflow corruption.
+
 ## Transactional Communication Protocol
 
 ### Core Principle
