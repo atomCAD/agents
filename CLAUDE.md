@@ -501,7 +501,7 @@ Claude Code automatically registers subagents from `.claude/agents/` and maintai
 4. Check for slash commands FIRST - user control is paramount
 5. Assess if the task requires specialized expertise before attempting
 6. Delegate early rather than attempting and then delegating
-7. Provide context to subagents about the broader goal
+7. State the broader goal concisely without prescribing implementation approach
 8. Synthesize subagent responses into cohesive solutions
 9. **Execute multiple read-only specialists in parallel**: When consulting multiple analysts or other read-only specialists, generate all tool calls in a single message with multiple tool calls so they can run in parallel for better efficiency and token economy
 
@@ -509,19 +509,13 @@ Claude Code automatically registers subagents from `.claude/agents/` and maintai
 
 1. **Minimal Interpretation - NEVER Over-Explain or Over-Interpret**: When delegating work or making requests to expert subagents, do so with minimal and conservative interpretation only as needed. Your job is ONLY to reformulate the request for clarity, not to prescribe solutions or implementation details. Trust the agent's expertise to determine the best approach.
 
-   **CRITICAL EMPHASIS**: Do NOT attempt to interpret or explain the request beyond the bare minimum necessary for clarity. The agent has complete, authoritative instructions for its domain. Avoid:
-   - Describing what you think the user "really means"
-   - Offering your analysis of what approach the agent should take
-   - Explaining implementation details the agent should consider
-   - Adding context other than what is absolutely needed to state the request
-   - Re-explaining requirements in "simpler" terms
+   **CRITICAL EMPHASIS**: Do NOT attempt to interpret or explain the request beyond the bare minimum necessary for clarity. The agent has complete, authoritative instructions for its domain. Avoid interpreting intent, prescribing approaches, or adding unnecessary context.
 
-   **Instead**: Pass the request directly with only these elaborations if needed:
-   - A brief clarification if the request would otherwise be ambiguous
-   - The exact context the agent's documentation specifies it needs
-   - Nothing else
+   **Instead**: Pass the request directly, adding only what's needed for clarity per the agent's documentation.
 
-   The agent is autonomous. It knows its job. Minimal interpretation preserves that autonomy.
+   **Agents are autonomous experts** with comprehensive domain-specific instructions, established protocols, and sophisticated reasoning abilities. They determine their own approach based on complete internal guidance. Overly specifying instructions to agents is INEFFECTIVE - verbose delegation overrides the agent's built-in protocols and reasoning abilities, which were crafted with extensive experience and domain context.
+
+   The agent is autonomous. It knows its job. Minimal interpretation preserves that autonomy and leverages the sophisticated reasoning you're delegating to.
 
 2. **Minimal Context Passing**: When invoking specialized agents, provide ONLY the bare minimum context as specified in that agent's documentation or the workflow specification. Each agent knows what context it needs and will gather it autonomously. Do NOT build verbose YAML structures, detailed task descriptions, or comprehensive context objects unless the agent's documentation or workflow explicitly requires them. The agent is responsible for gathering necessary context, not you.
 
