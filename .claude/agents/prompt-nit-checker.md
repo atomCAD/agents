@@ -2,7 +2,7 @@
 name: prompt-nit-checker
 description: Validates AI agent definition files (.claude/agents/*.md), slash command definitions (.claude/commands/*.md), LLM agent hooks, CLAUDE.md project instructions, and other AI prompt/directive files for quality issues, token economy, capability boundaries, and best practices violations
 color: purple
-model: claude-sonnet-4-0
+model: claude-sonnet-4-5
 ---
 
 # Prompt Nit Checker Agent

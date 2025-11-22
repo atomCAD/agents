@@ -122,7 +122,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Add "Interpreting Bash tool results" section with decision criteria
 
 - [x] Create next-task-selector agent definition
-  - Write YAML frontmatter with name: "next-task-selector", description: "Analyzes PLAN.md to select the optimal next task", color: "blue", model: "claude-sonnet-4-0"
+  - Write YAML frontmatter with name: "next-task-selector", description: "Analyzes PLAN.md to select the optimal next task", color: "blue", model: "claude-haiku-4-5"
   - Define agent purpose: Analyze PLAN.md task list and select the next task to work on
   - Specify input requirements: PLAN.md contents, optional user directive
   - Define selection criteria: tasks not yet completed, no incomplete dependencies, consider criticality markers
@@ -132,7 +132,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Save to /workspace/.claude/agents/next-task-selector.md
 
 - [x] Create /next slash command workflow
-  - Write YAML frontmatter with name: "next", description: "Selects the next task to work on from PLAN.md", color: "green", model: "claude-sonnet-4-0"
+  - Write YAML frontmatter with name: "next", description: "Selects the next task to work on from PLAN.md", color: "green", model: "claude-haiku-4-5"
   - Define workflow purpose: Provide users with the next task to work on
   - Specify procedure: check for PLAN.md existence, read PLAN.md, call next-task-selector agent
   - Define error handling: exit with error if no PLAN.md exists
@@ -417,7 +417,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Review: Evaluate if all agent definitions are needed immediately or can be phased
 
 - [ ] [Implementation] Create component-lifecycle-analyst agent definition file
-  - Add YAML frontmatter with name, description (component lifecycle and memory leak analysis), color, model (claude-sonnet-4-0), and tools (if needed)
+  - Add YAML frontmatter with name, description (component lifecycle and memory leak analysis), color, model (claude-sonnet-4-5), and tools (if needed)
   - Write comprehensive agent instructions covering component mounting/unmounting patterns
   - Include memory leak detection guidance (event listener cleanup, subscription cleanup, DOM reference cleanup)
   - Add component lifecycle testing methodology (useEffect cleanup, componentWillUnmount verification)
@@ -429,7 +429,7 @@ This plan implements a complete automated development workflow using Claude Code
 
 - [ ] [Implementation] Create concurrency-analyst agent definition file
   - Context: Required for specialized domain experts completion
-  - Create .claude/agents/concurrency-analyst.md with YAML frontmatter (name, description, color, model, tools)
+  - Create .claude/agents/concurrency-analyst.md with YAML frontmatter (name, description, color, model: claude-sonnet-4-5, tools)
   - Write agent instruction section covering race conditions, deadlocks, and thread safety analysis
   - Include core philosophy, primary responsibilities, testing methodology, and tool usage sections
   - Specify analysis patterns for common concurrency issues (data races, deadlocks, lock ordering)
@@ -438,7 +438,7 @@ This plan implements a complete automated development workflow using Claude Code
 
 - [ ] [Implementation] Create config-auditor agent definition file
   - Context: Required for specialized domain experts completion
-  - Write YAML frontmatter with name: "config-auditor", description, color, model (claude-sonnet-4-0), and tools fields
+  - Write YAML frontmatter with name: "config-auditor", description, color, model (claude-haiku-4-5), and tools fields
   - Write agent instruction section covering configuration security review responsibilities
   - Add environment variable security analysis methodology (secrets detection, credential patterns, exposure risks)
   - Add configuration file validation guidance (permissions, sensitive data, insecure defaults)
@@ -448,14 +448,14 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file follows existing agent structure pattern from /workspace/.claude/agents/accessibility-auditor.md
 
 - [ ] Create container-orchestrator agent definition file
-  - Create `/workspace/.claude/agents/container-orchestrator.md` with YAML frontmatter (name, description, color, model, tools)
+  - Create `/workspace/.claude/agents/container-orchestrator.md` with YAML frontmatter (name, description, color, model: claude-sonnet-4-5, tools)
   - Write comprehensive agent instruction section covering Docker and Kubernetes configuration review responsibilities
   - Include security best practices, resource optimization, networking, and deployment patterns
   - Add validation checklist for container configurations
   - Verify file follows existing agent structure pattern from accessibility-auditor.md
 
 - [ ] Create cors-policy-reviewer agent definition file
-  - Add YAML frontmatter with name, description, color (purple), model (claude-sonnet-4-0), and tools fields
+  - Add YAML frontmatter with name, description, color (purple), model (claude-haiku-4-5), and tools fields
   - Write agent instruction section covering CORS configuration review fundamentals
   - Document security validation requirements for origin whitelists and credential handling
   - Specify code analysis patterns for detecting CORS misconfigurations
@@ -464,7 +464,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file structure matches existing agent definitions (accessibility-auditor.md, commit-message-author.md)
 
 - [ ] Create crypto-specialist agent definition file
-  - Write YAML frontmatter with name: crypto-specialist, description (cryptographic implementations and key management review), color, model: claude-sonnet-4-0, and tools
+  - Write YAML frontmatter with name: crypto-specialist, description (cryptographic implementations and key management review), color, model: claude-sonnet-4-5, and tools
   - Write Core Philosophy section explaining approach to cryptographic security and implementation
   - Write Primary Responsibilities section covering cryptographic code review, key management assessment, algorithm selection guidance, and vulnerability detection
   - Write Implementation Guidelines section with secure coding patterns, common cryptographic pitfalls, and best practices for encryption/hashing/key storage
@@ -475,7 +475,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Save file to /workspace/.claude/agents/crypto-specialist.md
 
 - [ ] Create css-architecture-reviewer agent definition file
-  - Create /workspace/.claude/agents/css-architecture-reviewer.md with YAML frontmatter (name: css-architecture-reviewer, description covering CSS organization and specificity expertise, color: purple, model: claude-sonnet-4-0, tools: Read/Grep/Glob)
+  - Create /workspace/.claude/agents/css-architecture-reviewer.md with YAML frontmatter (name: css-architecture-reviewer, description covering CSS organization and specificity expertise, color: purple, model: claude-sonnet-4-5, tools: Read/Grep/Glob)
   - Write agent instruction section covering CSS architecture review (organization patterns, specificity issues, cascade analysis, naming conventions like BEM/SMACSS)
   - Add methodology section for CSS reviews and code analysis patterns for common issues (overly-specific selectors, !important overuse, deep nesting)
   - Add best practices section covering CSS architecture patterns and specificity management
@@ -483,7 +483,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file follows structure of existing agent files
 
 - [ ] Create database-optimizer agent definition file
-  - Create file at `/workspace/.claude/agents/database-optimizer.md` with YAML frontmatter (name: database-optimizer, description, color, model: claude-sonnet-4-0, tools field)
+  - Create file at `/workspace/.claude/agents/database-optimizer.md` with YAML frontmatter (name: database-optimizer, description, color, model: claude-sonnet-4-5, tools field)
   - Write agent instruction section covering database performance analysis responsibilities
   - Include query performance optimization guidance (execution plans, index usage, join strategies)
   - Document N+1 query problem detection and resolution patterns
@@ -494,12 +494,12 @@ This plan implements a complete automated development workflow using Claude Code
 
 - [ ] Create dead-code-detective agent definition file
   - Create file at /workspace/.claude/agents/dead-code-detective.md
-  - Add YAML frontmatter with name: "dead-code-detective", description, color, model: "claude-sonnet-4-0", and tools fields
+  - Add YAML frontmatter with name: "dead-code-detective", description, color, model: "claude-haiku-4-5", and tools fields
   - Write agent instructions covering purpose (identifying unused code and dead functions), analysis methodology, reporting format, and collaboration guidelines
   - Verify file follows existing agent file structure (frontmatter + instruction sections)
 
 - [ ] Create dependency-auditor agent definition file
-  - Write YAML frontmatter with name "dependency-auditor", description, color "purple", model "claude-sonnet-4-0", and tools array
+  - Write YAML frontmatter with name "dependency-auditor", description, color "purple", model "claude-sonnet-4-5", and tools array
   - Write Core Philosophy section explaining dependency management principles and security importance
   - Write Primary Responsibilities section covering package file reviews, version management, import statement analysis, and security vulnerability detection
   - Write Detection Triggers section specifying when this agent must be included (package file changes, import statement additions/removals, new library introductions)
@@ -510,7 +510,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file follows established agent file structure and formatting conventions from existing agents
 
 - [ ] Create documentation-reviewer agent definition file
-  - Create /workspace/.claude/agents/documentation-reviewer.md with YAML frontmatter (name: documentation-reviewer, description for documentation quality and API documentation validation, color: purple, model: claude-sonnet-4-0, tools: Read/Grep/Glob)
+  - Create /workspace/.claude/agents/documentation-reviewer.md with YAML frontmatter (name: documentation-reviewer, description for documentation quality and API documentation validation, color: purple, model: claude-haiku-4-5, tools: Read/Grep/Glob)
   - Write agent instructions covering documentation quality assessment, API documentation validation, and completeness checks
   - Include detection patterns for common documentation issues (missing docstrings, outdated docs, incomplete parameter documentation, broken examples)
   - Define testing methodology for cross-referencing documentation with code and validating examples
@@ -519,7 +519,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file follows structure pattern from accessibility-auditor.md
 
 - [ ] Create git-hygiene-inspector agent definition file
-  - Write YAML frontmatter with name: git-hygiene-inspector, description (reviews commit message quality, commit granularity, and branch strategies), color (select appropriate color), model: claude-sonnet-4-0, and tools: Read, Glob, Grep, Bash
+  - Write YAML frontmatter with name: git-hygiene-inspector, description (reviews commit message quality, commit granularity, and branch strategies), color (select appropriate color), model: claude-haiku-4-5, and tools: Read, Glob, Grep, Bash
   - Define agent purpose and core responsibilities for reviewing git hygiene (commit message quality, commit granularity, branch strategies)
   - Specify analysis protocol for evaluating commit messages against project guidelines
   - Include evaluation criteria for commit granularity (atomic commits, single responsibility, appropriate scope)
@@ -529,7 +529,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Validate agent file follows established patterns from existing agents (frontmatter structure, clear responsibilities, specific procedures)
 
 - [ ] Create go-engineer agent definition file at .claude/agents/go-engineer.md
-  - Create YAML frontmatter with name "go-engineer", description for Go development expertise, color "cyan", model "claude-sonnet-4-0", and tools list
+  - Create YAML frontmatter with name "go-engineer", description for Go development expertise, color "cyan", model "claude-sonnet-4-5", and tools list
   - Write comprehensive agent instructions covering Go philosophy (simplicity, explicit error handling, interface-based design)
   - Include sections for error handling patterns, concurrency primitives (goroutines, channels, sync package), testing strategies, and common anti-patterns
   - Add Go-specific quality checklist covering error handling, resource cleanup, race conditions, and idiomatic patterns
@@ -537,7 +537,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify agent can serve as fallback for go-nit-checker by covering anti-pattern detection
 
 - [ ] Create go-nit-checker agent definition file
-  - Write YAML frontmatter with name (go-nit-checker), description (Expert Go code reviewer specializing in identifying anti-patterns, error handling issues, and unnecessary type conversions. Focuses on Go-specific code smells, idiomatic violations, and performance concerns.), color (rust), model (claude-sonnet-4-0), and tools (Read, Grep, Glob)
+  - Write YAML frontmatter with name (go-nit-checker), description (Expert Go code reviewer specializing in identifying anti-patterns, error handling issues, and unnecessary type conversions. Focuses on Go-specific code smells, idiomatic violations, and performance concerns.), color (rust), model (claude-haiku-4-5), and tools (Read, Grep, Glob)
   - Write agent instruction section covering core responsibilities for Go-specific nit-checking
   - Define anti-pattern detection capabilities (unnecessary type conversions, improper error handling, goroutine leaks, defer misuse)
   - Document common Go code smells and idiomatic violations to check
@@ -546,14 +546,14 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file structure matches existing agent files (rust-engineer.md, accessibility-auditor.md)
 
 - [ ] Create interface-designer agent definition file at .claude/agents/interface-designer.md
-  - Write YAML frontmatter with name: "interface-designer", description matching analyst-roster.md purpose (API consistency, versioning, breaking changes), color: "purple", model: "claude-sonnet-4-0", and tools: "Read, Glob, Grep, Bash"
+  - Write YAML frontmatter with name: "interface-designer", description matching analyst-roster.md purpose (API consistency, versioning, breaking changes), color: "purple", model: "claude-sonnet-4-5", and tools: "Read, Glob, Grep, Bash"
   - Write comprehensive agent instructions covering API design consistency philosophy and primary responsibilities
   - Include implementation best practices for REST/GraphQL conventions and API documentation requirements
   - Verify file follows existing agent structure patterns from accessibility-auditor.md and commit-message-author.md
   - Validate YAML frontmatter parses correctly and all required fields are present
 
 - [ ] Create java-nit-checker agent definition file at .claude/agents/java-nit-checker.md
-  - Write YAML frontmatter with name: java-nit-checker, description covering Java anti-patterns and null handling, color: rust, model: claude-sonnet-4-0
+  - Write YAML frontmatter with name: java-nit-checker, description covering Java anti-patterns and null handling, color: rust, model: claude-haiku-4-5
   - Write agent instruction section defining role as Java code reviewer specializing in anti-patterns and null handling issues
   - Document common Java anti-patterns to detect (mutable defaults, null handling issues, stream misuse, exception handling problems)
   - Include code examples showing bad patterns and correct alternatives
@@ -562,7 +562,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Ensure all content uses ASCII characters (no emojis, Unicode arrows, or special typography)
 
 - [ ] Create javascript-nit-checker agent definition file
-  - Add YAML frontmatter with name: "javascript-nit-checker", description: "Identifies JavaScript quirks and anti-patterns", model: "claude-sonnet-4-0", color: "yellow", tools: none
+  - Add YAML frontmatter with name: "javascript-nit-checker", description: "Identifies JavaScript quirks and anti-patterns", model: "claude-haiku-4-5", color: "yellow", tools: none
   - Document core mission to validate JavaScript code for quirks and anti-patterns
   - Define validation tasks covering equality operators, variable declarations, mutations, Promise handling, and common JavaScript pitfalls
   - Specify analysis framework for processing JavaScript files and staged changes
@@ -571,7 +571,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Add examples demonstrating common JavaScript anti-patterns and proper flagging
 
 - [ ] Create logging-auditor agent definition file
-  - Write YAML frontmatter with name "logging-auditor", description, color "purple", model "claude-sonnet-4-0", and empty tools array
+  - Write YAML frontmatter with name "logging-auditor", description, color "purple", model "claude-haiku-4-5", and empty tools array
   - Write agent purpose section explaining responsibility for reviewing log levels and sensitive data exposure in logs
   - Write core philosophy section on balancing observability with security and privacy
   - Write primary responsibilities section covering log level appropriateness review, sensitive data detection (credentials, PII, tokens), and compliance guidance
@@ -581,7 +581,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file structure matches existing agent patterns from accessibility-auditor.md and commit-message-author.md
 
 - [ ] Create markdown-linter agent definition file
-  - Write YAML frontmatter with name, description, color, model, and tools fields
+  - Write YAML frontmatter with name, description, color, model (claude-haiku-4-5), and tools fields
   - Add comprehensive agent instruction section covering markdown syntax validation
   - Include markdown formatting rules (headings, lists, links, code blocks)
   - Define linting standards for document structure and consistency
@@ -590,7 +590,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file follows existing agent template structure from .claude/agents/ directory
 
 - [ ] Create memory-inspector agent definition file
-  - Write YAML frontmatter with name, description, color (gray), model (claude-sonnet-4-0), and tools fields
+  - Write YAML frontmatter with name, description, color (gray), model (claude-sonnet-4-5), and tools fields
   - Write Core Philosophy section explaining memory analysis principles and approach
   - Write Primary Responsibilities section covering memory usage analysis, leak detection, allocation tracking, and low-level memory operations
   - Write Memory Analysis Methodology section with specific techniques for profiling, identifying leaks, and analyzing allocations
@@ -601,7 +601,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file saved at /workspace/.claude/agents/memory-inspector.md
 
 - [ ] Create migration-specialist agent definition file at /workspace/.claude/agents/migration-specialist.md
-  - Write YAML frontmatter with name, description, color, model, and tools fields
+  - Write YAML frontmatter with name, description, color, model: claude-sonnet-4-5, and tools fields
   - Implement agent instructions for data migration and schema evolution review
   - Include methodology for analyzing migration safety, data integrity, and rollback procedures
   - Document patterns for detecting migration anti-patterns (data loss risks, breaking changes, missing rollback strategies)
@@ -609,7 +609,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file structure follows established agent definition patterns from existing agents
 
 - [ ] Create mobile-compatibility-tester agent definition file
-  - Write YAML frontmatter with name: "mobile-compatibility-tester", description for responsive design and touch target review, color, model (claude-sonnet-4-0), and tools fields
+  - Write YAML frontmatter with name: "mobile-compatibility-tester", description for responsive design and touch target review, color, model (claude-haiku-4-5), and tools fields
   - Write agent instruction section covering core philosophy for mobile-first design
   - Define primary responsibilities: responsive layout assessment, touch target validation, mobile interaction pattern review
   - Specify mobile testing methodology including viewport testing, touch interaction validation, mobile-specific accessibility
@@ -619,7 +619,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file structure matches existing agent definition format in /workspace/.claude/agents/
 
 - [ ] Create module-boundary-guard agent definition file
-  - Write YAML frontmatter with name "module-boundary-guard", description "Reviews module boundaries and encapsulation", color, model "claude-sonnet-4-0", and tools fields
+  - Write YAML frontmatter with name "module-boundary-guard", description "Reviews module boundaries and encapsulation", color, model "claude-sonnet-4-5", and tools fields
   - Write agent instructions covering core philosophy of module boundary enforcement
   - Define primary responsibilities for analyzing module coupling, dependency violations, and encapsulation breaches
   - Document review methodology including layer boundary checks, import pattern analysis, and circular dependency detection
@@ -630,7 +630,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file structure matches existing agent file patterns (YAML frontmatter followed by markdown content)
 
 - [ ] Create naming-consistency-checker agent definition file
-  - Add YAML frontmatter with name, description, color (use "purple"), model (claude-sonnet-4-0), and tools fields
+  - Add YAML frontmatter with name, description, color (use "purple"), model (claude-haiku-4-5), and tools fields
   - Write agent instruction section covering naming convention review responsibilities
   - Define scope: variable names, function names, class names, file names, and module names across codebase
   - Specify review methodology: pattern detection, consistency analysis, convention adherence checks
@@ -641,14 +641,14 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file structure matches existing agent files (frontmatter followed by instructions)
 
 - [ ] Create numerical-methods-analyst agent definition file
-  - Create `/workspace/.claude/agents/numerical-methods-analyst.md` with YAML frontmatter (name: numerical-methods-analyst, description covering mathematical computation and numerical analysis, color: blue, model: claude-sonnet-4-0, tools: Read/Glob/Grep/Bash)
+  - Create `/workspace/.claude/agents/numerical-methods-analyst.md` with YAML frontmatter (name: numerical-methods-analyst, description covering mathematical computation and numerical analysis, color: blue, model: claude-sonnet-4-5, tools: Read/Glob/Grep/Bash)
   - Add agent instruction section covering mathematical computation review responsibilities (numerical stability analysis, floating-point arithmetic best practices, algorithm correctness verification, computational complexity assessment, precision and accuracy validation)
   - Document when to engage this agent (mathematical operations, scientific computing, numerical algorithms)
   - Verify file follows existing agent file structure (frontmatter, heading, responsibilities sections) matching accessibility-auditor.md pattern
   - Verify file uses ASCII-only characters except where required for proper mathematical notation
 
 - [ ] Create performance-analyst agent definition file
-  - Create `/workspace/.claude/agents/performance-analyst.md` with YAML frontmatter (name: performance-analyst, description for performance optimization and bottleneck analysis, color: yellow, model: claude-sonnet-4-0, tools: Read/Glob/Grep/Bash)
+  - Create `/workspace/.claude/agents/performance-analyst.md` with YAML frontmatter (name: performance-analyst, description for performance optimization and bottleneck analysis, color: yellow, model: claude-sonnet-4-5, tools: Read/Glob/Grep/Bash)
   - Write agent instructions covering performance profiling methodology, bottleneck identification, and optimization strategies (algorithmic, memory, I/O, concurrency)
   - Include common performance anti-patterns detection and analysis tools usage patterns
   - Add performance validation checklist and code analysis patterns
@@ -656,7 +656,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file is valid Markdown with proper YAML frontmatter syntax
 
 - [ ] Create python-nit-checker agent definition file
-  - Add YAML frontmatter with name: python-nit-checker, description, color: orange, model: claude-sonnet-4-0, tools: []
+  - Add YAML frontmatter with name: python-nit-checker, description, color: orange, model: claude-haiku-4-5, tools: []
   - Write agent instructions covering identification of Python anti-patterns and mutable defaults
   - Include specific patterns to detect (mutable default arguments, late binding closures, bare except clauses, etc.)
   - Provide code examples showing anti-patterns and their corrections
@@ -664,7 +664,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Specify validation approach using static analysis patterns
 
 - [ ] Create query-security-reviewer agent definition file
-  - Add YAML frontmatter with name "query-security-reviewer", description, color "red", model "claude-sonnet-4-0", and empty tools array
+  - Add YAML frontmatter with name "query-security-reviewer", description, color "red", model "claude-sonnet-4-5", and empty tools array
   - Write agent purpose section explaining SQL injection risk review and parameterization validation
   - Add responsibility section covering query analysis, parameterized query verification, SQL injection pattern detection, and security recommendations
   - Define methodology section with SQL injection attack vector analysis, query construction review, and input sanitization validation
@@ -675,7 +675,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file created at /workspace/.claude/agents/query-security-reviewer.md with complete content and proper formatting
 
 - [ ] Create queue-processor-analyst agent definition file
-  - Add YAML frontmatter with name "queue-processor-analyst", description "Reviews message queue patterns", color, model "claude-sonnet-4-0", and tools array
+  - Add YAML frontmatter with name "queue-processor-analyst", description "Reviews message queue patterns", color, model "claude-sonnet-4-5", and tools array
   - Write agent instructions defining role as message queue pattern analyst
   - Document core responsibilities for reviewing queue implementations
   - Specify analysis focus areas: message ordering, delivery semantics, error handling, backpressure, dead letter queues
@@ -686,7 +686,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file follows agent definition format from existing examples
 
 - [ ] Create rate-limit-engineer agent definition file
-  - Write YAML frontmatter with name: rate-limit-engineer, description: "Expert in rate limiting and throttling strategies for APIs and services. Reviews rate limit implementations, quota management, and request throttling patterns.", color: orange, model: claude-sonnet-4-0
+  - Write YAML frontmatter with name: rate-limit-engineer, description: "Expert in rate limiting and throttling strategies for APIs and services. Reviews rate limit implementations, quota management, and request throttling patterns.", color: orange, model: claude-sonnet-4-5
   - Create comprehensive agent instruction section covering rate limiting responsibilities
   - Include sections on rate limiting strategies (token bucket, leaky bucket, sliding window), implementation review patterns, quota management, and common anti-patterns
   - Add code review checklist for identifying rate limiting issues in API endpoints
@@ -694,14 +694,14 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file structure matches existing agent definition format (rust-engineer.md, accessibility-auditor.md)
 
 - [ ] Create regex-validator agent definition file at .claude/agents/regex-validator.md
-  - Write YAML frontmatter with name, description, color, model
+  - Write YAML frontmatter with name, description, color, model: claude-sonnet-4-5
   - Add comprehensive agent instruction section covering regex patterns, performance analysis, security issues, and best practices
   - Include examples of regex validation and optimization
   - Verify file follows structure from existing agent templates (frontmatter + instructions)
   - Confirm file is properly formatted markdown
 
 - [ ] Create rust-nit-checker agent specification file
-  - Add YAML frontmatter with name, description ("Identifies Rust anti-patterns, unnecessary clones, and error handling issues"), color (rust), model (claude-sonnet-4-0), and no tools specification
+  - Add YAML frontmatter with name, description ("Identifies Rust anti-patterns, unnecessary clones, and error handling issues"), color (rust), model (claude-haiku-4-5), and no tools specification
   - Write agent instruction section defining role as Rust code quality specialist focused on nit-level issues
   - Document detection patterns for Rust anti-patterns (unnecessary clones, `Box<dyn Error>`, improper error handling, panic in production code, missing SAFETY comments on unsafe blocks)
   - Specify output format with severity levels and actionable suggestions
@@ -709,7 +709,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Verify file follows established agent file structure from rust-engineer.md and commit-message-nit-checker.md
 
 - [ ] Create schema-evolutionist agent definition file
-  - Write YAML frontmatter with name: "schema-evolutionist", description: "Reviews database schema compatibility", color: "blue", model: "claude-sonnet-4-0", tools: ["Read", "Glob", "Grep", "Bash"]
+  - Write YAML frontmatter with name: "schema-evolutionist", description: "Reviews database schema compatibility", color: "blue", model: "claude-sonnet-4-5", tools: ["Read", "Glob", "Grep", "Bash"]
   - Write comprehensive agent instruction section covering database schema analysis responsibilities (compatibility checks, migration validation, breaking change detection)
   - Include examples of schema compatibility patterns and anti-patterns
   - Add checklist for schema review (version compatibility, data type changes, constraint modifications, index changes)
@@ -725,14 +725,14 @@ This plan implements a complete automated development workflow using Claude Code
   - Save to /workspace/.claude/agents/security-auditor.md
 
 - [ ] Create session-manager agent definition file at .claude/agents/session-manager.md
-  - Write YAML frontmatter with name: "session-manager", description: "Expert in reviewing session storage and timeout handling for backend systems, ensuring secure and efficient session lifecycle management", color: "purple", model: "claude-sonnet-4-0"
+  - Write YAML frontmatter with name: "session-manager", description: "Expert in reviewing session storage and timeout handling for backend systems, ensuring secure and efficient session lifecycle management", color: "purple", model: "claude-sonnet-4-5"
   - Write agent instruction section covering core responsibilities (session storage review, timeout validation, session security), methodology (analyzing session configurations, token management, timeout policies), common session anti-patterns to detect, and best practices for session lifecycle management
   - Include code analysis patterns for detecting session-related issues (storage configuration, timeout settings, session fixation vulnerabilities)
   - Verify file structure matches existing agents (accessibility-auditor.md format)
   - Validate YAML frontmatter syntax is correct
 
 - [ ] Create state-management-auditor agent definition file
-  - Write YAML frontmatter with name "state-management-auditor", description for frontend state mutations and store patterns, color "blue", model "claude-sonnet-4-0", and tools array with Read, Grep, Glob, Bash
+  - Write YAML frontmatter with name "state-management-auditor", description for frontend state mutations and store patterns, color "blue", model "claude-sonnet-4-5", and tools array with Read, Grep, Glob, Bash
   - Write agent instruction section covering core philosophy on state management best practices
   - Document primary responsibilities including state mutation analysis, store pattern review, and state consistency validation
   - Define testing methodology for state flow analysis, immutability verification, and side effect detection
@@ -753,7 +753,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Save to /workspace/.claude/agents/style-conformist.md
 
 - [ ] [Implementation] Create test-inspector agent definition file
-  - Write YAML frontmatter with test inspector role and coverage analysis focus
+  - Write YAML frontmatter with test inspector role, coverage analysis focus, and model: claude-sonnet-4-5
   - Write comprehensive agent instruction section covering test coverage and quality assessment
   - Include guidance on when test-inspector should be invoked
   - Define core responsibilities: coverage assessment and test pattern validation
@@ -763,7 +763,7 @@ This plan implements a complete automated development workflow using Claude Code
   - Save to /workspace/.claude/agents/test-inspector.md
 
 - [ ] Create type-safety-inspector agent definition file at .claude/agents/type-safety-inspector.md
-  - Write YAML frontmatter with name: "type-safety-inspector", description explaining type safety review focus, color: "blue", model: "claude-sonnet-4-0", tools: "Read, Glob, Grep"
+  - Write YAML frontmatter with name: "type-safety-inspector", description explaining type safety review focus, color: "blue", model: "claude-sonnet-4-5", tools: "Read, Glob, Grep"
   - Write Core Philosophy section explaining the importance of type safety in strongly-typed languages
   - Write Primary Responsibilities section covering type checking, generic constraints, null safety, type inference issues, and type conversions
   - Write Core Implementation Principles section with patterns for identifying type safety issues across Rust, TypeScript, Haskell, Go, Java, and other strongly-typed languages

@@ -2,7 +2,7 @@
 name: task-inference
 description: "Bridges scope analysis (WHERE) and quality analysis (WHAT) by determining implementation objectives from file changes. Infers the task being performed from file modifications to enable task-objective-based scope decisions."
 color: purple
-model: claude-sonnet-4-0
+model: claude-sonnet-4-5
 ---
 
 # Task Inference Agent

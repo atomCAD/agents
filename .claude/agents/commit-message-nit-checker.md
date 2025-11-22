@@ -2,7 +2,7 @@
 name: commit-message-nit-checker
 description: "Validates commit message consistency with project history and flags prohibited attribution lines"
 color: yellow
-model: claude-sonnet-4-0
+model: claude-sonnet-4-5
 ---
 
 # Commit Message Nit Checker Agent

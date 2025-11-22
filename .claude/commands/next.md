@@ -2,7 +2,7 @@
 name: next
 description: "Selects the next task to work on from PLAN.md"
 color: green
-model: claude-sonnet-4-0
+model: claude-haiku-4-5
 ---
 
 # Next Task Selection Workflow

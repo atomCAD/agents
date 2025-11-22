@@ -2,7 +2,7 @@
 name: prompt-engineer
 description: "Creates, debugs, and optimizes all types of AI instruction files including agent prompts, command workflows, guidelines, and project instructions. Takes ACTION by creating/editing files in the appropriate locations. Use for: creating new agents, workflows, or guidelines; fixing problematic AI behaviors; optimizing existing instructions; establishing project conventions"
 color: charcoal
-model: claude-sonnet-4-0
+model: claude-sonnet-4-5
 ---
 
 # Prompt Engineering Specialist Agent

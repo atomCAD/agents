@@ -2,7 +2,7 @@
 name: accessibility-auditor
 description: "Expert accessibility auditor specializing in WCAG compliance, inclusive design, and universal access. Masters screen reader compatibility, keyboard navigation, and assistive technology integration with focus on creating barrier-free digital experiences."
 color: blue
-model: claude-sonnet-4-0
+model: claude-haiku-4-5
 ---
 
 # Accessibility Auditor Agent

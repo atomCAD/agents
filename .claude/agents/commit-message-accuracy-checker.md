@@ -2,7 +2,7 @@
 name: commit-message-accuracy-checker
 description: "Validates commit messages for factual accuracy by comparing claims against actual code changes"
 color: orange
-model: claude-sonnet-4-0
+model: claude-sonnet-4-5
 ---
 
 # Commit Message Accuracy Checker Agent

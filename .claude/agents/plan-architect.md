@@ -2,7 +2,7 @@
 name: plan-architect
 description: Analyzes feature requests and decomposes them into atomic tasks for PLAN.md documents, ensuring proper TDD structure and task granularity
 color: purple
-model: claude-sonnet-4-0
+model: claude-sonnet-4-5
 ---
 
 # Plan Architect

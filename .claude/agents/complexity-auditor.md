@@ -2,7 +2,7 @@
 name: complexity-auditor
 description: "Analyzes code complexity using contextual reasoning to identify overly complex code that may benefit from refactoring, focusing on maintainability and comprehensibility over rigid metrics."
 color: orange
-model: claude-sonnet-4-0
+model: claude-sonnet-4-5
 ---
 
 # Complexity Auditor Agent

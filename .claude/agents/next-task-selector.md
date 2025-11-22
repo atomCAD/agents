@@ -2,7 +2,7 @@
 name: next-task-selector
 description: "Analyzes PLAN.md to select the optimal next task for implementation based on completion status, dependencies, and priority ordering"
 color: blue
-model: claude-sonnet-4-0
+model: claude-haiku-4-5
 ---
 
 # Next Task Selector Agent
